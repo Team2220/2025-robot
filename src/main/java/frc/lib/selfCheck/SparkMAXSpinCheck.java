@@ -1,14 +1,14 @@
 package frc.lib.selfCheck;
 
-import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Units;
 import frc.lib.devices.SparkMaxWrapper;
 import frc.lib.units.UnitsUtil;
 
 public class SparkMAXSpinCheck extends CheckCommand {
     SparkMaxWrapper spark;
-    Measure<Angle> position;
+    Angle position;
     boolean isForward;
 
     public SparkMAXSpinCheck(SparkMaxWrapper spark, boolean isForward) {

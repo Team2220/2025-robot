@@ -2,18 +2,18 @@ package frc.lib.selfCheck;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Units;
 import frc.lib.drivetrain.SwerveModule;
 import frc.lib.units.UnitsUtil;
 
 public class SwerveModuleSelfCheck extends CheckCommand {
     private SwerveModule module;
-    Measure<Angle> position;
-    Measure<Angle> tolerance;
+    Angle position;
+    Angle tolerance;
 
-    public SwerveModuleSelfCheck(SwerveModule module, Measure<Angle> position, Measure<Angle> tolerance) {
+    public SwerveModuleSelfCheck(SwerveModule module, Angle position, Angle tolerance) {
         this.module = module;
         this.position = position;
         this.tolerance = tolerance;
@@ -46,7 +46,7 @@ public class SwerveModuleSelfCheck extends CheckCommand {
         return UnitsUtil.abs(diff).lte(tolerance);
     }
 
-    private Measure<Angle> getCurrentPosition() {
+    private Angle getCurrentPosition() {
         return Units.Degrees.of(module.getPosition().angle.getDegrees());
     }
 

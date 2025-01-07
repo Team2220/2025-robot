@@ -12,11 +12,11 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.FaultID;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Temperature;
-import edu.wpi.first.units.Units;
-import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.measure.Temperature;
+import edu.wpi.first.units.measure.Units;
+import edu.wpi.first.units.measure.Velocity;
 import frc.lib.faults.SparkMaxLogPowerFaults;
 import frc.lib.tunables.TunableDouble;
 import frc.lib.tunables.TunableMeasure;
@@ -28,11 +28,11 @@ public class SparkMaxWrapper {
     public SparkPIDController pidController;
 
     public SparkMaxWrapper(int id, String name, boolean isInverted, double gearRatio, double P, double I, double D,
-            Measure<Velocity<Velocity<Angle>>> maxAcceleration, Measure<Velocity<Angle>> maxVelocity,
+            AngularAcceleration maxAcceleration, AngularVelocity maxVelocity,
             double allowedErr, boolean forwardSoftLimitEnable,
             boolean reverseSoftLimitEnable,
-            Measure<Angle> forwardSoftLimitTreshold,
-            Measure<Angle> reverseSoftLimitThreshold) {
+            Angle forwardSoftLimitTreshold,
+            Angle reverseSoftLimitThreshold) {
         this.name = name;
 
         sparkMax = new CANSparkMax(id, MotorType.kBrushless);
@@ -64,11 +64,11 @@ public class SparkMaxWrapper {
             pidController.setD(value);
         });
 
-        new TunableMeasure<>("maxAcceleration", maxAcceleration, getName(), value -> {
+        new Tunable("maxAcceleration", maxAcceleration, getName(), value -> {
             pidController.setSmartMotionMaxAccel(value.in(RPM.per(Seconds)), 0);
         });
 
-        new TunableMeasure<>("maxVelocity", maxVelocity, getName(), value -> {
+        new Tunable("maxVelocity", maxVelocity, getName(), value -> {
             pidController.setSmartMotionMaxVelocity(value.in(RPM), 0);
         });
 
@@ -97,7 +97,7 @@ public class SparkMaxWrapper {
         return name + " (SparkMax" + sparkMax.getDeviceId() + ")";
     }
 
-    public Measure<Temperature> getTemperature() {
+    public Temperature getTemperature() {
         var temp = sparkMax.getMotorTemperature();
         return Celsius.of(temp);
     }
@@ -106,19 +106,19 @@ public class SparkMaxWrapper {
         sparkMax.set(speed);
     }
 
-    public Measure<Velocity<Angle>> getVelocity() {
+    public AngularVelocity getVelocity() {
         return RPM.of(sparkMax.getEncoder().getVelocity());
     }
 
-    public Measure<Angle> getPosition() {
+    public Angle getPosition() {
         return Rotations.of(sparkMax.getEncoder().getPosition());
     }
 
-    public void setVelocity(Measure<Velocity<Angle>> speed) {
+    public void setVelocity(AngularVelocity speed) {
         pidController.setReference(speed.in(RPM), CANSparkBase.ControlType.kVelocity);
     }
 
-    public boolean isAtReference(Measure<Velocity<Angle>> speed, Measure<Velocity<Angle>> tolerance) {
+    public boolean isAtReference(AngularVelocity speed, AngularVelocity tolerance) {
         var diff = (getVelocity().minus(speed));
         return UnitsUtil.abs(diff).lte(tolerance);
     }

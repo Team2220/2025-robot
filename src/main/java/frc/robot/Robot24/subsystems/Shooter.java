@@ -5,10 +5,10 @@ import static frc.lib.units.UnitsUtil.RotationsPerSecSquared;
 import java.util.function.DoubleSupplier;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Units;
-import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.measure.Units;
+import edu.wpi.first.units.measure.Velocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.ShuffleBoardTabWrapper;
@@ -23,13 +23,13 @@ import frc.robot.Robot24.Constants;
 public class Shooter extends SubsystemBase implements CheckableSubsystem, ShuffleBoardTabWrapper {
     private TalonFXWrapper left;
     private TalonFXWrapper right;
-    private TunableMeasure<Velocity<Angle>> shooterSpeed;
-    private TunableMeasure<Velocity<Angle>> tolerance;
+    private TunableAngularVelocity shooterSpeed;
+    private TunableAngularVelocity tolerance;
     private double desiredspeed = 0;
 
     public Shooter() {
-        shooterSpeed = new TunableMeasure<>("shooterSpeed", Units.RPM.of(7000), "Shooter");
-        tolerance = new TunableMeasure<>("tolerance", Units.RPM.of(300), "Shooter");
+        shooterSpeed = new Tunable("shooterSpeed", Units.RPM.of(7000), "Shooter");
+        tolerance = new Tunable("tolerance", Units.RPM.of(300), "Shooter");
         left = new TalonFXWrapper(
                 Constants.Shooter.id_left,
                 "leftShooter",
@@ -137,7 +137,7 @@ public class Shooter extends SubsystemBase implements CheckableSubsystem, Shuffl
     // }
 
     // public void setDefaultSpeed() {
-    // Measure<Velocity<Angle>> speed = shooterSpeed.getValue();
+    // AngularVelocity speed = shooterSpeed.getValue();
     // left.setVelocity(speed);
     // right.setVelocity(speed);
     // }
@@ -149,7 +149,7 @@ public class Shooter extends SubsystemBase implements CheckableSubsystem, Shuffl
     }
 
     // public void setDefaultySpeed() {
-    // Measure<Velocity<Angle>> speed = shooterSpeed.getValue();
+    // AngularVelocity speed = shooterSpeed.getValue();
     // left.setVelocity(speed.times(-1));
     // right.setVelocity(speed.times(-1));
     // }

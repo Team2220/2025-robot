@@ -3,13 +3,13 @@ package frc.lib.selfCheck;
 import static edu.wpi.first.units.Units.Rotations;
 import static frc.lib.units.UnitsUtil.abs;
 
-import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.Measure;
 import frc.lib.devices.TalonFXWrapper;
 
 public class SpinTalonCheck extends CheckCommand {
     TalonFXWrapper talon;
-    Measure<Angle> position;
+    Angle position;
     boolean isForward;
 
     public SpinTalonCheck(TalonFXWrapper talon, boolean isForward) {

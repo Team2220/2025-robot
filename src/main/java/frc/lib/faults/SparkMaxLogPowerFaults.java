@@ -5,7 +5,7 @@ import java.util.HashMap;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
 
-import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Units;
 import frc.lib.devices.SparkMaxWrapper;
 import frc.lib.eventLoops.EventLoops;
 

@@ -6,7 +6,7 @@ package frc.robot.KrackenSwerve;
 
 import static edu.wpi.first.units.Units.Degree;
 
-import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.Measure;
 import frc.lib.RobotInstance;
 
@@ -29,14 +29,14 @@ public final class Constants {
   }
 
   public static class DriveTrain {
-    private static Measure<Angle> ofset = Degree.of(180);
-    public static final Measure<Angle> frontLeftOffset = Degree.of(259.94).plus(ofset);
+    private static Angle ofset = Degree.of(180);
+    public static final Angle frontLeftOffset = Degree.of(259.94).plus(ofset);
 
-    public static final Measure<Angle>  frontrightoffset = Degree.of(121.41).plus(ofset);
+    public static final Angle  frontrightoffset = Degree.of(121.41).plus(ofset);
 
-    public static final Measure<Angle> backleftoffset = Degree.of(154.00).plus(ofset);
+    public static final Angle backleftoffset = Degree.of(154.00).plus(ofset);
 
-    public static final Measure<Angle> backrightoffset = Degree.of(184.74).plus(ofset);
+    public static final Angle backrightoffset = Degree.of(184.74).plus(ofset);
   }
 
 

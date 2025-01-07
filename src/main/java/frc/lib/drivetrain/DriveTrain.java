@@ -14,10 +14,10 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.Distance;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.measure.Velocity;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -68,7 +68,7 @@ public class DriveTrain extends SubsystemBase implements TalonFXSubsystem, Check
     double driveRadius = Math
             .sqrt(Math.pow(DRIVETRAIN_TRACKWIDTH_METERS / 2, 2) + Math.pow(DRIVETRAIN_WHEELBASE_METERS / 2, 2));
 
-    public DriveTrain(Measure<Angle> frontLeftOffset, Measure<Angle> frontrightoffset, Measure<Angle> backleftoffset, Measure<Angle> backrightoffset) {
+    public DriveTrain(Angle frontLeftOffset, Angle frontrightoffset, Angle backleftoffset, Angle backrightoffset) {
         this.frontLeft = new SwerveModule(
                 "frontleft",
                 12,
@@ -147,9 +147,9 @@ public class DriveTrain extends SubsystemBase implements TalonFXSubsystem, Check
     GenericEntry gyroAngle = Shuffleboard.getTab("swerve").add("gyroAngle", 0).getEntry();
 
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-        Measure<Velocity<Distance>> x = MAX_VELOCITY.times(-xSpeed);
-        Measure<Velocity<Distance>> y = MAX_VELOCITY.times(-ySpeed);
-        Measure<Velocity<Angle>> r = MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND.times(-rot);
+        LinearVelocity x = MAX_VELOCITY.times(-xSpeed);
+        LinearVelocity y = MAX_VELOCITY.times(-ySpeed);
+        AngularVelocity r = MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND.times(-rot);
         driveRobotRelative(
                 fieldRelative
                         ? ChassisSpeeds.fromFieldRelativeSpeeds(x, y, r, getGyroscopeRotation())
@@ -318,7 +318,7 @@ public class DriveTrain extends SubsystemBase implements TalonFXSubsystem, Check
      * This is a measure of how fast the robot should be able to drive in a straight
      * line.
      */
-    public static final Measure<Velocity<Distance>> MAX_VELOCITY = UnitsUtil.velocityForWheel(
+    public static final LinearVelocity MAX_VELOCITY = UnitsUtil.velocityForWheel(
         SwerveModule.DT_WHEEL_DIAMETER,
                 RotationsPerSecond.of(6380.0 / 60.0 / SwerveModule.DT_DRIVE_GEAR_RATIO));
         
@@ -332,7 +332,7 @@ public class DriveTrain extends SubsystemBase implements TalonFXSubsystem, Check
      */
     // Here we calculate the theoretical maximum angular velocity. You can also
     // replace this with a measured amount.
-    public static final Measure<Velocity<Angle>> MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = RadiansPerSecond.of(MAX_VELOCITY.in(MetersPerSecond) /
+    public static final AngularVelocity MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = RadiansPerSecond.of(MAX_VELOCITY.in(MetersPerSecond) /
             Math.hypot(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0));
 
     public Command xcommand() {

@@ -9,11 +9,11 @@ import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.derive;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.Distance;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Unit;
-import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.measure.Unit;
+import edu.wpi.first.units.measure.Velocity;
 
 public final class UnitsUtil {
     private UnitsUtil() {
@@ -29,17 +29,17 @@ public final class UnitsUtil {
     public static final Frequency gigaHertz = derive(megaHertz).aggregate(1000).named("Giga Hertz").symbol("Ghz")
             .make();
 
-    public static <U extends Unit<U>> Measure<U> abs(Measure<U> measure) {
+    public static <U extends Unit<U>> U abs(U measure) {
         double dMeasure = measure.in(measure.unit());
         return measure.unit().of(Math.abs(dMeasure));
     }
 
-    public static final Measure<Distance> distanceForWheel(Measure<Distance> wheelDiameter, Measure<Angle> rotations) {
+    public static final Distance distanceForWheel(Distance wheelDiameter, Angle rotations) {
         var distance = Math.PI * wheelDiameter.in(Meters) * rotations.in(Rotations);
         return Meters.of(distance);
     }
 
-    public static final Measure<Velocity<Distance>> velocityForWheel(Measure<Distance> wheelDiameter, Measure<Velocity<Angle>> rotations) {
+    public static final LinearVelocity velocityForWheel(Distance wheelDiameter, AngularVelocity rotations) {
         var distance = Math.PI * wheelDiameter.in(Meters) * rotations.in(RotationsPerSecond);
         return MetersPerSecond.of(distance);
     }
@@ -47,7 +47,7 @@ public final class UnitsUtil {
     public static final Velocity<Velocity<Angle>> RotationsPerSecSquared = RotationsPerSecond.per(Seconds);
 
     public static final Velocity<Velocity<Velocity<Angle>>> RotationsPerSecCubed = RotationsPerSecSquared.per(Seconds);
-    public static <U extends Unit<U>> Measure<U> inputModulus(Measure<U> value, Measure<U> min, Measure<U> max){
+    public static <U extends Unit<U>> U inputModulus(U value, U min, U max){
         U unit = value.unit();
         double dvalue = value.in(unit);
         double dmin = value.in(unit);
@@ -55,7 +55,7 @@ public final class UnitsUtil {
         return unit.of(MathUtil.inputModulus(dvalue, dmin, dmax)); 
     }
 
-    public static final Measure<Angle> angleModulus(Measure<Angle> value){
+    public static final Angle angleModulus(Angle value){
 
       return Radian.of(MathUtil.angleModulus(value.in(Radian)));
 

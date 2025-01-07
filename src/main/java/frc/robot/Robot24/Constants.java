@@ -6,7 +6,7 @@ package frc.robot.Robot24;
 
 import static edu.wpi.first.units.Units.Degree;
 
-import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.Measure;
 import frc.lib.RobotInstance;
 
@@ -37,13 +37,13 @@ public final class Constants {
   public static final boolean isGraphsEnabled = false;
 
   public static class DriveTrain {
-    public static final Measure<Angle> frontLeftOffset = Degree.of(37.96);
+    public static final Angle frontLeftOffset = Degree.of(37.96);
 
-    public static final Measure<Angle>  frontrightoffset = Degree.of(309.46);
+    public static final Angle  frontrightoffset = Degree.of(309.46);
 
-    public static final Measure<Angle> backleftoffset = Degree.of(254.53);
+    public static final Angle backleftoffset = Degree.of(254.53);
 
-    public static final Measure<Angle> backrightoffset = Degree.of(358.24);
+    public static final Angle backrightoffset = Degree.of(358.24);
   }
 
   public static class Shooter {

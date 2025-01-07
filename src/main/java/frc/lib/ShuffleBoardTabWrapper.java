@@ -5,7 +5,7 @@ import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Unit;
+import edu.wpi.first.units.measure.Unit;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.SuppliedValueWidget;
@@ -21,7 +21,7 @@ public interface ShuffleBoardTabWrapper {
         }
     }
 
-    default <U extends Unit<U>> void addGraph(String name, Supplier<Measure<U>> supplier, Unit<U> unit) {
+    default <U extends Unit<U>> void addGraph(String name, Supplier<U> supplier, Unit<U> unit) {
         if (Constants.isGraphsEnabled) {
             Shuffleboard.getTab(getName())
                     .addDouble(name, () -> {
@@ -31,7 +31,7 @@ public interface ShuffleBoardTabWrapper {
         }
     }
 
-    default <U extends Unit<U>> void addMeasure(String name, Supplier<Measure<U>> supplier, Unit<U> unit) {
+    default <U extends Unit<U>> void addMeasure(String name, Supplier<U> supplier, Unit<U> unit) {
         Shuffleboard.getTab(getName())
                 .addDouble(name, () -> {
                     return supplier.get().in(unit);

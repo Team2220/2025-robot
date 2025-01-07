@@ -3,8 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.lib.units;
 
-import edu.wpi.first.units.UnaryFunction;
-import edu.wpi.first.units.Unit;
+import edu.wpi.first.units.measure.UnaryFunction;
+import edu.wpi.first.units.measure.Unit;
 
 /**
  * Unit of the number of waves that pass a fixed point in unit time.

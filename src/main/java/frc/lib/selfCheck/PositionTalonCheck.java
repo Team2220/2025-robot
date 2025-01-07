@@ -1,15 +1,15 @@
 package frc.lib.selfCheck;
 
-import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.Measure;
 import frc.lib.devices.TalonFXWrapper;
 
 public class PositionTalonCheck extends CheckCommand {
     TalonFXWrapper talon;
-    Measure<Angle> position;
-    Measure<Angle> tolerance;
+    Angle position;
+    Angle tolerance;
 
-    public PositionTalonCheck(TalonFXWrapper talon, Measure<Angle> position, Measure<Angle> tolerance) {
+    public PositionTalonCheck(TalonFXWrapper talon, Angle position, Angle tolerance) {
         this.talon = talon;
         this.position = position;
         this.tolerance = tolerance;

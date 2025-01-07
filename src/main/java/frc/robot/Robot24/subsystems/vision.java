@@ -15,7 +15,7 @@ package frc.robot.Robot24.subsystems;
 // import edu.wpi.first.wpilibj.TimedRobot;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-// Camera camera = CameraServer.getInstance().getVideo();
+// Camera camera = CameraServer.getVideo();
 // VM videoMode = camera.getVideoMode();
 // Photo photo = new Image(videoMode.pixelFormat, videoMode.width,
 // videoMode.height);
@@ -24,7 +24,7 @@ package frc.robot.Robot24.subsystems;
 
 // public void robotInit() {
 // try {
-// CameraServer.getInstance().startAutomaticCapture();
+// CameraServer.startAutomaticCapture();
 // } catch (Exception e) {
 // System.err.println("We have a bit of a problem dog: " + e.getMessage());
 // }
