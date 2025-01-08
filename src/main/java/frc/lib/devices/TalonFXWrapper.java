@@ -7,6 +7,10 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 
+import edu.wpi.first.units.AngularAccelerationUnit;
+import edu.wpi.first.units.AngularVelocityUnit;
+import edu.wpi.first.units.CurrentUnit;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.*;
 import static edu.wpi.first.units.Units.*;
 
@@ -35,8 +39,8 @@ public class TalonFXWrapper implements ShuffleBoardTabWrapper {
     // private static Fault fault = new Fault("TalonFX device disconnected");
     // private StatusSignal<Integer> firmwareVersionSignal;
     private Fault softLimitOverrideFault;
-    private TunableMeasure<Current> stallCurrentLimit;
-    private TunableMeasure<Velocity<Angle>> stallRotationLimit;
+    private TunableMeasure<CurrentUnit> stallCurrentLimit;
+    private TunableMeasure<AngularVelocityUnit> stallRotationLimit;
     //private Measure<Velocity<Angle>> velocitySetPoint = Units.RPM.of(0);
 
     public TalonFXWrapper(
@@ -48,17 +52,17 @@ public class TalonFXWrapper implements ShuffleBoardTabWrapper {
             double P,
             double I,
             double D,
-            Measure<Velocity<Velocity<Angle>>> Acceleration,
-            Measure<Velocity<Angle>> CruiseVelocity,
-            Measure<Velocity<Velocity<Velocity<Angle>>>> Jerk,
+            AngularAcceleration Acceleration,
+            AngularVelocity CruiseVelocity,
+            Velocity<AngularAccelerationUnit> Jerk,
             boolean forwardSoftLimitEnable,
             boolean reverseSoftLimitEnable,
-            Measure<Angle> forwardSoftLimitTreshold,
-            Measure<Angle> reverseSoftLimitThreshold,
+            Angle forwardSoftLimitTreshold,
+            Angle reverseSoftLimitThreshold,
             FollowerConfig followerConfig,
-            Measure<Time> debounceTime,
-            Measure<Current> stallCurrentThreshold,
-            Measure<Velocity<Angle>> stallRotationThreshold) {
+            Time debounceTime,
+            Current stallCurrentThreshold,
+            AngularVelocity stallRotationThreshold) {
         talon = new TalonFX(id);
         this.name = name;
         // firmwareVersionSignal = talon.getVersion();
@@ -298,7 +302,7 @@ public class TalonFXWrapper implements ShuffleBoardTabWrapper {
     public static record FollowerConfig(int id, boolean isInverted) {
     }
 
-    public boolean isAtPositionReference(Measure<Angle> speed, Measure<Angle> tolerance) {
+    public boolean isAtPositionReference(Angle speed, Angle tolerance) {
         var diff = (getPosition().minus(speed));
         return UnitsUtil.abs(diff).lte(tolerance);
     }
