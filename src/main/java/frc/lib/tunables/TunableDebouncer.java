@@ -12,7 +12,7 @@ public class TunableDebouncer {
     private String name;
     private String tab;
 
-    public TunableDebouncer(String name, String tab, Measure<Time> debounceTime, DebounceType debounceType) {
+    public TunableDebouncer(String name, String tab, Time debounceTime, DebounceType debounceType) {
         debouncer = new Debouncer(debounceTime.in(Units.Seconds), debounceType);
         measureDebouncer = new TunableMeasure<>(name, debounceTime, tab, (time) -> {
             this.debouncer = new Debouncer(time.in(Units.Seconds), debounceType);

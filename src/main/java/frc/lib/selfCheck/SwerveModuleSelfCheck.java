@@ -47,7 +47,7 @@ public class SwerveModuleSelfCheck extends CheckCommand {
         return UnitsUtil.abs(diff).lte(tolerance);
     }
 
-    private Measure<Angle> getCurrentPosition() {
+    private Angle getCurrentPosition() {
         return Units.Degrees.of(module.getPosition().angle.getDegrees());
     }
 

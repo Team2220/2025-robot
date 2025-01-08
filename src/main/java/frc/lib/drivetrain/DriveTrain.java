@@ -33,6 +33,7 @@ import java.util.stream.Stream;
 
 import org.ejml.equation.Function;
 
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
@@ -144,9 +145,9 @@ public class DriveTrain extends SubsystemBase implements TalonFXSubsystem, Check
     GenericEntry gyroAngle = Shuffleboard.getTab("swerve").add("gyroAngle", 0).getEntry();
 
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-        Measure<Velocity<Distance>> x = MAX_VELOCITY.times(-xSpeed);
-        Measure<Velocity<Distance>> y = MAX_VELOCITY.times(-ySpeed);
-        Measure<Velocity<Angle>> r = MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND.times(-rot);
+        LinearVelocity x = MAX_VELOCITY.times(-xSpeed);
+        LinearVelocity y = MAX_VELOCITY.times(-ySpeed);
+        AngularVelocity r = MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND.times(-rot);
         driveRobotRelative(
                 fieldRelative
                         ? ChassisSpeeds.fromFieldRelativeSpeeds(x, y, r, getGyroscopeRotation())
