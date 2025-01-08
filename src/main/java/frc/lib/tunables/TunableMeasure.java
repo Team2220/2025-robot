@@ -1,11 +1,13 @@
 package frc.lib.tunables;
 
 import java.util.function.Consumer;
+
+import edu.wpi.first.units.ImmutableMeasure;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Unit;
 import frc.lib.functional.BooleanObjectConsumer;
 
-public class TunableMeasure<U extends Unit<U>> {
+public class TunableMeasure<U extends Unit> {
     private TunableDouble tunable;
     private U unit;
 
@@ -25,12 +27,12 @@ public class TunableMeasure<U extends Unit<U>> {
     }
 
     public Measure<U> getValue() {
-        return unit.of(tunable.getValue());
+        return ImmutableMeasure.ofBaseUnits(tunable.getValue(), unit);
     }
 
     public void addChangeListener(BooleanObjectConsumer<Measure<U>> onChange) {
         tunable.addChangeListener((isInit, value) -> {
-            onChange.accept(isInit, unit.of(value));
+            onChange.accept(isInit, ImmutableMeasure.ofBaseUnits(tunable.getValue(), unit));
         });
     }
         public void addChangeListener(Consumer<Measure<U>> onChange) {
