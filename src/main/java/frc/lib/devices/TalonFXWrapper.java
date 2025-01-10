@@ -10,7 +10,9 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import edu.wpi.first.units.AngularAccelerationUnit;
 import edu.wpi.first.units.AngularVelocityUnit;
 import edu.wpi.first.units.CurrentUnit;
+import edu.wpi.first.units.ImmutableMeasure;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.units.VelocityUnit;
 import edu.wpi.first.units.measure.*;
 import static edu.wpi.first.units.Units.*;
 
@@ -54,7 +56,7 @@ public class TalonFXWrapper implements ShuffleBoardTabWrapper {
             double D,
             AngularAcceleration Acceleration,
             AngularVelocity CruiseVelocity,
-            Velocity<AngularAccelerationUnit> Jerk,
+            // Velocity<AngularAccelerationUnit> Jerk,
             boolean forwardSoftLimitEnable,
             boolean reverseSoftLimitEnable,
             Angle forwardSoftLimitTreshold,
@@ -148,13 +150,13 @@ public class TalonFXWrapper implements ShuffleBoardTabWrapper {
             }
         });
 
-        new TunableMeasure<>("Jerk", Jerk, getName(), (isInit, value) -> {
-            talonFXConfigs.MotionMagic.MotionMagicJerk = value
-                    .in(RotationsPerSecond.per(Seconds).per(Seconds));
-            if (!isInit) {
-                talon.getConfigurator().apply(talonFXConfigs);
-            }
-        });
+        // new TunableMeasure<>("Jerk", Jerk, getName(), (isInit, value) -> {
+        //     talonFXConfigs.MotionMagic.MotionMagicJerk = value
+        //             .in(RotationsPerSecond.per(Seconds).per(Seconds));
+        //     if (!isInit) {
+        //         talon.getConfigurator().apply(talonFXConfigs);
+        //     }
+        // });
 
         this.stallCurrentLimit = new TunableMeasure<>("Stall Current Threshold", stallCurrentThreshold, getName());
         this.stallRotationLimit = new TunableMeasure<>("Stall Rotation Threshold", stallRotationThreshold, getName());
@@ -193,7 +195,7 @@ public class TalonFXWrapper implements ShuffleBoardTabWrapper {
                 0,
                 RotationsPerSecondPerSecond.of(0),
                 RotationsPerSecond.of(0),
-                RotationsPerSecCubed.of(0),
+               // RotationsPerSecCubed.of(0),
                 false,
                 false,
                 Rotations.of(0),
@@ -201,7 +203,7 @@ public class TalonFXWrapper implements ShuffleBoardTabWrapper {
                 null,
                 Units.Seconds.of(1),
                 Units.Amps.of(75),
-                Units.RotationsPerSecond.of(1);
+                Units.RotationsPerSecond.of(1));
     }
 
     public void setSoftLimitsEnabled(boolean enabled) {
