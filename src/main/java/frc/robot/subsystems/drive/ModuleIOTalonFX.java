@@ -40,6 +40,8 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj.Encoder;
+import frc.lib.devices.PWMEncoder;
 import frc.robot.generated.TunerConstants;
 import java.util.Queue;
 
@@ -58,6 +60,7 @@ public class ModuleIOTalonFX implements ModuleIO {
   private final TalonFX driveTalon;
   private final TalonFX turnTalon;
   private final CANcoder cancoder;
+  private final PWMEncoder customEncoder;
 
   // Voltage control requests
   private final VoltageOut voltageRequest = new VoltageOut(0);
@@ -101,6 +104,7 @@ public class ModuleIOTalonFX implements ModuleIO {
     driveTalon = new TalonFX(constants.DriveMotorId, TunerConstants.DrivetrainConstants.CANBusName);
     turnTalon = new TalonFX(constants.SteerMotorId, TunerConstants.DrivetrainConstants.CANBusName);
     cancoder = new CANcoder(constants.EncoderId, TunerConstants.DrivetrainConstants.CANBusName);
+    customEncoder =new PWMEncoder(0);
 
     // Configure drive motor
     var driveConfig = constants.DriveMotorInitialConfigs;
@@ -123,13 +127,8 @@ public class ModuleIOTalonFX implements ModuleIO {
     turnConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     turnConfig.Slot0 = constants.SteerMotorGains;
     turnConfig.Feedback.FeedbackRemoteSensorID = constants.EncoderId;
-    turnConfig.Feedback.FeedbackSensorSource =
-        switch (constants.FeedbackSource) {
-          case RemoteCANcoder -> FeedbackSensorSourceValue.RemoteCANcoder;
-          case FusedCANcoder -> FeedbackSensorSourceValue.FusedCANcoder;
-          case SyncCANcoder -> FeedbackSensorSourceValue.SyncCANcoder;
-        };
-    turnConfig.Feedback.RotorToSensorRatio = constants.SteerMotorGearRatio;
+    turnConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
+    turnConfig.Feedback.SensorToMechanismRatio = constants.SteerMotorGearRatio;
     turnConfig.MotionMagic.MotionMagicCruiseVelocity = 100.0 / constants.SteerMotorGearRatio;
     turnConfig.MotionMagic.MotionMagicAcceleration =
         turnConfig.MotionMagic.MotionMagicCruiseVelocity / 0.100;
@@ -141,6 +140,7 @@ public class ModuleIOTalonFX implements ModuleIO {
             ? InvertedValue.Clockwise_Positive
             : InvertedValue.CounterClockwise_Positive;
     tryUntilOk(5, () -> turnTalon.getConfigurator().apply(turnConfig, 0.25));
+    tryUntilOk(5, () -> turnTalon.setPosition(customEncoder.getPosition(), 0.25));
 
     // Configure CANCoder
     CANcoderConfiguration cancoderConfig = constants.EncoderInitialConfigs;
