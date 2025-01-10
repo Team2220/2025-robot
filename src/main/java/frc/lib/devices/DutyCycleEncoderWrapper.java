@@ -17,10 +17,6 @@ public class DutyCycleEncoderWrapper {
     }
 
     public Rotation2d getAngle() {
-        return Rotation2d.fromRotations(duty.getAbsolutePosition());
-    }
-
-    public void zero() {
-        duty.reset();
+        return Rotation2d.fromRotations(duty.get());
     }
 }

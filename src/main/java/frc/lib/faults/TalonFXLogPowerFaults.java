@@ -5,6 +5,7 @@ import java.util.function.DoubleFunction;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.StatusSignal;
 
+import edu.wpi.first.units.Units;
 import frc.lib.devices.TalonFXWrapper;
 import frc.lib.eventLoops.EventLoops;
 
@@ -152,7 +153,7 @@ public class TalonFXLogPowerFaults {
                 Fault.autoUpdating(wrapper.getName() + "MoterTempToHigh", () -> {
                         var value = device_temp.refresh().getValue();
                         // unable to find clearStickyFault for device_temp
-                        return value > 100;
+                        return value.gt(Units.Celsius.of(100));
                 });
 
         }

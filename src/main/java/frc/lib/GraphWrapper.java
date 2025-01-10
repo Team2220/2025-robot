@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.Constants;
 
-
 public class GraphWrapper {
     private String name;
     private GenericEntry graph;
@@ -13,10 +12,8 @@ public class GraphWrapper {
 
     public GraphWrapper(String name, String tab) {
         this.name = name;
-        if (Constants.isGraphsEnabled) {
-            this.graph = Shuffleboard.getTab(tab).add(name,
-                    0).withWidget(BuiltInWidgets.kGraph).getEntry();
-        }
+        this.graph = Shuffleboard.getTab(tab).add(name,
+                0).withWidget(BuiltInWidgets.kGraph).getEntry();
     }
 
     public void setDouble(double value) {

@@ -201,7 +201,7 @@ public class TalonFXWrapper implements ShuffleBoardTabWrapper {
                 null,
                 Units.Seconds.of(1),
                 Units.Amps.of(75),
-                Units.RotationsPerSecond.of(1));
+                Units.RotationsPerSecond.of(1);
     }
 
     public void setSoftLimitsEnabled(boolean enabled) {

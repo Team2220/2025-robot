@@ -43,13 +43,13 @@ public final class UnitsUtil {
         return MetersPerSecond.of(distance);
     }
 
-    // public static <U extends Unit<U>> Measure<U> inputModulus(Measure<U> value, Measure<U> min, Measure<U> max){
-    //     U unit = value.unit();
-    //     double dvalue = value.in(unit);
-    //     double dmin = value.in(unit);
-    //     double dmax = value.in(unit);
-    //     return unit.of(MathUtil.inputModulus(dvalue, dmin, dmax)); 
-    // }
+    public static <U extends Unit> Measure<U> inputModulus(Measure<U> value, Measure<U> min, Measure<U> max){
+        U unit = value.unit();
+        double dvalue = value.in(unit);
+        double dmin = value.in(unit);
+        double dmax = value.in(unit);
+        return ImmutableMeasure.ofRelativeUnits(MathUtil.inputModulus(dvalue, dmin, dmax), unit); 
+    }
 
     public static final Angle angleModulus(Angle value){
       return Radian.of(MathUtil.angleModulus(value.in(Radian)));

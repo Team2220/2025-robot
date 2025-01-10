@@ -14,24 +14,21 @@ import frc.robot.Constants;
 
 public interface ShuffleBoardTabWrapper {
     default void addGraph(String name, DoubleSupplier supplier) {
-        if (Constants.isGraphsEnabled) {
-            Shuffleboard.getTab(getName())
-                    .addDouble(name, supplier)
-                    .withWidget(BuiltInWidgets.kGraph);
-        }
+        Shuffleboard.getTab(getName())
+                .addDouble(name, supplier)
+                .withWidget(BuiltInWidgets.kGraph);
     }
 
-    default <U extends Unit> void addGraph(String name, Supplier<Measure<U>> supplier, Unit<U> unit) {
-        if (Constants.isGraphsEnabled) {
-            Shuffleboard.getTab(getName())
-                    .addDouble(name, () -> {
-                        return supplier.get().in(unit);
-                    })
-                    .withWidget(BuiltInWidgets.kGraph);
-        }
+    default <U extends Unit> void addGraph(String name, Supplier<Measure<U>> supplier, U unit) {
+        Shuffleboard.getTab(getName())
+                .addDouble(name, () -> {
+                    return supplier.get().in(unit);
+                })
+                .withWidget(BuiltInWidgets.kGraph);
+
     }
 
-    default <U extends Unit> void addMeasure(String name, Supplier<Measure<U>> supplier, Unit<U> unit) {
+    default <U extends Unit> void addMeasure(String name, Supplier<Measure<U>> supplier, U unit) {
         Shuffleboard.getTab(getName())
                 .addDouble(name, () -> {
                     return supplier.get().in(unit);

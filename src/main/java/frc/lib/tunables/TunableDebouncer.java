@@ -3,12 +3,13 @@ package frc.lib.tunables;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.TimeUnit;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Time;
 
 public class TunableDebouncer {
     private Debouncer debouncer;
-    private TunableMeasure<Time> measureDebouncer;
+    private TunableMeasure<TimeUnit> measureDebouncer;
     private String name;
     private String tab;
 
