@@ -9,6 +9,9 @@ import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.derive;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.units.ImmutableMeasure;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Unit;
 import edu.wpi.first.units.measure.*;
 import static edu.wpi.first.units.Units.*;
 
@@ -26,10 +29,9 @@ public final class UnitsUtil {
     // public static final Frequency gigaHertz = derive(megaHertz).aggregate(1000).named("Giga Hertz").symbol("Ghz")
     //         .make();
 
-    // public static <U extends Unit<U>> Measure<U> abs(Measure<U> measure) {
-    //     double dMeasure = measure.in(measure.unit());
-    //     return measure.unit().of(Math.abs(dMeasure));
-    // }
+    public static <U extends Unit> Measure<U> abs(Measure<U> measure) {
+        return ImmutableMeasure.ofBaseUnits(measure.abs(measure.unit()), measure.unit()); 
+    }
 
     public static final Distance distanceForWheel(Distance wheelDiameter, Angle rotations) {
         var distance = Math.PI * wheelDiameter.in(Meters) * rotations.in(Rotations);

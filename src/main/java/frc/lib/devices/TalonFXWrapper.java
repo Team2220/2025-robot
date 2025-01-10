@@ -191,7 +191,7 @@ public class TalonFXWrapper implements ShuffleBoardTabWrapper {
                 0,
                 0,
                 0,
-                RotationsPerSecSquared.of(0),
+                RotationsPerSecondPerSecond.of(0),
                 RotationsPerSecond.of(0),
                 RotationsPerSecCubed.of(0),
                 false,
@@ -255,20 +255,20 @@ public class TalonFXWrapper implements ShuffleBoardTabWrapper {
         }
     }
 
-    public Measure<Angle> getPosition() {
+    public Angle getPosition() {
         return Units.Rotations.of(talon.getPosition().getValueAsDouble());
     }
 
-    public void setVelocity(Measure<Velocity<Angle>> speed) {
+    public void setVelocity(AngularVelocity speed) {
         talon.setControl(new VelocityVoltage(speed.in(RotationsPerSecond)));
         isPositionBeingHeld = false;
     }
 
-    public Measure<Velocity<Angle>> getVelocity() {
+    public AngularVelocity getVelocity() {
         return Units.RotationsPerSecond.of(talon.getVelocity().getValueAsDouble());
     }
 
-    public boolean isAtReference(Measure<Velocity<Angle>> speed, Measure<Velocity<Angle>> tolerance) {
+    public boolean isAtReference(AngularVelocity speed, AngularVelocity tolerance) {
         var diff = (getVelocity().minus(speed));
         return UnitsUtil.abs(diff).lte(tolerance);
     }
@@ -279,12 +279,12 @@ public class TalonFXWrapper implements ShuffleBoardTabWrapper {
         isPositionBeingHeld = false;
     }
 
-    public void setMotionMagicVoltage(Measure<Angle> position) {
+    public void setMotionMagicVoltage(Angle position) {
         talon.setControl(new PositionVoltage(position.in(Rotations)));
         isPositionBeingHeld = false;
     }
 
-    public void setVoltageOut(Measure<Voltage> voltage) {
+    public void setVoltageOut(Voltage voltage) {
         talon.setControl(new VoltageOut(voltage.in(Volts)));
         isPositionBeingHeld = false;
     }

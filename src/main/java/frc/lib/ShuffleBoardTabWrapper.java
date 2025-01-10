@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.SuppliedValueWidget;
 import frc.lib.tunables.TunableDouble;
-import frc.robot.Robot24.Constants;
+import frc.robot.Constants;
 
 public interface ShuffleBoardTabWrapper {
     default void addGraph(String name, DoubleSupplier supplier) {
@@ -21,7 +21,7 @@ public interface ShuffleBoardTabWrapper {
         }
     }
 
-    default <U extends Unit<U>> void addGraph(String name, Supplier<Measure<U>> supplier, Unit<U> unit) {
+    default <U extends Unit> void addGraph(String name, Supplier<Measure<U>> supplier, Unit<U> unit) {
         if (Constants.isGraphsEnabled) {
             Shuffleboard.getTab(getName())
                     .addDouble(name, () -> {
@@ -31,7 +31,7 @@ public interface ShuffleBoardTabWrapper {
         }
     }
 
-    default <U extends Unit<U>> void addMeasure(String name, Supplier<Measure<U>> supplier, Unit<U> unit) {
+    default <U extends Unit> void addMeasure(String name, Supplier<Measure<U>> supplier, Unit<U> unit) {
         Shuffleboard.getTab(getName())
                 .addDouble(name, () -> {
                     return supplier.get().in(unit);
