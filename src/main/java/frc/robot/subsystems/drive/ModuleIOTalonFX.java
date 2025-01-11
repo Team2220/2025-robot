@@ -13,6 +13,7 @@
 
 package frc.robot.subsystems.drive;
 
+import static edu.wpi.first.units.Units.Rotations;
 import static frc.robot.util.PhoenixUtil.*;
 
 import com.ctre.phoenix6.BaseStatusSignal;
@@ -44,6 +45,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import frc.lib.devices.PWMEncoder;
 import frc.robot.generated.TunerConstants;
 import java.util.Queue;
+import java.util.function.Supplier;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -61,7 +63,7 @@ public class ModuleIOTalonFX implements ModuleIO {
   // Hardware objects
   private final TalonFX driveTalon;
   private final TalonFX turnTalon;
-  private final CANcoder cancoder;
+  // private final CANcoder cancoder;
   private final PWMEncoder customEncoder;
 
   // Voltage control requests
@@ -87,7 +89,7 @@ public class ModuleIOTalonFX implements ModuleIO {
   private final StatusSignal<Current> driveCurrent;
 
   // Inputs from turn motor
-  private final StatusSignal<Angle> turnAbsolutePosition;
+  private final Supplier<Angle> turnAbsolutePosition;
   private final StatusSignal<Angle> turnPosition;
   private final Queue<Double> turnPositionQueue;
   private final StatusSignal<AngularVelocity> turnVelocity;
@@ -97,7 +99,7 @@ public class ModuleIOTalonFX implements ModuleIO {
   // Connection debouncers
   private final Debouncer driveConnectedDebounce = new Debouncer(0.5);
   private final Debouncer turnConnectedDebounce = new Debouncer(0.5);
-  private final Debouncer turnEncoderConnectedDebounce = new Debouncer(0.5);
+  // private final Debouncer turnEncoderConnectedDebounce = new Debouncer(0.5);
 
   public ModuleIOTalonFX(
       SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
@@ -105,12 +107,12 @@ public class ModuleIOTalonFX implements ModuleIO {
     this.constants = constants;
     driveTalon = new TalonFX(constants.DriveMotorId, TunerConstants.DrivetrainConstants.CANBusName);
     turnTalon = new TalonFX(constants.SteerMotorId, TunerConstants.DrivetrainConstants.CANBusName);
-    cancoder = new CANcoder(constants.EncoderId, TunerConstants.DrivetrainConstants.CANBusName);
-    customEncoder = new PWMEncoder(constants.EncoderId);
+    // cancoder = new CANcoder(constants.EncoderId, TunerConstants.DrivetrainConstants.CANBusName);
+    customEncoder = new PWMEncoder(constants.EncoderId, Rotations.of(constants.EncoderOffset));
 
     // Configure drive motor
     var driveConfig = constants.DriveMotorInitialConfigs;
-    driveConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    driveConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
     driveConfig.Slot0 = constants.DriveMotorGains;
     driveConfig.Feedback.SensorToMechanismRatio = constants.DriveMotorGearRatio;
     driveConfig.TorqueCurrent.PeakForwardTorqueCurrent = constants.SlipCurrent;
@@ -126,7 +128,7 @@ public class ModuleIOTalonFX implements ModuleIO {
 
     // Configure turn motor
     var turnConfig = new TalonFXConfiguration();
-    turnConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    turnConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
     turnConfig.Slot0 = constants.SteerMotorGains;
     turnConfig.Feedback.FeedbackRemoteSensorID = constants.EncoderId;
     turnConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
@@ -145,13 +147,13 @@ public class ModuleIOTalonFX implements ModuleIO {
     tryUntilOk(5, () -> turnTalon.setPosition(customEncoder.getPosition(), 0.25));
 
     // Configure CANCoder
-    CANcoderConfiguration cancoderConfig = constants.EncoderInitialConfigs;
-    cancoderConfig.MagnetSensor.MagnetOffset = constants.EncoderOffset;
-    cancoderConfig.MagnetSensor.SensorDirection =
-        constants.EncoderInverted
-            ? SensorDirectionValue.Clockwise_Positive
-            : SensorDirectionValue.CounterClockwise_Positive;
-    cancoder.getConfigurator().apply(cancoderConfig);
+    // CANcoderConfiguration cancoderConfig = constants.EncoderInitialConfigs;
+    // cancoderConfig.MagnetSensor.MagnetOffset = constants.EncoderOffset;
+    // cancoderConfig.MagnetSensor.SensorDirection =
+    //     constants.EncoderInverted
+    //         ? SensorDirectionValue.Clockwise_Positive
+    //         : SensorDirectionValue.CounterClockwise_Positive;
+    // cancoder.getConfigurator().apply(cancoderConfig);
 
     // Create timestamp queue
     timestampQueue = PhoenixOdometryThread.getInstance().makeTimestampQueue();
@@ -165,7 +167,7 @@ public class ModuleIOTalonFX implements ModuleIO {
     driveCurrent = driveTalon.getStatorCurrent();
 
     // Create turn status signals
-    turnAbsolutePosition = cancoder.getPosition();
+    turnAbsolutePosition = ()-> customEncoder.getPosition();//cancoder.getPosition();
     turnPosition = turnTalon.getPosition();
     turnPositionQueue = PhoenixOdometryThread.getInstance().registerSignal(turnTalon.getPosition());
     turnVelocity = turnTalon.getVelocity();
@@ -180,7 +182,7 @@ public class ModuleIOTalonFX implements ModuleIO {
         driveVelocity,
         driveAppliedVolts,
         driveCurrent,
-        turnAbsolutePosition,
+        // turnAbsolutePosition,
         turnVelocity,
         turnAppliedVolts,
         turnCurrent);
@@ -194,7 +196,7 @@ public class ModuleIOTalonFX implements ModuleIO {
         BaseStatusSignal.refreshAll(drivePosition, driveVelocity, driveAppliedVolts, driveCurrent);
     var turnStatus =
         BaseStatusSignal.refreshAll(turnPosition, turnVelocity, turnAppliedVolts, turnCurrent);
-    var turnEncoderStatus = BaseStatusSignal.refreshAll(turnAbsolutePosition);
+    // var turnEncoderStatus = BaseStatusSignal.refreshAll(turnAbsolutePosition);
 
     Logger.recordOutput("Module" + constants.EncoderId + "AbsEncoder", customEncoder.getPosition());
 
@@ -207,8 +209,9 @@ public class ModuleIOTalonFX implements ModuleIO {
 
     // Update turn inputs
     inputs.turnConnected = turnConnectedDebounce.calculate(turnStatus.isOK());
-    inputs.turnEncoderConnected = turnEncoderConnectedDebounce.calculate(turnEncoderStatus.isOK());
-    inputs.turnAbsolutePosition = Rotation2d.fromRotations(turnAbsolutePosition.getValueAsDouble());
+    inputs.turnEncoderConnected = true;
+    // turnEncoderConnectedDebounce.calculate(turnEncoderStatus.isOK());
+    inputs.turnAbsolutePosition = new Rotation2d(turnAbsolutePosition.get());
     inputs.turnPosition = Rotation2d.fromRotations(turnPosition.getValueAsDouble());
     inputs.turnVelocityRadPerSec = Units.rotationsToRadians(turnVelocity.getValueAsDouble());
     inputs.turnAppliedVolts = turnAppliedVolts.getValueAsDouble();
