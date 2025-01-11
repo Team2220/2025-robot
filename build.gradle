@@ -4,6 +4,10 @@ plugins {
 
     // Add gversion plugin for AdvantageKit
     id "com.peterabeles.gversion" version "1.10"
+
+    // For formatting
+    id 'com.diffplug.spotless' version '6.0.0'
+
 }
 
 java {
@@ -159,3 +163,10 @@ task(eventDeploy) {
     }
 }
 createVersionFile.dependsOn(eventDeploy)
+
+spotless {
+    java {
+        targetExclude '**/BuildConstants.java', '**/TunerConstants.java'
+        googleJavaFormat()
+    }
+}
