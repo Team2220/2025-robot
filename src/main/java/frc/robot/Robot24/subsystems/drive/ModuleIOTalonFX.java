@@ -199,8 +199,8 @@ public abstract class ModuleIOTalonFX implements ModuleIO {
     driveTalon.setControl(
         switch (constants.DriveMotorClosedLoopOutput) {
           case Voltage -> velocityVoltageRequest.withVelocity(motorVelocityRotPerSec);
-          case TorqueCurrentFOC -> velocityTorqueCurrentRequest.withVelocity(
-              motorVelocityRotPerSec);
+          case TorqueCurrentFOC ->
+              velocityTorqueCurrentRequest.withVelocity(motorVelocityRotPerSec);
         });
   }
 
@@ -209,8 +209,8 @@ public abstract class ModuleIOTalonFX implements ModuleIO {
     turnTalon.setControl(
         switch (constants.SteerMotorClosedLoopOutput) {
           case Voltage -> positionVoltageRequest.withPosition(rotation.getRotations());
-          case TorqueCurrentFOC -> positionTorqueCurrentRequest.withPosition(
-              rotation.getRotations());
+          case TorqueCurrentFOC ->
+              positionTorqueCurrentRequest.withPosition(rotation.getRotations());
         });
   }
 }

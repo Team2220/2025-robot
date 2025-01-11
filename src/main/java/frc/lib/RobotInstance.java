@@ -1,4 +1,5 @@
 package frc.lib;
+
 /* https://stackoverflow.com/questions/604424/how-to-get-an-enum-value-from-a-string-value-in-java */
 
 /* https://www.tutorialspoint.com/java-program-to-get-system-mac-address-of-windows-and-linux-machine */
@@ -17,6 +18,7 @@ public enum RobotInstance {
 
   private String address;
   private static RobotInstance current = getMacAddress();
+
   // private static Fault fault;
 
   RobotInstance(String text) {
