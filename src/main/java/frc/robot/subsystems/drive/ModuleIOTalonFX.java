@@ -165,7 +165,6 @@ public class ModuleIOTalonFX implements ModuleIO {
     driveCurrent = driveTalon.getStatorCurrent();
 
     // Create turn status signals
-    Logger.recordOutput("Module" + constants.EncoderId + "AbsEncoder", customEncoder.getPosition());
     turnAbsolutePosition = cancoder.getPosition();
     turnPosition = turnTalon.getPosition();
     turnPositionQueue = PhoenixOdometryThread.getInstance().registerSignal(turnTalon.getPosition());
@@ -196,6 +195,8 @@ public class ModuleIOTalonFX implements ModuleIO {
     var turnStatus =
         BaseStatusSignal.refreshAll(turnPosition, turnVelocity, turnAppliedVolts, turnCurrent);
     var turnEncoderStatus = BaseStatusSignal.refreshAll(turnAbsolutePosition);
+
+    Logger.recordOutput("Module" + constants.EncoderId + "AbsEncoder", customEncoder.getPosition());
 
     // Update drive inputs
     inputs.driveConnected = driveConnectedDebounce.calculate(driveStatus.isOK());
