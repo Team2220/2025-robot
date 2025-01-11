@@ -45,6 +45,8 @@ import frc.lib.devices.PWMEncoder;
 import frc.robot.generated.TunerConstants;
 import java.util.Queue;
 
+import org.littletonrobotics.junction.Logger;
+
 /**
  * Module IO implementation for Talon FX drive motor controller, Talon FX turn motor controller, and
  * CANcoder. Configured using a set of module constants from Phoenix.
@@ -163,6 +165,7 @@ public class ModuleIOTalonFX implements ModuleIO {
     driveCurrent = driveTalon.getStatorCurrent();
 
     // Create turn status signals
+    Logger.recordOutput("Drive/Module" + constants.EncoderId, customEncoder.getPosition());
     turnAbsolutePosition = cancoder.getPosition();
     turnPosition = turnTalon.getPosition();
     turnPositionQueue = PhoenixOdometryThread.getInstance().registerSignal(turnTalon.getPosition());

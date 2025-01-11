@@ -1,7 +1,7 @@
  package frc.lib.devices;
 
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Units;
+import static edu.wpi.first.units.Units.Degrees;
+
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.AnalogInput;
 
@@ -16,6 +16,6 @@ public class PWMEncoder {
 
     public Angle getPosition() {
         // return encoder.getAverageValue() * 360 / 4096.0 / Math.pow(2, oversampling);
-        return Units.Degrees.of(encoder.getValue() * 360.0 / 4096.0);
+        return Degrees.of(encoder.getValue() * 360.0 / 4096.0);
     }
 }
