@@ -1,4 +1,4 @@
-// Copyright 2021-2025 FRC 6328
+// Copyright 2021-2024 FRC 6328
 // http://github.com/Mechanical-Advantage
 //
 // This program is free software; you can redistribute it and/or
@@ -43,9 +43,8 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.Constants;
-import frc.robot.Constants.Mode;
-import frc.robot.TunerConstants;
+import frc.robot.Robot24.Constants;
+import frc.robot.Robot24.TunerConstants;
 import frc.robot.util.LocalADStarAK;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -56,6 +55,7 @@ import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class Drive extends SubsystemBase /* implements Vision.VisionConsumer */ {
+  // PathPlanner config constants
   private static final RobotConfig PP_CONFIG =
       new RobotConfig(
           ROBOT_MASS_KG,
@@ -105,7 +105,14 @@ public class Drive extends SubsystemBase /* implements Vision.VisionConsumer */ 
         new SwerveModulePosition()
       };
   private SwerveDrivePoseEstimator poseEstimator =
-      new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
+      new SwerveDrivePoseEstimator(
+          kinematics,
+          rawGyroRotation,
+          lastModulePositions,
+          frc.robot.Constants.simInitialFieldPose);
+
+  private boolean snapToRotationEnabled = false;
+  private Rotation2d desiredRotation = new Rotation2d();
 
   public Drive(
       GyroIO gyroIO,
@@ -215,7 +222,8 @@ public class Drive extends SubsystemBase /* implements Vision.VisionConsumer */ 
     }
 
     // Update gyro alert
-    gyroDisconnectedAlert.set(!gyroInputs.connected && Constants.currentMode != Mode.SIM);
+    gyroDisconnectedAlert.set(
+        !gyroInputs.connected && frc.robot.Constants.currentMode != frc.robot.Constants.Mode.SIM);
   }
 
   /**
@@ -225,13 +233,13 @@ public class Drive extends SubsystemBase /* implements Vision.VisionConsumer */ 
    */
   public void runVelocity(ChassisSpeeds speeds) {
     // Calculate module setpoints
-    ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
-    SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
+    speeds = ChassisSpeeds.discretize(speeds, 0.02);
+    SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(speeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, TunerConstants.kSpeedAt12Volts);
 
     // Log unoptimized setpoints and setpoint speeds
     Logger.recordOutput("SwerveStates/Setpoints", setpointStates);
-    Logger.recordOutput("SwerveChassisSpeeds/Setpoints", discreteSpeeds);
+    Logger.recordOutput("SwerveChassisSpeeds/Setpoints", speeds);
 
     // Send setpoints to modules
     for (int i = 0; i < 4; i++) {
@@ -265,6 +273,23 @@ public class Drive extends SubsystemBase /* implements Vision.VisionConsumer */ 
     }
     kinematics.resetHeadings(headings);
     stop();
+  }
+
+  public void setSnapToRotation(boolean enabled) {
+    snapToRotationEnabled = enabled;
+  }
+
+  public boolean getSnapToRotation() {
+    return snapToRotationEnabled;
+  }
+
+  public void setDesiredRotation(Rotation2d rotation) {
+    desiredRotation = rotation;
+    setSnapToRotation(true);
+  }
+
+  public Rotation2d getDesiredRotation() {
+    return desiredRotation;
   }
 
   /** Returns a command to run a quasistatic test in the specified direction. */
@@ -355,7 +380,7 @@ public class Drive extends SubsystemBase /* implements Vision.VisionConsumer */ 
 
   /** Returns the maximum angular speed in radians per sec. */
   public double getMaxAngularSpeedRadPerSec() {
-    return getMaxLinearSpeedMetersPerSec() / DRIVE_BASE_RADIUS;
+    return getMaxLinearSpeedMetersPerSec() / Constants.DRIVE_BASE_RADIUS;
   }
 
   /** Returns an array of module translations. */

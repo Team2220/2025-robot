@@ -23,7 +23,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
-import frc.robot.Robot;
 import frc.robot.Robot24.commands.DriveCommands;
 import frc.robot.Robot24.subsystems.drive.Drive;
 import frc.robot.Robot24.subsystems.drive.GyroIO;
@@ -130,7 +129,8 @@ public class RobotContainer extends frc.lib.RobotContainer {
             drive,
             () -> -controller.getLeftY(),
             () -> -controller.getLeftX(),
-            () -> -controller.getRightX()));
+            () -> -controller.getRightX(),
+            () -> controller.getLeftTriggerAxis() > 0.5));
 
     // Lock to 0° when A button is held
     controller

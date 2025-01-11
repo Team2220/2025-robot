@@ -4,14 +4,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import org.ironmaple.simulation.SimulatedArena;
-import org.ironmaple.simulation.drivesims.AbstractDriveTrainSimulation;
+import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.littletonrobotics.junction.Logger;
 
 public abstract class RobotContainer {
 
-  private final AbstractDriveTrainSimulation driveSimulation;
+  private SwerveDriveSimulation driveSimulation = null;
 
-  protected RobotContainer(AbstractDriveTrainSimulation driveSimulation) {
+  protected RobotContainer(SwerveDriveSimulation driveSimulation) {
     this.driveSimulation = driveSimulation;
     SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
   }
