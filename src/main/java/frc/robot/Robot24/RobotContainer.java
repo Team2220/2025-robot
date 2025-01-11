@@ -23,7 +23,9 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
+import frc.robot.Constants.Mode;
 import frc.robot.Robot24.commands.DriveCommands;
+import frc.robot.Robot24.generated.TunerConstants;
 import frc.robot.Robot24.subsystems.drive.Drive;
 import frc.robot.Robot24.subsystems.drive.GyroIO;
 import frc.robot.Robot24.subsystems.drive.GyroIONavX;
@@ -44,20 +46,19 @@ public class RobotContainer extends frc.lib.RobotContainer {
   // Subsystems
   private final Drive drive;
 
+  // Drive simulation
+  private static final SwerveDriveSimulation driveSimulation =
+      new SwerveDriveSimulation(Drive.mapleSimConfig, Constants.simInitialFieldPose);
+
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
 
-  // Simulator
-  private static final SwerveDriveSimulation driveSimulation =
-      new SwerveDriveSimulation(Drive.mapleSimConfig, Constants.simInitialFieldPose);
-
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     super(driveSimulation);
-
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
@@ -129,18 +130,53 @@ public class RobotContainer extends frc.lib.RobotContainer {
             drive,
             () -> -controller.getLeftY(),
             () -> -controller.getLeftX(),
-            () -> -controller.getRightX(),
-            () -> controller.getLeftTriggerAxis() > 0.5));
+            // Xbox controller is mapped incorrectly on Mac OS
+            () ->
+                Constants.simMode == Mode.REAL
+                    ? -controller.getRightX()
+                    : -controller.getLeftTriggerAxis(),
+            () ->
+                Constants.simMode == Mode.REAL
+                    ? controller.getRightTriggerAxis() > 0.5
+                    : controller.getRightY() > 0.5));
 
-    // Lock to 0° when A button is held
     controller
         .a()
-        .whileTrue(
-            DriveCommands.joystickDriveAtAngle(
-                drive,
-                () -> -controller.getLeftY(),
-                () -> -controller.getLeftX(),
-                () -> new Rotation2d()));
+        .toggleOnTrue(
+            DriveCommands.keepRotationForward(
+                drive, () -> -controller.getLeftY(), () -> -controller.getLeftX()));
+
+    controller.povUp().onTrue(DriveCommands.snapToRotation(drive, Rotation2d.kZero));
+
+    controller
+        .povUpRight()
+        .onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(-45)));
+
+    controller.povRight().onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(-90)));
+
+    controller
+        .povDownRight()
+        .onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(-135)));
+
+    controller.povDown().onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(-180)));
+
+    controller
+        .povDownLeft()
+        .onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(135)));
+
+    controller.povLeft().onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(90)));
+
+    controller.povUpLeft().onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(45)));
+
+    // Lock to 0° when A button is held
+    // controller
+    // .a()
+    // .whileTrue(
+    // DriveCommands.joystickDriveAtAngle(
+    // drive,
+    // () -> -controller.getLeftY(),
+    // () -> -controller.getLeftX(),
+    // () -> Rotation2d.kZero));
 
     // Switch to X pattern when X button is pressed
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
@@ -152,7 +188,7 @@ public class RobotContainer extends frc.lib.RobotContainer {
             Commands.runOnce(
                     () ->
                         drive.setPose(
-                            new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
+                            new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
                     drive)
                 .ignoringDisable(true));
   }
@@ -164,6 +200,6 @@ public class RobotContainer extends frc.lib.RobotContainer {
 
   @Override
   public Command getTestCommand() {
-    return Commands.none();
+    return autoChooser.get();
   }
 }

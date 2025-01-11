@@ -1,6 +1,6 @@
 package frc.robot.Robot24.subsystems.drive;
 
-import static frc.robot.util.PhoenixUtil.tryUntilOk;
+import static frc.robot.Robot24.util.PhoenixUtil.tryUntilOk;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
@@ -22,8 +22,8 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
-import frc.robot.Robot24.Constants;
-import frc.robot.Robot24.TunerConstants;
+import frc.robot.Constants;
+import frc.robot.Robot24.generated.TunerConstants;
 
 public abstract class ModuleIOTalonFX implements ModuleIO {
   protected final SwerveModuleConstants<
@@ -90,7 +90,7 @@ public abstract class ModuleIOTalonFX implements ModuleIO {
     var turnConfig = new TalonFXConfiguration();
     turnConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     turnConfig.Slot0 = constants.SteerMotorGains;
-    if (frc.robot.Constants.currentMode == frc.robot.Constants.Mode.SIM)
+    if (Constants.currentMode == Constants.Mode.SIM)
       turnConfig.Slot0.withKD(0.5).withKS(0); // during simulation, gains are slightly different
 
     turnConfig.Feedback.FeedbackRemoteSensorID = constants.EncoderId;
@@ -136,7 +136,7 @@ public abstract class ModuleIOTalonFX implements ModuleIO {
 
     // Configure periodic frames
     BaseStatusSignal.setUpdateFrequencyForAll(
-        Constants.ODOMETRY_FREQUENCY, turnAbsolutePosition, drivePosition);
+        Drive.ODOMETRY_FREQUENCY, turnAbsolutePosition, drivePosition);
     BaseStatusSignal.setUpdateFrequencyForAll(
         50.0,
         driveVelocity,
