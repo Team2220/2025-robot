@@ -16,6 +16,6 @@ public class PWMEncoder {
 
     public Angle getPosition() {
         // return encoder.getAverageValue() * 360 / 4096.0 / Math.pow(2, oversampling);
-        return Units.Degrees.of(encoder.getValue() * 360 / 4096.);
+        return Units.Degrees.of(encoder.getValue() * 360.0 / 4096.0);
     }
 }

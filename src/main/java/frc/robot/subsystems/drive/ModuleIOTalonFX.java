@@ -59,7 +59,7 @@ public class ModuleIOTalonFX implements ModuleIO {
   // Hardware objects
   private final TalonFX driveTalon;
   private final TalonFX turnTalon;
-  private final CANcoder cancoder;
+//   private final CANcoder cancoder;
   private final PWMEncoder customEncoder;
 
   // Voltage control requests
@@ -103,7 +103,7 @@ public class ModuleIOTalonFX implements ModuleIO {
     this.constants = constants;
     driveTalon = new TalonFX(constants.DriveMotorId, TunerConstants.DrivetrainConstants.CANBusName);
     turnTalon = new TalonFX(constants.SteerMotorId, TunerConstants.DrivetrainConstants.CANBusName);
-    cancoder = new CANcoder(constants.EncoderId, TunerConstants.DrivetrainConstants.CANBusName);
+    // cancoder = new CANcoder(constants.EncoderId, TunerConstants.DrivetrainConstants.CANBusName);
     customEncoder = new PWMEncoder(constants.EncoderId);
 
     // Configure drive motor
@@ -143,13 +143,13 @@ public class ModuleIOTalonFX implements ModuleIO {
     tryUntilOk(5, () -> turnTalon.setPosition(customEncoder.getPosition(), 0.25));
 
     // Configure CANCoder
-    CANcoderConfiguration cancoderConfig = constants.EncoderInitialConfigs;
-    cancoderConfig.MagnetSensor.MagnetOffset = constants.EncoderOffset;
-    cancoderConfig.MagnetSensor.SensorDirection =
-        constants.EncoderInverted
-            ? SensorDirectionValue.Clockwise_Positive
-            : SensorDirectionValue.CounterClockwise_Positive;
-    cancoder.getConfigurator().apply(cancoderConfig);
+    // CANcoderConfiguration cancoderConfig = constants.EncoderInitialConfigs;
+    // cancoderConfig.MagnetSensor.MagnetOffset = constants.EncoderOffset;
+    // cancoderConfig.MagnetSensor.SensorDirection =
+    //     constants.EncoderInverted
+    //         ? SensorDirectionValue.Clockwise_Positive
+    //         : SensorDirectionValue.CounterClockwise_Positive;
+    // cancoder.getConfigurator().apply(cancoderConfig);
 
     // Create timestamp queue
     timestampQueue = PhoenixOdometryThread.getInstance().makeTimestampQueue();
@@ -163,7 +163,7 @@ public class ModuleIOTalonFX implements ModuleIO {
     driveCurrent = driveTalon.getStatorCurrent();
 
     // Create turn status signals
-    turnAbsolutePosition = cancoder.getAbsolutePosition();
+    turnAbsolutePosition = encoder.getPosition();
     turnPosition = turnTalon.getPosition();
     turnPositionQueue = PhoenixOdometryThread.getInstance().registerSignal(turnTalon.getPosition());
     turnVelocity = turnTalon.getVelocity();
