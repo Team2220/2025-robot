@@ -13,8 +13,8 @@ public class PWMEncoder {
     encoder.setOversampleBits(oversampling);
   }
 
-  public Angle getPosition() {
-    // return encoder.getAverageValue() * 360 / 4096.0 / Math.pow(2, oversampling);
-    return Units.Degrees.of(encoder.getValue() * 360 / 4096.);
+    public Angle getPosition() {
+        // return encoder.getAverageValue() * 360 / 4096.0 / Math.pow(2, oversampling);
+        return Degrees.of(encoder.getValue() * 360.0 / 4096.0);
+    }
   }
-}
