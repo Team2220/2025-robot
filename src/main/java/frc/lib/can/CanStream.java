@@ -31,13 +31,15 @@ public class CanStream {
       e.printStackTrace();
     }
   }
+
   public void process(CANStreamMessage message) {
     System.out.print("Message ID: " + message.messageID);
     System.out.print(" Timestamp: " + message.timestamp);
     System.out.print(" Length: " + message.length);
     System.out.print(" Data: ");
     for (int i = 0; i < message.data.length; i++) {
-      System.out.print(message.data [i]);
-    } System.out.println(" ");
+      System.out.print(message.data[i]);
     }
+    System.out.println(" ");
+  }
 }

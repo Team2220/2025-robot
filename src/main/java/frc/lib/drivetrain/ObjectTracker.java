@@ -37,7 +37,6 @@
 //     this.fwd = fwd;
 //     this.str = str;
 //   }
-  
 
 //   @Override
 //   public void initialize() {
@@ -71,11 +70,10 @@
 //     out = turningPid.calculate(out);
 //     outA = movingPid.calculate(outA);
 
-
 //     if (foundNote) {
 //       // System.out.println("out: "+ out);
 //       // var result = results.targets_Detector[0];
-      
+
 //       out = MathUtil.clamp(out, -1, 1);
 //       // System.out.println(outA);
 //       driveTrain.drive(0, outA, -out, false);

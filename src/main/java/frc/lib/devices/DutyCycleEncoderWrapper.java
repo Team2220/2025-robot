@@ -6,17 +6,19 @@ import frc.lib.faults.Fault;
 
 public class DutyCycleEncoderWrapper {
 
-    private DutyCycleEncoder duty;
+  private DutyCycleEncoder duty;
 
-    public DutyCycleEncoderWrapper(int channel) {
-        duty = new DutyCycleEncoder(channel);
-        Fault.autoUpdating("DutyCycleEncoder Disconnected", () -> {
-            var value = !duty.isConnected();
-            return value;
+  public DutyCycleEncoderWrapper(int channel) {
+    duty = new DutyCycleEncoder(channel);
+    Fault.autoUpdating(
+        "DutyCycleEncoder Disconnected",
+        () -> {
+          var value = !duty.isConnected();
+          return value;
         });
-    }
+  }
 
-    public Rotation2d getAngle() {
-        return Rotation2d.fromRotations(duty.get());
-    }
+  public Rotation2d getAngle() {
+    return Rotation2d.fromRotations(duty.get());
+  }
 }

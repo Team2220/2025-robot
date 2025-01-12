@@ -19,7 +19,10 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerMotorArrangement;
 import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.generated.TunerConstants;
+import frc.lib.RobotContainer;
+import frc.lib.RobotInstance;
+import frc.lib.replay.WPILogReadMACAddress;
+import org.ironmaple.simulation.SimulatedArena;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -40,6 +43,8 @@ public class Robot extends LoggedRobot {
   public Robot() {
     // Record metadata
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
+    Logger.recordMetadata("RobotMACAddress", RobotInstance.getMacAddressStr());
+    Logger.recordMetadata("RobotInstance", RobotInstance.getMacAddress().toString());
     Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
     Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
     Logger.recordMetadata("GitDate", BuildConstants.GIT_DATE);
@@ -55,6 +60,9 @@ public class Robot extends LoggedRobot {
         Logger.recordMetadata("GitDirty", "Unknown");
         break;
     }
+
+    // Record MAC address from log replay
+    String macAddress = null;
 
     // Set up data receivers & replay source
     switch (Constants.currentMode) {
@@ -73,6 +81,7 @@ public class Robot extends LoggedRobot {
         // Replaying a log, set up replay source
         setUseTiming(false); // Run as fast as possible
         String logPath = LogFileUtil.findReplayLog();
+        macAddress = WPILogReadMACAddress.get(logPath);
         Logger.setReplaySource(new WPILOGReader(logPath));
         Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
         break;
@@ -97,9 +106,36 @@ public class Robot extends LoggedRobot {
       }
     }
 
-    // Instantiate our RobotContainer. This will perform all our button bindings,
-    // and put our autonomous chooser on the dashboard.
-    robotContainer = new RobotContainer();
+    switch (Constants.currentMode) {
+      case REAL:
+      case SIM:
+        // Instantiate our RobotContainer. This will perform all our button bindings,
+        // and put our autonomous chooser on the dashboard.
+
+        // Choose robot instance based on current MAC address
+        robotContainer = RobotInstance.config(this::getRobotContainerFromInstance);
+        break;
+
+      case REPLAY:
+        /* Autodetects which robot instance to construct for REPLAY mode based on metadata */
+        if (macAddress == null) {
+          /* IF REPLAYING A LOG MISSING MAC ADDRESS, MANUALLY SELECT CORRECT ROBOT CODE HERE */
+          robotContainer = new frc.robot.Robot24.RobotContainer();
+        } else {
+          robotContainer = getRobotContainerFromInstance(RobotInstance.fromString(macAddress));
+        }
+        break;
+    }
+  }
+
+  private RobotContainer getRobotContainerFromInstance(RobotInstance instance) {
+    return switch (instance) {
+      case Robot24 -> new frc.robot.Robot24.RobotContainer();
+      // case BoxyBot -> new BoxysRobotContainer();
+      // case KrackenSwerve -> new frc.robot.KrackenSwerve.RobotContainer();
+      case Simulator -> new frc.robot.Robot24.RobotContainer();
+      default -> throw new RuntimeException("Unsupported robot instance: " + instance.toString());
+    };
   }
 
   /** This function is called periodically during all modes. */
@@ -121,8 +157,7 @@ public class Robot extends LoggedRobot {
 
   /** This function is called once when the robot is disabled. */
   @Override
-  public void disabledInit() {
-  }
+  public void disabledInit() {}
 
   /** This function is called periodically when disabled. */
   @Override
@@ -172,9 +207,14 @@ public class Robot extends LoggedRobot {
 
   /** This function is called once when the robot is first started up. */
   @Override
-  public void simulationInit() {}
+  public void simulationInit() {
+    // robotContainer.resetSimulation();
+  }
 
   /** This function is called periodically whilst in simulation. */
   @Override
-  public void simulationPeriodic() {}
+  public void simulationPeriodic() {
+    SimulatedArena.getInstance().simulationPeriodic();
+    robotContainer.displaySimFieldToAdvantageScope();
+  }
 }

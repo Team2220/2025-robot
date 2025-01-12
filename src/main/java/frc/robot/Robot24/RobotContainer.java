@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 
-package frc.robot;
+package frc.robot.Robot24;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -22,15 +22,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.commands.DriveCommands;
-import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.drive.GyroIO;
-import frc.robot.subsystems.drive.GyroIONavX;
-import frc.robot.subsystems.drive.GyroIOPigeon2;
-import frc.robot.subsystems.drive.ModuleIO;
-import frc.robot.subsystems.drive.ModuleIOSim;
-import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.Constants;
+import frc.robot.Constants.Mode;
+import frc.robot.Robot24.commands.DriveCommands;
+import frc.robot.Robot24.generated.TunerConstants;
+import frc.robot.Robot24.subsystems.drive.Drive;
+import frc.robot.Robot24.subsystems.drive.GyroIO;
+import frc.robot.Robot24.subsystems.drive.GyroIONavX;
+import frc.robot.Robot24.subsystems.drive.GyroIOSim;
+import frc.robot.Robot24.subsystems.drive.ModuleIO;
+import frc.robot.Robot24.subsystems.drive.ModuleIOTalonFXReal;
+import frc.robot.Robot24.subsystems.drive.ModuleIOTalonFXSim;
+import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -39,9 +42,13 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
-public class RobotContainer {
+public class RobotContainer extends frc.lib.RobotContainer {
   // Subsystems
   private final Drive drive;
+
+  // Drive simulation
+  private static final SwerveDriveSimulation driveSimulation =
+      new SwerveDriveSimulation(Drive.mapleSimConfig, Constants.simInitialFieldPose);
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -51,27 +58,28 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    super(driveSimulation);
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
         drive =
             new Drive(
                 new GyroIONavX(),
-                new ModuleIOTalonFX(TunerConstants.FrontLeft),
-                new ModuleIOTalonFX(TunerConstants.FrontRight),
-                new ModuleIOTalonFX(TunerConstants.BackLeft),
-                new ModuleIOTalonFX(TunerConstants.BackRight));
+                new ModuleIOTalonFXReal(TunerConstants.FrontLeft),
+                new ModuleIOTalonFXReal(TunerConstants.FrontRight),
+                new ModuleIOTalonFXReal(TunerConstants.BackLeft),
+                new ModuleIOTalonFXReal(TunerConstants.BackRight));
         break;
 
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
         drive =
             new Drive(
-                new GyroIO() {},
-                new ModuleIOSim(TunerConstants.FrontLeft),
-                new ModuleIOSim(TunerConstants.FrontRight),
-                new ModuleIOSim(TunerConstants.BackLeft),
-                new ModuleIOSim(TunerConstants.BackRight));
+                new GyroIOSim(driveSimulation.getGyroSimulation()),
+                new ModuleIOTalonFXSim(TunerConstants.FrontLeft, driveSimulation.getModules()[0]),
+                new ModuleIOTalonFXSim(TunerConstants.FrontRight, driveSimulation.getModules()[1]),
+                new ModuleIOTalonFXSim(TunerConstants.BackLeft, driveSimulation.getModules()[2]),
+                new ModuleIOTalonFXSim(TunerConstants.BackRight, driveSimulation.getModules()[3]));
         break;
 
       default:
@@ -122,17 +130,53 @@ public class RobotContainer {
             drive,
             () -> -controller.getLeftY(),
             () -> -controller.getLeftX(),
-            () -> -controller.getRightX()));
+            // Xbox controller is mapped incorrectly on Mac OS
+            () ->
+                Constants.simMode == Mode.REAL
+                    ? -controller.getRightX()
+                    : -controller.getLeftTriggerAxis(),
+            () ->
+                Constants.simMode == Mode.REAL
+                    ? controller.getRightTriggerAxis() > 0.5
+                    : controller.getRightY() > 0.5));
 
-    // Lock to 0° when A button is held
     controller
         .a()
-        .whileTrue(
-            DriveCommands.joystickDriveAtAngle(
-                drive,
-                () -> -controller.getLeftY(),
-                () -> -controller.getLeftX(),
-                () -> new Rotation2d()));
+        .toggleOnTrue(
+            DriveCommands.keepRotationForward(
+                drive, () -> -controller.getLeftY(), () -> -controller.getLeftX()));
+
+    controller.povUp().onTrue(DriveCommands.snapToRotation(drive, Rotation2d.kZero));
+
+    controller
+        .povUpRight()
+        .onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(-45)));
+
+    controller.povRight().onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(-90)));
+
+    controller
+        .povDownRight()
+        .onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(-135)));
+
+    controller.povDown().onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(-180)));
+
+    controller
+        .povDownLeft()
+        .onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(135)));
+
+    controller.povLeft().onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(90)));
+
+    controller.povUpLeft().onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(45)));
+
+    // Lock to 0° when A button is held
+    // controller
+    // .a()
+    // .whileTrue(
+    // DriveCommands.joystickDriveAtAngle(
+    // drive,
+    // () -> -controller.getLeftY(),
+    // () -> -controller.getLeftX(),
+    // () -> Rotation2d.kZero));
 
     // Switch to X pattern when X button is pressed
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
@@ -144,17 +188,18 @@ public class RobotContainer {
             Commands.runOnce(
                     () ->
                         drive.setPose(
-                            new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
+                            new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
                     drive)
                 .ignoringDisable(true));
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
+  @Override
   public Command getAutonomousCommand() {
+    return autoChooser.get();
+  }
+
+  @Override
+  public Command getTestCommand() {
     return autoChooser.get();
   }
 }

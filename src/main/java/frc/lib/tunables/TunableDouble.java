@@ -1,12 +1,11 @@
 package frc.lib.tunables;
 
-import java.util.function.DoubleConsumer;
-
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.lib.functional.BooleanDoubleConsumer;
+import java.util.function.DoubleConsumer;
 
 public class TunableDouble {
   private double defaultValue;
@@ -20,7 +19,6 @@ public class TunableDouble {
    * @param d
    * @param tunable
    */
-
   public TunableDouble(String name, double defaultValue, String tab) {
     this(name, defaultValue, true, tab);
   }
@@ -30,7 +28,8 @@ public class TunableDouble {
     addChangeListener(onChange);
   }
 
-  public TunableDouble(String name, double defaultValue, String tab, BooleanDoubleConsumer onChange) {
+  public TunableDouble(
+      String name, double defaultValue, String tab, BooleanDoubleConsumer onChange) {
     this(name, defaultValue, tab);
     addChangeListener(onChange);
   }
@@ -46,7 +45,8 @@ public class TunableDouble {
     }
   }
 
-  public TunableDouble(String name, double defaultValue, boolean tunable, String tab, DoubleConsumer onChange) {
+  public TunableDouble(
+      String name, double defaultValue, boolean tunable, String tab, DoubleConsumer onChange) {
     this(name, defaultValue, tunable, tab);
     addChangeListener(onChange);
   }
@@ -56,12 +56,18 @@ public class TunableDouble {
     addChangeListener(onChange);
   }
 
-  public TunableDouble(String name, double defaultValue, boolean tunable, String tab, BooleanDoubleConsumer onChange) {
+  public TunableDouble(
+      String name,
+      double defaultValue,
+      boolean tunable,
+      String tab,
+      BooleanDoubleConsumer onChange) {
     this(name, defaultValue, tunable, tab);
     addChangeListener(onChange);
   }
 
-  public TunableDouble(String name, double defaultValue, boolean tunable, BooleanDoubleConsumer onChange) {
+  public TunableDouble(
+      String name, double defaultValue, boolean tunable, BooleanDoubleConsumer onChange) {
     this(name, defaultValue, tunable);
     addChangeListener(onChange);
   }
@@ -82,8 +88,7 @@ public class TunableDouble {
    * @return Value as a double
    */
   public double getValue() {
-    if (shuffleboard != null)
-      return shuffleboard.getDouble(defaultValue);
+    if (shuffleboard != null) return shuffleboard.getDouble(defaultValue);
     return defaultValue;
   }
 
@@ -93,21 +98,21 @@ public class TunableDouble {
 
   public void addChangeListener(BooleanDoubleConsumer onChange) {
     onChange.accept(true, getValue());
-    CommandScheduler.getInstance().getDefaultButtonLoop().bind(
-        new Runnable() {
-          private double oldValue = getValue();
+    CommandScheduler.getInstance()
+        .getDefaultButtonLoop()
+        .bind(
+            new Runnable() {
+              private double oldValue = getValue();
 
-          @Override
-          public void run() {
-            double newValue = getValue();
+              @Override
+              public void run() {
+                double newValue = getValue();
 
-            if (oldValue != newValue) {
-              onChange.accept(false, newValue);
-              oldValue = newValue;
-            }
-
-          }
-        });
+                if (oldValue != newValue) {
+                  onChange.accept(false, newValue);
+                  oldValue = newValue;
+                }
+              }
+            });
   }
-
 }
