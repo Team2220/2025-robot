@@ -40,6 +40,7 @@ import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -234,7 +235,7 @@ public class Drive extends SubsystemBase /* implements Vision.VisionConsumer */ 
     }
 
     // Update gyro alert
-    gyroDisconnectedAlert.set(!gyroInputs.connected && Constants.currentMode != Mode.SIM);
+    gyroDisconnectedAlert.set(!gyroInputs.connected && Constants.CURRENT_MODE != Mode.SIM);
   }
 
   /**
@@ -244,7 +245,7 @@ public class Drive extends SubsystemBase /* implements Vision.VisionConsumer */ 
    */
   public void runVelocity(ChassisSpeeds speeds) {
     // Calculate module setpoints
-    speeds = ChassisSpeeds.discretize(speeds, 0.02);
+    speeds = ChassisSpeeds.discretize(speeds, TimedRobot.kDefaultPeriod);
     SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(speeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, TunerConstants.kSpeedAt12Volts);
 

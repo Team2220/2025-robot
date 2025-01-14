@@ -24,6 +24,7 @@ import com.ctre.phoenix6.sim.TalonFXSimState;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import java.util.function.Supplier;
 import org.ironmaple.simulation.SimulatedArena;
@@ -106,7 +107,9 @@ public final class PhoenixUtil {
     final double[] odometryTimeStamps = new double[SimulatedArena.getSimulationSubTicksIn1Period()];
     for (int i = 0; i < odometryTimeStamps.length; i++) {
       odometryTimeStamps[i] =
-          Timer.getFPGATimestamp() - 0.02 + i * SimulatedArena.getSimulationDt().in(Seconds);
+          Timer.getFPGATimestamp()
+              - TimedRobot.kDefaultPeriod
+              + i * SimulatedArena.getSimulationDt().in(Seconds);
     }
 
     return odometryTimeStamps;

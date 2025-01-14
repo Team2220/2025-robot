@@ -72,7 +72,7 @@ public class TunerConstants {
   private static final double kCoupleRatio = 3.8181818181818183;
 
   private static final double kDriveGearRatio = 6.122;
-  private static final double kSteerGearRatio = 15.428; // (150.0 / 7.0);
+  private static final double kSteerGearRatio = 150.0 / 7.0; // 15.428; // (150.0 / 7.0);
   private static final Distance kWheelRadius = Inches.of(2);
 
   // Theoretical free speed (m/s) at 12 V applied output;
@@ -93,11 +93,11 @@ public class TunerConstants {
   private static final int kPigeonId = 1;
 
   // These are only used for simulation
-  private static final MomentOfInertia kSteerInertia = KilogramSquareMeters.of(3.5616048297757996);
-  private static final MomentOfInertia kDriveInertia = KilogramSquareMeters.of(5.3609491886953995);
+  private static final MomentOfInertia kSteerInertia = KilogramSquareMeters.of(0.007442);
+  private static final MomentOfInertia kDriveInertia = KilogramSquareMeters.of(0.007212);
   // Simulated voltage necessary to overcome friction
-  private static final Voltage kSteerFrictionVoltage = Volts.of(0.5); // 0.3 - 0.5
-  private static final Voltage kDriveFrictionVoltage = Volts.of(0.8); // 0.6 - 0.8
+  private static final Voltage kSteerFrictionVoltage = Volts.of(0.4); // 0.3 - 0.5
+  private static final Voltage kDriveFrictionVoltage = Volts.of(0.7); // 0.6 - 0.8
 
   public static final SwerveDrivetrainConstants DrivetrainConstants =
       new SwerveDrivetrainConstants()
