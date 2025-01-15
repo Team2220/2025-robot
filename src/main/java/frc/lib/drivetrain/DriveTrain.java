@@ -39,7 +39,6 @@
 // import com.pathplanner.lib.config.PIDConstants;
 // import com.pathplanner.lib.util.PathPlannerLogging;
 
-
 // import edu.wpi.first.wpilibj2.command.Command;
 // import edu.wpi.first.wpilibj2.command.SubsystemBase;
 // import frc.lib.ShuffleBoardTabWrapper;
@@ -60,13 +59,16 @@
 //  * radians.
 //  */
 
-// public class DriveTrain extends SubsystemBase implements TalonFXSubsystem, CheckableSubsystem, ShuffleBoardTabWrapper {
+// public class DriveTrain extends SubsystemBase implements TalonFXSubsystem, CheckableSubsystem,
+// ShuffleBoardTabWrapper {
 //     public static final PIDConstants rotationConstants = new PIDConstants(2, 0.0, 0.3);
 
 //     double driveRadius = Math
-//             .sqrt(Math.pow(DRIVETRAIN_TRACKWIDTH_METERS / 2, 2) + Math.pow(DRIVETRAIN_WHEELBASE_METERS / 2, 2));
+//             .sqrt(Math.pow(DRIVETRAIN_TRACKWIDTH_METERS / 2, 2) +
+// Math.pow(DRIVETRAIN_WHEELBASE_METERS / 2, 2));
 
-//     public DriveTrain(Angle frontLeftOffset, Angle frontrightoffset, Angle backleftoffset, Angle backrightoffset) {
+//     public DriveTrain(Angle frontLeftOffset, Angle frontrightoffset, Angle backleftoffset, Angle
+// backrightoffset) {
 //         this.frontLeft = new SwerveModule(
 //                 "frontleft",
 //                 12,
@@ -106,16 +108,21 @@
 //                 .withPosition(0, 0);
 //         AutoBuilder.configureHolonomic(
 //                 this::getPose, // Robot pose supplier
-//                 this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+//                 this::resetPose, // Method to reset odometry (will be called if your auto has a
+// starting pose)
 //                 this::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-//                 this::autoDriveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-//                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your
+//                 this::autoDriveRobotRelative, // Method that will drive the robot given ROBOT
+// RELATIVE ChassisSpeeds
+//                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should
+// likely live in your
 //                                                  // Constants class
 //                         new PIDConstants(.001, 0.0, 0.0), // Translation PID constants
 //                         rotationConstants, // Rotation PID constants
 //                         MAX_VELOCITY.in(MetersPerSecond), // Max module speed, in m/s
-//                         driveRadius, // Drive base radius in meters. Distance from robot center to furthest module.
-//                         new ReplanningConfig() // Default path replanning config. See the API for the options here
+//                         driveRadius, // Drive base radius in meters. Distance from robot center
+// to furthest module.
+//                         new ReplanningConfig() // Default path replanning config. See the API for
+// the options here
 //                 ),
 //                 () -> {
 //                     // Boolean supplier that controls when the path will be mirrored for the red
@@ -190,7 +197,8 @@
 
 //     public void autoDriveRobotRelative(ChassisSpeeds speed) {
 //         driveRobotRelative(
-//                 new ChassisSpeeds(speed.vyMetersPerSecond * 1.55, speed.vxMetersPerSecond * -1.55,
+//                 new ChassisSpeeds(speed.vyMetersPerSecond * 1.55, speed.vxMetersPerSecond *
+// -1.55,
 //                         speed.omegaRadiansPerSecond));
 //     }
 
@@ -221,9 +229,7 @@
 //         backLeft.toggleCoast();
 //         backRight.toggleCoast();
 
-
 //     };
-
 
 //     private final SwerveModule frontLeft;
 //     private final SwerveModule frontRight;
@@ -280,10 +286,12 @@
 //         };
 //     }
 
-//     private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(10));
+//     private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(0.5, 0.5,
+// Units.degreesToRadians(10));
 //     public static final double DRIVETRAIN_TRACKWIDTH_METERS = inchesToMeters(24.5);
 //     public static final double DRIVETRAIN_WHEELBASE_METERS = inchesToMeters(24.5);
-//     private static final Vector<N3> stateStdDevs = VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5));
+//     private static final Vector<N3> stateStdDevs = VecBuilder.fill(0.05, 0.05,
+// Units.degreesToRadians(5));
 
 //     public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(
 //             // // Front left
@@ -300,13 +308,17 @@
 //             // -DRIVETRAIN_WHEELBASE_METERS / 2.0)
 
 //             // Front left
-//             new Translation2d(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0),
+//             new Translation2d(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS /
+// 2.0),
 //             // Front right
-//             new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0),
+//             new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS /
+// 2.0),
 //             // Back left
-//             new Translation2d(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0),
+//             new Translation2d(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS /
+// 2.0),
 //             // Back right
-//             new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0));
+//             new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS /
+// 2.0));
 
 //     private final SwerveDrivePoseEstimator poseEstimator;
 
@@ -319,7 +331,7 @@
 //     public static final Measure<Velocity<Distance>> MAX_VELOCITY = UnitsUtil.velocityForWheel(
 //         SwerveModule.DT_WHEEL_DIAMETER,
 //                 RotationsPerSecond.of(6380.0 / 60.0 / SwerveModule.DT_DRIVE_GEAR_RATIO));
-        
+
 //     // ModuleConfiguration.MK4I_L2.getDriveReduction() *
 //     // ModuleConfiguration.MK4I_L2.getWheelDiameter() * PI;
 
@@ -330,7 +342,8 @@
 //      */
 //     // Here we calculate the theoretical maximum angular velocity. You can also
 //     // replace this with a measured amount.
-//     public static final Measure<Velocity<Angle>> MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = RadiansPerSecond.of(MAX_VELOCITY.in(MetersPerSecond) /
+//     public static final Measure<Velocity<Angle>> MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND =
+// RadiansPerSecond.of(MAX_VELOCITY.in(MetersPerSecond) /
 //             Math.hypot(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0));
 
 //     public Command xcommand() {

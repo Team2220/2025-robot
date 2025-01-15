@@ -87,8 +87,10 @@ public class TunerConstants {
   // Theoretical free speed (m/s) at 12 V applied output;
   // This needs to be tuned to your individual robot
   public static final double kMaxMotorRPM = 6000.0;
-  public static final LinearVelocity kSpeedAt12Volts = MetersPerSecond.of(Math.PI * kWheelRadius.in(Meters) * 2 * kMaxMotorRPM / 60 / kDriveGearRatio);
-  
+  public static final LinearVelocity kSpeedAt12Volts =
+      MetersPerSecond.of(
+          Math.PI * kWheelRadius.in(Meters) * 2 * kMaxMotorRPM / 60 / kDriveGearRatio);
+
   private static final boolean kInvertLeftSide = false;
   private static final boolean kInvertRightSide = true;
 

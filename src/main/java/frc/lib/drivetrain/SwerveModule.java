@@ -34,7 +34,6 @@
 // import edu.wpi.first.units.measure.*;
 // import static edu.wpi.first.units.Units.*;
 
-
 // public class SwerveModule implements ShuffleBoardTabWrapper {
 //   GenericEntry speed;
 //   GenericEntry angle;
@@ -70,8 +69,10 @@
 //     angle = Shuffleboard.getTab("swerve").add(name + " angle", 0).getEntry();
 //     drivePositionEntry = Shuffleboard.getTab("swerve").add(name + " drivePostion", 0).getEntry();
 
-//     Shuffleboard.getTab("swerve").addDouble(name + " motor encoder", () -> getTurningMotorRotation2d().getDegrees());
-//     Shuffleboard.getTab("swerve").addDouble(name + "encoder", () -> turningEncoder.getPosition().in(Degrees));
+//     Shuffleboard.getTab("swerve").addDouble(name + " motor encoder", () ->
+// getTurningMotorRotation2d().getDegrees());
+//     Shuffleboard.getTab("swerve").addDouble(name + "encoder", () ->
+// turningEncoder.getPosition().in(Degrees));
 
 //     SwerveModule.DT_DRIVE_P.addChangeListener((isInit, value) -> {
 //       driveConfig.Slot0.kP = value;
@@ -160,7 +161,8 @@
 
 //     return UnitsUtil.velocityForWheel(
 //         DT_WHEEL_DIAMETER,
-//         RotationsPerSecond.of(driveMotor.getVelocity().getValueAsDouble() * (1.0 / DT_DRIVE_GEAR_RATIO)));
+//         RotationsPerSecond.of(driveMotor.getVelocity().getValueAsDouble() * (1.0 /
+// DT_DRIVE_GEAR_RATIO)));
 
 //   }
 
@@ -177,21 +179,30 @@
 //     };
 //   }
 
-//   public static final TunableDouble DT_DRIVE_P = new TunableDouble("DT_DRIVE_P", 0.025, "swerve").setSpot(0, 0);
-//   public static final TunableDouble DT_DRIVE_I = new TunableDouble("DT_DRIVE_I", 0, "swerve").setSpot(1, 0);
-//   public static final TunableDouble DT_DRIVE_D = new TunableDouble("DT_DRIVE_D", 0.00001, "swerve").setSpot(2, 0);
-//   public static final TunableDouble DT_DRIVE_F = new TunableDouble("DT_DRIVE_F", 0, "swerve").setSpot(3, 0);
+//   public static final TunableDouble DT_DRIVE_P = new TunableDouble("DT_DRIVE_P", 0.025,
+// "swerve").setSpot(0, 0);
+//   public static final TunableDouble DT_DRIVE_I = new TunableDouble("DT_DRIVE_I", 0,
+// "swerve").setSpot(1, 0);
+//   public static final TunableDouble DT_DRIVE_D = new TunableDouble("DT_DRIVE_D", 0.00001,
+// "swerve").setSpot(2, 0);
+//   public static final TunableDouble DT_DRIVE_F = new TunableDouble("DT_DRIVE_F", 0,
+// "swerve").setSpot(3, 0);
 
 //   // PID values for the steer motor
-//   public static final TunableDouble DT_STEER_P = new TunableDouble("DT_STEER_P", 1, "swerve").setSpot(0, 1);
-//   public static final TunableDouble DT_STEER_I = new TunableDouble("DT_STEER_I", 0, "swerve").setSpot(1, 1);
-//   public static final TunableDouble DT_STEER_D = new TunableDouble("DT_STEER_D", 0.0001, "swerve").setSpot(2, 1);
-//   public static final TunableDouble DT_STEER_F = new TunableDouble("DT_STEER_F", 0, "swerve").setSpot(3, 1);
+//   public static final TunableDouble DT_STEER_P = new TunableDouble("DT_STEER_P", 1,
+// "swerve").setSpot(0, 1);
+//   public static final TunableDouble DT_STEER_I = new TunableDouble("DT_STEER_I", 0,
+// "swerve").setSpot(1, 1);
+//   public static final TunableDouble DT_STEER_D = new TunableDouble("DT_STEER_D", 0.0001,
+// "swerve").setSpot(2, 1);
+//   public static final TunableDouble DT_STEER_F = new TunableDouble("DT_STEER_F", 0,
+// "swerve").setSpot(3, 1);
 
 //   private Distance getDrivePosition() {
 //     return UnitsUtil.distanceForWheel(
 //         DT_WHEEL_DIAMETER,
-//         Rotation.of(driveMotor.getRotorPosition().getValueAsDouble() * (1.0 / DT_DRIVE_GEAR_RATIO)));
+//         Rotation.of(driveMotor.getRotorPosition().getValueAsDouble() * (1.0 /
+// DT_DRIVE_GEAR_RATIO)));
 //   }
 
 //   private double mpsToEncoderTicks(double mps) {
@@ -224,9 +235,11 @@
 //     Rotation2d rotation2d = getTurningMotorRotation2d();
 //     SwerveModuleState state = SwerveModuleState.optimize(desiredState, rotation2d);
 //     speed.setDouble(mpsToEncoderTicks(state.speedMetersPerSecond));
-//     driveMotor.setControl(new VelocityDutyCycle(mpsToEncoderTicks(state.speedMetersPerSecond) * -1));
+//     driveMotor.setControl(new VelocityDutyCycle(mpsToEncoderTicks(state.speedMetersPerSecond) *
+// -1));
 //     turningMotor.setControl(new PositionDutyCycle(
-//         angleToEncoderTicks(convertAngle(rotation2d.getDegrees(), state.angle.getDegrees()) * -1)));
+//         angleToEncoderTicks(convertAngle(rotation2d.getDegrees(), state.angle.getDegrees()) *
+// -1)));
 
 //   }
 

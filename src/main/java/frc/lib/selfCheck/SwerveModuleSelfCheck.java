@@ -41,8 +41,10 @@
 
 //     @Override
 //     public boolean isFinished() {
-//         var currentPosition = UnitsUtil.inputModulus(getCurrentPosition(),Units.Degrees.of(0),Units.Degrees.of(180));
-//         var wrappedPosition = UnitsUtil.inputModulus(getCurrentPosition(),Units.Degrees.of(0),Units.Degrees.of(180));
+//         var currentPosition =
+// UnitsUtil.inputModulus(getCurrentPosition(),Units.Degrees.of(0),Units.Degrees.of(180));
+//         var wrappedPosition =
+// UnitsUtil.inputModulus(getCurrentPosition(),Units.Degrees.of(0),Units.Degrees.of(180));
 //         var diff = (currentPosition.minus(wrappedPosition));
 //         return UnitsUtil.abs(diff).lte(tolerance);
 //     }
@@ -59,7 +61,6 @@
 //     @Override
 //     public String getDescription() {
 //         return "set Position Of " + module.getName() + " to " + position.toLongString();
-       
 
 //     }
 // }

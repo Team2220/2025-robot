@@ -4,6 +4,9 @@ plugins {
 
     // Add gversion plugin for AdvantageKit
     id "com.peterabeles.gversion" version "1.10"
+
+    // For formatting
+    id 'com.diffplug.spotless' version '7.0.1'
 }
 
 java {

@@ -1,7 +1,6 @@
 package frc.lib;
 
 import edu.wpi.first.wpilibj.Timer;
-import frc.lib.faults.Fault;
 
 /*
  * This class works the same way as WPILib's Tracer class:
@@ -11,6 +10,7 @@ import frc.lib.faults.Fault;
 public class LoopTimer {
   // private String name;
   private GraphWrapper graph;
+
   // private Fault fault;
   // private double maxTimeMilliseconds;
 

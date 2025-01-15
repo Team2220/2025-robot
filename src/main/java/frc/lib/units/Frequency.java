@@ -3,18 +3,12 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.lib.units;
 
-import edu.wpi.first.units.UnaryFunction;
-import edu.wpi.first.units.Unit;
-
 /**
  * Unit of the number of waves that pass a fixed point in unit time.
  *
- * <p>
- * This is the base type for units of frequency.
+ * <p>This is the base type for units of frequency.
  *
- * <p>
- * Actual units (such as {@link Units#hertz} and {@link Units#megaHertz}) can be
- * found in the
+ * <p>Actual units (such as {@link Units#hertz} and {@link Units#megaHertz}) can be found in the
  * {@link UnitsUtil} class.
  */
 // public class Frequency extends Unit<Frequency> {
@@ -24,7 +18,8 @@ import edu.wpi.first.units.Unit;
 //     }
 
 //     Frequency(
-//             UnaryFunction toBaseConverter, UnaryFunction fromBaseConverter, String name, String symbol) {
+//             UnaryFunction toBaseConverter, UnaryFunction fromBaseConverter, String name, String
+// symbol) {
 //         super(Frequency.class, toBaseConverter, fromBaseConverter, name, symbol);
 //     }
 
