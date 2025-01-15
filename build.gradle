@@ -159,3 +159,17 @@ task(eventDeploy) {
     }
 }
 createVersionFile.dependsOn(eventDeploy)
+
+spotless {
+    java {
+        targetExclude '**/BuildConstants.java'
+        googleJavaFormat()
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+}
+
+tasks.named("build") {
+    dependsOn "spotlessApply"
+}

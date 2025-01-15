@@ -188,3 +188,7 @@ compile_commands.json
 
 # Ignore generated build constants by AdvantageKit
 BuildConstants.java
+
+# Ignore simgui and network table files created by simulator
+simgui*
+networktables.json

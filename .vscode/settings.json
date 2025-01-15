@@ -7,12 +7,22 @@
     "**/.hg": true,
     "**/CVS": true,
     "**/.DS_Store": true,
+    "**/.gradle": true,
+    "**/gradlew": true,
+    "**/gradlew.bat": true,
     "bin/": true,
     "**/.classpath": true,
     "**/.project": true,
     "**/.settings": true,
     "**/.factorypath": true,
-    "**/*~": true
+    "**/*~": true,
+    "**/BuildConstants.java": true,
+    "*.log": true,
+    ".wpilib": true,
+    "gradle": true,
+    "ctre_sim": true,
+    "build": true,
+    "WPILib-License.md": true,
   },
   "java.test.config": [
     {
@@ -39,6 +49,13 @@
     "org.mockito.Answers.*",
     "edu.wpi.first.units.Units.*"
   ],
+  "java.completion.guessMethodArguments": "off",
+  "java.completion.importOrder": [
+    "#",
+    "frc.robot",
+    "frc.lib",
+    "edu.wpi.first",
+  ],
   "java.completion.filteredTypes": [
     "java.awt.*",
     "com.sun.*",
@@ -55,6 +72,36 @@
     "javax.smartcardio.*",
     "edu.wpi.first.math.proto.*",
     "edu.wpi.first.math.**.proto.*",
-    "edu.wpi.first.math.**.struct.*",
-  ]
+    "edu.wpi.first.math.**.struct.*"
+  ],
+  "editor.formatOnSave": true,
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+  "[java]": {
+    "spotlessGradle.format.enable": true,
+    "spotlessGradle.diagnostics.enable": true,
+    "editor.defaultFormatter": "richardwillis.vscode-spotless-gradle",
+    "files.trimTrailingWhitespace": false,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.spotlessGradle": "always",
+    }
+  },
+  "[gradle]": {
+    "files.trimTrailingWhitespace": false,
+    "spotlessGradle.diagnostics.enable": true,
+    "spotlessGradle.format.enable": true,
+    "editor.defaultFormatter": "richardwillis.vscode-spotless-gradle",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.spotlessGradle": "always",
+    }
+  },
+  "[kotlin]": {
+    "files.trimTrailingWhitespace": false,
+    "spotlessGradle.diagnostics.enable": true,
+    "spotlessGradle.format.enable": true,
+    "editor.defaultFormatter": "richardwillis.vscode-spotless-gradle",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.spotlessGradle": "always",
+    }
+  }
 }
