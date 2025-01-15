@@ -29,7 +29,7 @@ public final class SimConstants {
   public static final Mode SIM_MODE = Mode.SIM;
   public static final Pose2d SIM_INITIAL_FIELD_POSE = new Pose2d(3, 3, new Rotation2d());
   public static final Supplier<RobotContainer> SIM_ROBOT_SUPPLIER =
-      () -> new frc.robot.Robot24.RobotContainer();
+      () -> new frc.robot.Robot25.RobotContainer();
 
   /* DO NOT CHANGE */
   public static final Mode CURRENT_MODE = RobotBase.isReal() ? Mode.REAL : SIM_MODE;

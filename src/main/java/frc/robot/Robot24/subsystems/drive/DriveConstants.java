@@ -71,9 +71,6 @@ public class DriveConstants {
   public static final double ROBOT_MOI = 6.978708607719857;
   public static final double WHEEL_COF = 1.2;
 
-  public static final double ODOMETRY_FREQUENCY =
-      new CANBus(DriveConstants.DrivetrainConstants.CANBusName).isNetworkFD() ? 250.0 : 100.0;
-
   // The closed-loop output type to use for the steer motors;
   // This affects the PID/FF gains for the steer motors
   private static final ClosedLoopOutputType kSteerClosedLoopOutput = ClosedLoopOutputType.Voltage;
@@ -208,7 +205,8 @@ public class DriveConstants {
               .withSteerInertia(Sim.kSteerInertia)
               .withDriveInertia(Sim.kDriveInertia)
               .withSteerFrictionVoltage(Sim.kSteerFrictionVoltage)
-              .withDriveFrictionVoltage(Sim.kDriveFrictionVoltage);
+              .withDriveFrictionVoltage(Sim.kDriveFrictionVoltage)
+              .withEncoderInitialConfigs(new CANcoderConfiguration());
 
   public static final SwerveModuleConstants<
           TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
@@ -272,4 +270,7 @@ public class DriveConstants {
           Math.max(
               Math.hypot(DriveConstants.BackLeft.LocationX, DriveConstants.BackLeft.LocationY),
               Math.hypot(DriveConstants.BackRight.LocationX, DriveConstants.BackRight.LocationY)));
+
+  public static final double ODOMETRY_FREQUENCY =
+      new CANBus(DriveConstants.DrivetrainConstants.CANBusName).isNetworkFD() ? 250.0 : 100.0;
 }

@@ -59,8 +59,8 @@ public class DriveConstants {
         new Slot0Configs().withKP(0.5).withKI(0).withKD(0).withKS(0.12085).withKV(0.83153);
 
     /* These are both calculated off of MK4i Swerve Module CAD */
-    private static final MomentOfInertia kSteerInertia = KilogramSquareMeters.of(0.007442);
-    private static final MomentOfInertia kDriveInertia = KilogramSquareMeters.of(0.007212);
+    private static final MomentOfInertia kSteerInertia = KilogramSquareMeters.of(0.02); // 0.007442
+    private static final MomentOfInertia kDriveInertia = KilogramSquareMeters.of(0.019); // 0.007212
 
     private static final Voltage kSteerFrictionVoltage = Volts.of(0.4); // suggested range 0.3 - 0.5
     private static final Voltage kDriveFrictionVoltage = Volts.of(0.7); // suggested range 0.6 - 0.8
@@ -70,9 +70,6 @@ public class DriveConstants {
   public static final double ROBOT_MASS_KG = 60.07;
   public static final double ROBOT_MOI = 6.978708607719857;
   public static final double WHEEL_COF = 1.2;
-
-  public static final double ODOMETRY_FREQUENCY =
-      new CANBus(DriveConstants.DrivetrainConstants.CANBusName).isNetworkFD() ? 250.0 : 100.0;
 
   // The closed-loop output type to use for the steer motors;
   // This affects the PID/FF gains for the steer motors
@@ -208,7 +205,8 @@ public class DriveConstants {
               .withSteerInertia(Sim.kSteerInertia)
               .withDriveInertia(Sim.kDriveInertia)
               .withSteerFrictionVoltage(Sim.kSteerFrictionVoltage)
-              .withDriveFrictionVoltage(Sim.kDriveFrictionVoltage);
+              .withDriveFrictionVoltage(Sim.kDriveFrictionVoltage)
+              .withEncoderInitialConfigs(new CANcoderConfiguration());
 
   public static final SwerveModuleConstants<
           TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
@@ -272,4 +270,7 @@ public class DriveConstants {
           Math.max(
               Math.hypot(DriveConstants.BackLeft.LocationX, DriveConstants.BackLeft.LocationY),
               Math.hypot(DriveConstants.BackRight.LocationX, DriveConstants.BackRight.LocationY)));
+
+  public static final double ODOMETRY_FREQUENCY =
+      new CANBus(DrivetrainConstants.CANBusName).isNetworkFD() ? 250.0 : 100.0;
 }
