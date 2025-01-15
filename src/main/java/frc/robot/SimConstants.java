@@ -24,7 +24,7 @@ import java.util.function.Supplier;
  * on a roboRIO. Change the value of "simMode" to switch between "sim" (physics sim) and "replay"
  * (log replay from a file).
  */
-public final class Constants {
+public final class SimConstants {
   /* Simulation mode, initial position, and robot container */
   public static final Mode SIM_MODE = Mode.SIM;
   public static final Pose2d SIM_INITIAL_FIELD_POSE = new Pose2d(3, 3, new Rotation2d());

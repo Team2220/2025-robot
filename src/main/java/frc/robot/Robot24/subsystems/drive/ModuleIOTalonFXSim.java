@@ -17,9 +17,7 @@ import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Rotations;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import frc.robot.Robot24.util.PhoenixUtil;
 import java.util.Arrays;
@@ -31,26 +29,6 @@ import org.ironmaple.simulation.drivesims.SwerveModuleSimulation;
  */
 public class ModuleIOTalonFXSim extends ModuleIOTalonFX {
 
-  // TODO Both sets of gains need to be tuned to your individual robot; practice tuning in the
-  // simulation
-
-  // The steer motor uses any SwerveModule.SteerRequestType control request with the
-  // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
-  private static final Slot0Configs steerGains =
-      new Slot0Configs()
-          .withKP(140)
-          .withKI(0)
-          .withKD(5)
-          .withKS(0.1)
-          .withKV(1.91)
-          .withKA(0)
-          .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
-
-  // When using closed-loop control, the drive motor uses the control
-  // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
-  private static final Slot0Configs driveGains =
-      new Slot0Configs().withKP(0.5).withKI(0).withKD(0).withKS(0.12085).withKV(0.83153);
-
   private final SwerveModuleSimulation simulation;
 
   public ModuleIOTalonFXSim(
@@ -58,7 +36,10 @@ public class ModuleIOTalonFXSim extends ModuleIOTalonFX {
           constants,
       SwerveModuleSimulation simulation) {
     // Pass constants to parent class with updated gains
-    super(constants.withDriveMotorGains(driveGains).withSteerMotorGains(steerGains));
+    super(
+        constants
+            .withDriveMotorGains(DriveConstants.Sim.DRIVE_GAINS)
+            .withSteerMotorGains(DriveConstants.Sim.STEER_GAINS));
 
     this.simulation = simulation;
     simulation.useDriveMotorController(

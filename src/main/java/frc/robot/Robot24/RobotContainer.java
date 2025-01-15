@@ -25,18 +25,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.Constants;
-import frc.robot.Constants.Mode;
 import frc.robot.Robot;
 import frc.robot.Robot24.commands.DriveCommands;
-import frc.robot.Robot24.generated.TunerConstants;
 import frc.robot.Robot24.subsystems.drive.Drive;
+import frc.robot.Robot24.subsystems.drive.DriveConstants;
 import frc.robot.Robot24.subsystems.drive.GyroIO;
 import frc.robot.Robot24.subsystems.drive.GyroIONavX;
 import frc.robot.Robot24.subsystems.drive.GyroIOSim;
 import frc.robot.Robot24.subsystems.drive.ModuleIO;
 import frc.robot.Robot24.subsystems.drive.ModuleIOTalonFXReal;
 import frc.robot.Robot24.subsystems.drive.ModuleIOTalonFXSim;
+import frc.robot.SimConstants;
+import frc.robot.SimConstants.Mode;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -52,7 +52,7 @@ public class RobotContainer extends frc.lib.RobotContainer {
 
   // Drive simulation
   private static final SwerveDriveSimulation driveSimulation =
-      new SwerveDriveSimulation(Drive.mapleSimConfig, Constants.SIM_INITIAL_FIELD_POSE);
+      new SwerveDriveSimulation(Drive.MAPLE_SIM_CONFIG, SimConstants.SIM_INITIAL_FIELD_POSE);
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -67,10 +67,10 @@ public class RobotContainer extends frc.lib.RobotContainer {
     // Check for valid swerve config
     var modules =
         new SwerveModuleConstants[] {
-          TunerConstants.FrontLeft,
-          TunerConstants.FrontRight,
-          TunerConstants.BackLeft,
-          TunerConstants.BackRight
+          DriveConstants.FrontLeft,
+          DriveConstants.FrontRight,
+          DriveConstants.BackLeft,
+          DriveConstants.BackRight
         };
     for (var constants : modules) {
       if (constants.DriveMotorType != DriveMotorArrangement.TalonFX_Integrated
@@ -80,16 +80,16 @@ public class RobotContainer extends frc.lib.RobotContainer {
       }
     }
 
-    switch (Constants.CURRENT_MODE) {
+    switch (SimConstants.CURRENT_MODE) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
         drive =
             new Drive(
                 new GyroIONavX(),
-                new ModuleIOTalonFXReal(TunerConstants.FrontLeft),
-                new ModuleIOTalonFXReal(TunerConstants.FrontRight),
-                new ModuleIOTalonFXReal(TunerConstants.BackLeft),
-                new ModuleIOTalonFXReal(TunerConstants.BackRight));
+                new ModuleIOTalonFXReal(DriveConstants.FrontLeft),
+                new ModuleIOTalonFXReal(DriveConstants.FrontRight),
+                new ModuleIOTalonFXReal(DriveConstants.BackLeft),
+                new ModuleIOTalonFXReal(DriveConstants.BackRight));
         break;
 
       case SIM:
@@ -97,10 +97,10 @@ public class RobotContainer extends frc.lib.RobotContainer {
         drive =
             new Drive(
                 new GyroIOSim(driveSimulation.getGyroSimulation()),
-                new ModuleIOTalonFXSim(TunerConstants.FrontLeft, driveSimulation.getModules()[0]),
-                new ModuleIOTalonFXSim(TunerConstants.FrontRight, driveSimulation.getModules()[1]),
-                new ModuleIOTalonFXSim(TunerConstants.BackLeft, driveSimulation.getModules()[2]),
-                new ModuleIOTalonFXSim(TunerConstants.BackRight, driveSimulation.getModules()[3]));
+                new ModuleIOTalonFXSim(DriveConstants.FrontLeft, driveSimulation.getModules()[0]),
+                new ModuleIOTalonFXSim(DriveConstants.FrontRight, driveSimulation.getModules()[1]),
+                new ModuleIOTalonFXSim(DriveConstants.BackLeft, driveSimulation.getModules()[2]),
+                new ModuleIOTalonFXSim(DriveConstants.BackRight, driveSimulation.getModules()[3]));
         break;
 
       default:
@@ -153,11 +153,11 @@ public class RobotContainer extends frc.lib.RobotContainer {
             () -> -controller.getLeftX(),
             // Xbox controller is mapped incorrectly on Mac OS
             () ->
-                Constants.SIM_MODE == Mode.REAL
+                SimConstants.SIM_MODE == Mode.REAL
                     ? -controller.getRightX()
                     : -controller.getLeftTriggerAxis(),
             () ->
-                Constants.SIM_MODE == Mode.REAL
+                SimConstants.SIM_MODE == Mode.REAL
                     ? controller.getRightTriggerAxis() > 0.5
                     : controller.getRightY() > 0.5));
 

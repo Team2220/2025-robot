@@ -17,9 +17,7 @@ import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Rotations;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -34,24 +32,6 @@ import java.util.Queue;
  */
 public class ModuleIOTalonFXReal extends ModuleIOTalonFX {
 
-  // TODO Both sets of gains need to be tuned to your individual robot
-  // The steer motor uses any SwerveModule.SteerRequestType control request with the
-  // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
-  private static final Slot0Configs steerGains =
-      new Slot0Configs()
-          .withKP(100)
-          .withKI(0)
-          .withKD(0.5)
-          .withKS(0.1)
-          .withKV(1.91)
-          .withKA(0)
-          .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
-
-  // When using closed-loop control, the drive motor uses the control
-  // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
-  private static final Slot0Configs driveGains =
-      new Slot0Configs().withKP(0.1).withKI(0).withKD(0).withKS(0).withKV(0.124);
-
   // Queue to read inputs from odometry thread
   private final Queue<Double> timestampQueue;
   private final Queue<Double> drivePositionQueue;
@@ -64,7 +44,10 @@ public class ModuleIOTalonFXReal extends ModuleIOTalonFX {
       SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
           constants) {
     // Pass constants to parent class with updated gains
-    super(constants.withDriveMotorGains(driveGains).withSteerMotorGains(steerGains));
+    super(
+        constants
+            .withDriveMotorGains(DriveConstants.Real.DRIVE_GRAINS)
+            .withSteerMotorGains(DriveConstants.Real.STEER_GAINS));
 
     // TODO should this be Rotations.of or Radians.of?
     absoluteEncoder = new PWMEncoder(constants.EncoderId, Rotations.of(constants.EncoderOffset));

@@ -1,8 +1,8 @@
 package frc.lib;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.SimConstants;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.littletonrobotics.junction.Logger;
@@ -65,14 +65,14 @@ public abstract class RobotContainer {
   public void simulationPeriodic() {}
 
   public void resetSimulation() {
-    if (Constants.CURRENT_MODE != Constants.Mode.SIM) return;
+    if (SimConstants.CURRENT_MODE != SimConstants.Mode.SIM) return;
 
-    driveSimulation.setSimulationWorldPose(Constants.SIM_INITIAL_FIELD_POSE);
+    driveSimulation.setSimulationWorldPose(SimConstants.SIM_INITIAL_FIELD_POSE);
     SimulatedArena.getInstance().resetFieldForAuto();
   }
 
   public void displaySimFieldToAdvantageScope() {
-    if (Constants.CURRENT_MODE != Constants.Mode.SIM) return;
+    if (SimConstants.CURRENT_MODE != SimConstants.Mode.SIM) return;
 
     Logger.recordOutput(
         "FieldSimulation/RobotPosition", driveSimulation.getSimulatedDriveTrainPose());

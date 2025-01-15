@@ -62,7 +62,7 @@ public class Robot extends LoggedRobot {
     String macAddress = null;
 
     // Set up data receivers & replay source
-    switch (Constants.CURRENT_MODE) {
+    switch (SimConstants.CURRENT_MODE) {
       case REAL:
         // Running on a real robot, log to a USB stick ("/U/logs")
         Logger.addDataReceiver(new WPILOGWriter());
@@ -87,7 +87,7 @@ public class Robot extends LoggedRobot {
     // Start AdvantageKit logger
     Logger.start();
 
-    switch (Constants.CURRENT_MODE) {
+    switch (SimConstants.CURRENT_MODE) {
       case REAL:
       case SIM:
         // Instantiate our RobotContainer. This will perform all our button bindings,
@@ -114,7 +114,7 @@ public class Robot extends LoggedRobot {
       case Robot24 -> new frc.robot.Robot24.RobotContainer();
       // case BoxyBot -> new BoxysRobotContainer();
       // case KrackenSwerve -> new frc.robot.KrackenSwerve.RobotContainer();
-      case Simulator -> Constants.SIM_ROBOT_SUPPLIER.get();
+      case Simulator -> SimConstants.SIM_ROBOT_SUPPLIER.get();
       default -> throw new RuntimeException("Unsupported robot instance: " + instance.toString());
     };
   }
