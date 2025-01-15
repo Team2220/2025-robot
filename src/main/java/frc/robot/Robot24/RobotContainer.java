@@ -13,6 +13,9 @@
 
 package frc.robot.Robot24;
 
+import static frc.robot.Constants.*;
+import static frc.robot.Robot24.subsystems.elevator.Constants.*;
+
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.DriveMotorArrangement;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerMotorArrangement;
@@ -25,7 +28,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.Constants;
 import frc.robot.Constants.Mode;
 import frc.robot.Robot;
 import frc.robot.Robot24.commands.DriveCommands;
@@ -37,7 +39,9 @@ import frc.robot.Robot24.subsystems.drive.GyroIOSim;
 import frc.robot.Robot24.subsystems.drive.ModuleIO;
 import frc.robot.Robot24.subsystems.drive.ModuleIOTalonFXReal;
 import frc.robot.Robot24.subsystems.drive.ModuleIOTalonFXSim;
+import frc.robot.Robot24.subsystems.elevator.Elevator;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
+import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -49,13 +53,15 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer extends frc.lib.RobotContainer {
   // Subsystems
   private final Drive drive;
+  private final Elevator elevator;
 
   // Drive simulation
   private static final SwerveDriveSimulation driveSimulation =
-      new SwerveDriveSimulation(Drive.mapleSimConfig, Constants.SIM_INITIAL_FIELD_POSE);
+      new SwerveDriveSimulation(Drive.mapleSimConfig, SIM_INITIAL_FIELD_POSE);
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
+  private final XboxController elevatorController = new XboxController(1);
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -80,7 +86,9 @@ public class RobotContainer extends frc.lib.RobotContainer {
       }
     }
 
-    switch (Constants.CURRENT_MODE) {
+    // TODO hardware abstraction
+    elevator = new Elevator();
+    switch (CURRENT_MODE) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
         drive =
@@ -153,11 +161,9 @@ public class RobotContainer extends frc.lib.RobotContainer {
             () -> -controller.getLeftX(),
             // Xbox controller is mapped incorrectly on Mac OS
             () ->
-                Constants.SIM_MODE == Mode.REAL
-                    ? -controller.getRightX()
-                    : -controller.getLeftTriggerAxis(),
+                SIM_MODE == Mode.REAL ? -controller.getRightX() : -controller.getLeftTriggerAxis(),
             () ->
-                Constants.SIM_MODE == Mode.REAL
+                SIM_MODE == Mode.REAL
                     ? controller.getRightTriggerAxis() > 0.5
                     : controller.getRightY() > 0.5));
 
@@ -225,7 +231,31 @@ public class RobotContainer extends frc.lib.RobotContainer {
   }
 
   @Override
+  public void robotPeriodic() {
+    elevator.updateTelemetry();
+  }
+
+  @Override
   public void disabledInit() {
     drive.stopWithX();
+    elevator.stop();
+  }
+
+  @Override
+  public void teleopPeriodic() {
+    if (elevatorController.getLeftTriggerAxis() > 0.5) {
+      // Here, we set the constant setpoint of 0.75 meters.
+      elevator.reachGoal(kSetpointMeters);
+      Logger.recordOutput("Elevator/Setpoint", kSetpointMeters);
+    } else {
+      // Otherwise, we update the setpoint to 0.
+      elevator.reachGoal(0.0);
+      Logger.recordOutput("Elevator/Setpoint", 0.0);
+    }
+  }
+
+  @Override
+  public void simulationPeriodic() {
+    elevator.simulationPeriodic();
   }
 }
