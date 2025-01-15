@@ -5,21 +5,21 @@ package frc.lib;
 /* https://www.tutorialspoint.com/java-program-to-get-system-mac-address-of-windows-and-linux-machine */
 
 import edu.wpi.first.wpilibj.RobotBase;
-// import frc.lib.faults.Fault;
+import frc.lib.faults.Fault;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.function.Function;
 
 public enum RobotInstance {
   Robot24("00-80-2F-36-FE-34"),
+  Robot25("00-80-2F-36-FD-D6"),
   KrackenSwerve("00-80-2F-17-F8-19"),
   BoxyBot("00-80-2F-36-FD-D6"),
   Simulator("Simulator");
 
   private String address;
   private static RobotInstance current = getMacAddress();
-
-  // private static Fault fault;
+  private static Fault fault;
 
   RobotInstance(String text) {
     this.address = text;
@@ -39,10 +39,12 @@ public enum RobotInstance {
   }
 
   public static String getMacAddressStr() {
+    // Return fake MAC address for all simulated robots
     if (RobotBase.isSimulation()) {
-      return Simulator.address;
+      return "Simulator";
     }
 
+    // Otherwise get real address
     InetAddress address;
     try {
       address = InetAddress.getLocalHost();
@@ -63,21 +65,21 @@ public enum RobotInstance {
   }
 
   public static RobotInstance getMacAddress() {
-    var check = fromString(getMacAddressStr());
+    RobotInstance check = fromString(getMacAddressStr());
     if (check == null) {
       // if (fault == null) {
       //     fault = new Fault("Unknown Robot MAC Address: " + getMacAddressStr());
       //     fault.setIsActive(true);
       // }
-      System.err.println("no mac address found");
-      throw new RuntimeException("Unknown Robot MAC Address: " + getMacAddressStr());
+      System.err.println("No mac address found");
+      return Robot24;
     } else {
       System.out.println("Current robot: " + check.toString());
       return check;
     }
   }
 
-  public static <T extends RobotContainer> T config(Function<RobotInstance, T> config) {
+  public static <T> T config(Function<RobotInstance, T> config) {
     return config.apply(current);
   }
 }

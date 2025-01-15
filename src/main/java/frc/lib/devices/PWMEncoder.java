@@ -16,10 +16,6 @@ public class PWMEncoder {
     encoder.setOversampleBits(oversampling);
   }
 
-  public PWMEncoder(int analogPort) {
-    this(analogPort, Degrees.of(0));
-  }
-
   public Angle getPosition() {
     // return encoder.getAverageValue() * 360 / 4096.0 / Math.pow(2, oversampling);
     return Degrees.of(encoder.getValue() * 360.0 / 4096.0).plus(offset);

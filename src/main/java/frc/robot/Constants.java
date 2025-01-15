@@ -16,6 +16,8 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.RobotBase;
+import frc.lib.RobotContainer;
+import java.util.function.Supplier;
 
 /**
  * This class defines the runtime mode used by AdvantageKit. The mode is always "real" when running
@@ -23,8 +25,13 @@ import edu.wpi.first.wpilibj.RobotBase;
  * (log replay from a file).
  */
 public final class Constants {
+  /* Simulation mode, initial position, and robot container */
   public static final Mode SIM_MODE = Mode.SIM;
   public static final Pose2d SIM_INITIAL_FIELD_POSE = new Pose2d(3, 3, new Rotation2d());
+  public static final Supplier<RobotContainer> SIM_ROBOT_SUPPLIER =
+      () -> new frc.robot.Robot24.RobotContainer();
+
+  /* DO NOT CHANGE */
   public static final Mode CURRENT_MODE = RobotBase.isReal() ? Mode.REAL : SIM_MODE;
 
   public static enum Mode {

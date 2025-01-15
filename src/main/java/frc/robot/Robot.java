@@ -114,7 +114,7 @@ public class Robot extends LoggedRobot {
       case Robot24 -> new frc.robot.Robot24.RobotContainer();
       // case BoxyBot -> new BoxysRobotContainer();
       // case KrackenSwerve -> new frc.robot.KrackenSwerve.RobotContainer();
-      case Simulator -> new frc.robot.Robot24.RobotContainer();
+      case Simulator -> Constants.SIM_ROBOT_SUPPLIER.get();
       default -> throw new RuntimeException("Unsupported robot instance: " + instance.toString());
     };
   }

@@ -7,7 +7,6 @@ plugins {
 
     // For formatting
     id 'com.diffplug.spotless' version '7.0.1'
-
 }
 
 java {
@@ -172,4 +171,8 @@ spotless {
         trimTrailingWhitespace()
         endWithNewline()
     }
+}
+
+tasks.named("build") {
+    dependsOn "spotlessApply"
 }
