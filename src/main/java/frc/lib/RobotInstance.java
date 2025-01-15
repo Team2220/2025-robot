@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.RobotBase;
 import frc.lib.faults.Fault;
 
 public enum RobotInstance {
-    Robot24("00-80-2F-36-FE-34"),
+    Robot24("00-80-2F-36-FD-D6"),
     KrackenSwerve("00-80-2F-17-F8-19"),
     BoxyBot("00-80-2F-36-FD-D6");
 
