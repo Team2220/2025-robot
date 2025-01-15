@@ -17,24 +17,6 @@ import edu.wpi.first.units.measure.*;
 // https://v6.docs.ctr-electronics.com/en/stable/docs/tuner/tuner-swerve/index.html
 public class TunerConstants {
   // Both sets of gains need to be tuned to your individual robot.
-  private static final double module0Ks = 0.084098;
-  private static final double module0Kv = 0.10668;
-  private static final double module0Ka = 0.014287;
-  private static final double module1Ks = 0.11487;
-  private static final double module1Kv = 0.11202;
-  private static final double module1Ka = 0.0085724;
-  private static final double module2Ks = 0.22082;
-  private static final double module2Kv = 0.10259;
-  private static final double module2Ka = 0.0051462;
-  private static final double module2Kp = 0.093947;
-  private static final double module2Kd = 0.00;
-  private static final double module3Ks = 0.20843;
-  private static final double module3Kv = 0.11005;
-  private static final double module3Ka = 0.0031173;
-  private static final double module3Kp = 0.00083593;
-  private static final double module3Kd = 0.00;
-
-
 
   // The steer motor uses any SwerveModule.SteerRequestType control request with the
   // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
