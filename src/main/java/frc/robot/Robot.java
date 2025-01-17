@@ -13,9 +13,6 @@
 
 package frc.robot;
 
-import com.ctre.phoenix6.swerve.SwerveModuleConstants;
-import com.ctre.phoenix6.swerve.SwerveModuleConstants.DriveMotorArrangement;
-import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerMotorArrangement;
 import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -65,7 +62,7 @@ public class Robot extends LoggedRobot {
     String macAddress = null;
 
     // Set up data receivers & replay source
-    switch (Constants.currentMode) {
+    switch (Constants.CURRENT_MODE) {
       case REAL:
         // Running on a real robot, log to a USB stick ("/U/logs")
         Logger.addDataReceiver(new WPILOGWriter());
@@ -90,23 +87,7 @@ public class Robot extends LoggedRobot {
     // Start AdvantageKit logger
     Logger.start();
 
-    // Check for valid swerve config
-    var modules =
-        new SwerveModuleConstants[] {
-          TunerConstants.FrontLeft,
-          TunerConstants.FrontRight,
-          TunerConstants.BackLeft,
-          TunerConstants.BackRight
-        };
-    for (var constants : modules) {
-      if (constants.DriveMotorType != DriveMotorArrangement.TalonFX_Integrated
-          || constants.SteerMotorType != SteerMotorArrangement.TalonFX_Integrated) {
-        throw new RuntimeException(
-            "You are using an unsupported swerve configuration, which this template does not support without manual customization. The 2025 release of Phoenix supports some swerve configurations which were not available during 2025 beta testing, preventing any development and support from the AdvantageKit developers.");
-      }
-    }
-
-    switch (Constants.currentMode) {
+    switch (Constants.CURRENT_MODE) {
       case REAL:
       case SIM:
         // Instantiate our RobotContainer. This will perform all our button bindings,
@@ -138,6 +119,15 @@ public class Robot extends LoggedRobot {
     };
   }
 
+  /**
+   * This function is called once when the robot is first started up. All robot-wide initialization
+   * goes here.
+   */
+  @Override
+  public void robotInit() {
+    robotContainer.robotInit();
+  }
+
   /** This function is called periodically during all modes. */
   @Override
   public void robotPeriodic() {
@@ -153,15 +143,21 @@ public class Robot extends LoggedRobot {
 
     // Return to normal thread priority
     Threads.setCurrentThreadPriority(false, 10);
+
+    robotContainer.robotPeriodic();
   }
 
   /** This function is called once when the robot is disabled. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    robotContainer.disabledInit();
+  }
 
   /** This function is called periodically when disabled. */
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    robotContainer.disabledPeriodic();
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
@@ -172,11 +168,15 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.schedule();
     }
+
+    robotContainer.autonomousInit();
   }
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    robotContainer.autonomousPeriodic();
+  }
 
   /** This function is called once when teleop is enabled. */
   @Override
@@ -188,27 +188,35 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
+
+    robotContainer.teleopInit();
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    robotContainer.teleopPeriodic();
+  }
 
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+    robotContainer.testInit();
   }
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+    robotContainer.testPeriodic();
+  }
 
   /** This function is called once when the robot is first started up. */
   @Override
   public void simulationInit() {
-    // robotContainer.resetSimulation();
+    robotContainer.resetSimulation();
+    robotContainer.simulationInit();
   }
 
   /** This function is called periodically whilst in simulation. */
@@ -216,5 +224,6 @@ public class Robot extends LoggedRobot {
   public void simulationPeriodic() {
     SimulatedArena.getInstance().simulationPeriodic();
     robotContainer.displaySimFieldToAdvantageScope();
+    robotContainer.simulationPeriodic();
   }
 }

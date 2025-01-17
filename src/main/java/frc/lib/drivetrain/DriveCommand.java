@@ -38,7 +38,8 @@
 //     boolean pid = false;
 //     boolean goal = false;
 
-//     public DriveCommand(CommandXBoxWrapper xbox, CommandJoystickWrapper joystick, DriveTrain driveTrain) {
+//     public DriveCommand(CommandXBoxWrapper xbox, CommandJoystickWrapper joystick, DriveTrain
+// driveTrain) {
 //         this(
 //             ()-> (xbox.getLeftX())+(joystick.getX()),
 //             ()-> (xbox.getLeftY())+(joystick.getY()),
@@ -163,16 +164,17 @@
 //         if (pointAtGoal.getAsBoolean()) {
 //             pid = true;
 //             goal = true;
-          
-            
+
 //         }
 //         if (goal){
 //             AprilTagFieldLayout layout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
 //             Pose3d RED = layout.getTagPose(4).get();
 //             Pose3d BLUE = layout.getTagPose(7).get();
-//             var goal = DriverStation.getAlliance().get() == DriverStation.Alliance.Red ? RED : BLUE;
-//             var Botpose = driveTrain.getPose().getTranslation().minus((goal).toPose2d().getTranslation());
-            
+//             var goal = DriverStation.getAlliance().get() == DriverStation.Alliance.Red ? RED :
+// BLUE;
+//             var Botpose =
+// driveTrain.getPose().getTranslation().minus((goal).toPose2d().getTranslation());
+
 //             wantedAngle = Math.toDegrees(Math.atan2(Botpose.getY(), Botpose.getX()));
 //         }
 //         double rotate = this.rot.getAsDouble() * coefficient;

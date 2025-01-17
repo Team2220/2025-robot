@@ -166,7 +166,10 @@ createVersionFile.dependsOn(eventDeploy)
 
 spotless {
     java {
-        targetExclude '**/BuildConstants.java', '**/TunerConstants.java'
+        targetExclude '**/BuildConstants.java'
         googleJavaFormat()
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
     }
 }

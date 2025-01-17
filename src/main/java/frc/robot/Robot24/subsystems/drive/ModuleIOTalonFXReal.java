@@ -13,9 +13,17 @@
 
 package frc.robot.Robot24.subsystems.drive;
 
+import static edu.wpi.first.units.Units.Radians;
+import static edu.wpi.first.units.Units.Rotations;
+
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import frc.lib.devices.PWMEncoder;
 import java.util.Queue;
 
 /**
@@ -25,24 +33,60 @@ import java.util.Queue;
  * <p>Device configuration and other behaviors not exposed by TunerConstants can be customized here.
  */
 public class ModuleIOTalonFXReal extends ModuleIOTalonFX {
+
+  // TODO Both sets of gains need to be tuned to your individual robot
+  // The steer motor uses any SwerveModule.SteerRequestType control request with the
+  // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
+  private static final Slot0Configs steerGains =
+      new Slot0Configs()
+          .withKP(100)
+          .withKI(0)
+          .withKD(0.5)
+          .withKS(0.1)
+          .withKV(1.91)
+          .withKA(0)
+          .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
+
+  // When using closed-loop control, the drive motor uses the control
+  // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
+  private static final Slot0Configs driveGains =
+      new Slot0Configs().withKP(0.1).withKI(0).withKD(0).withKS(0).withKV(0.124);
+
   // Queue to read inputs from odometry thread
   private final Queue<Double> timestampQueue;
   private final Queue<Double> drivePositionQueue;
   private final Queue<Double> turnPositionQueue;
 
-  public ModuleIOTalonFXReal(SwerveModuleConstants constants) {
-    super(constants);
+  // We use an analog absolute encoder
+  private final PWMEncoder absoluteEncoder;
+
+  public ModuleIOTalonFXReal(
+      SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
+          constants) {
+    // Pass constants to parent class with updated gains
+    super(constants.withDriveMotorGains(driveGains).withSteerMotorGains(steerGains));
+
+    // TODO should this be Rotations.of or Radians.of?
+    absoluteEncoder = new PWMEncoder(constants.EncoderId, Rotations.of(constants.EncoderOffset));
 
     this.timestampQueue = PhoenixOdometryThread.getInstance().makeTimestampQueue();
     this.drivePositionQueue =
         PhoenixOdometryThread.getInstance().registerSignal(super.drivePosition);
+    // I believe this should be supplied in rotations
     this.turnPositionQueue =
-        PhoenixOdometryThread.getInstance().registerSignal(super.turnAbsolutePosition);
+        PhoenixOdometryThread.getInstance()
+            .registerSignal(() -> absoluteEncoder.getPosition().in(Rotations));
   }
 
   @Override
   public void updateInputs(ModuleIOInputs inputs) {
     super.updateInputs(inputs);
+
+    // Update turn position
+    inputs.turnAbsolutePosition = Rotation2d.fromRadians(absoluteEncoder.getPosition().in(Radians));
+    // TODO analog encoder doesn't provide a connected status, could measure voltage above a
+    // threshold?
+    inputs.turnEncoderConnected = true;
 
     // Update odometry inputs
     inputs.odometryTimestamps =

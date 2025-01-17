@@ -30,8 +30,6 @@
     null
   ],
   "java.test.defaultConfig": "WPIlibUnitTests",
-  "spotlessGradle.format.enable": true,
-  "spotlessGradle.diagnostics.enable": false,
   "java.import.gradle.annotationProcessing.enabled": false,
   "java.completion.favoriteStaticMembers": [
     "org.junit.Assert.*",
@@ -63,22 +61,12 @@
     "edu.wpi.first.math.**.proto.*",
     "edu.wpi.first.math.**.struct.*"
   ],
-  "[json]": {
-    "editor.defaultFormatter": "richardwillis.vscode-spotless-gradle",
-    "spotlessGradle.diagnostics.enable": true,
-    "spotlessGradle.format.enable": true,
-    "editor.codeActionsOnSave": {
-      "source.fixAll.spotlessGradle": "always"
-    }
-  },
   "[java]": {
     "editor.defaultFormatter": "richardwillis.vscode-spotless-gradle",
-    "spotlessGradle.diagnostics.enable": true,
-    "spotlessGradle.format.enable": true,
-    "editor.codeActionsOnSave": {
-      "source.fixAll.spotlessGradle": "always",
-    },
+    "editor.formatOnSave": true
   },
+  "spotlessGradle.diagnostics.enable": true,
+  "spotlessGradle.format.enable": true,
   "[gradle]": {
     "spotlessGradle.diagnostics.enable": true,
     "spotlessGradle.format.enable": true,
