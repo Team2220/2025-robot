@@ -31,6 +31,7 @@ import frc.robot.Robot24.subsystems.drive.Drive;
 import frc.robot.Robot24.subsystems.drive.DriveConstants;
 import frc.robot.Robot24.subsystems.drive.GyroIO;
 import frc.robot.Robot24.subsystems.drive.GyroIONavX;
+import frc.robot.Robot24.subsystems.drive.GyroIOPigeon2;
 import frc.robot.Robot24.subsystems.drive.GyroIOSim;
 import frc.robot.Robot24.subsystems.drive.ModuleIO;
 import frc.robot.Robot24.subsystems.drive.ModuleIOTalonFXReal;
@@ -85,7 +86,7 @@ public class RobotContainer extends frc.lib.RobotContainer {
         // Real robot, instantiate hardware IO implementations
         drive =
             new Drive(
-                new GyroIONavX(),
+                new GyroIOPigeon2(),
                 new ModuleIOTalonFXReal(DriveConstants.FrontLeft),
                 new ModuleIOTalonFXReal(DriveConstants.FrontRight),
                 new ModuleIOTalonFXReal(DriveConstants.BackLeft),
