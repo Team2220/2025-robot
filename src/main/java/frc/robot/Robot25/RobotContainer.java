@@ -56,7 +56,7 @@ public class RobotContainer extends frc.lib.RobotContainer {
 
   // Controller
   private final CommandXboxController DriverController = new CommandXboxController(0);
-  private final CommandXboxController OperatorController = new CommandXboxController(0);
+  private final CommandXboxController OperatorController = new CommandXboxController(1);
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -154,11 +154,11 @@ public class RobotContainer extends frc.lib.RobotContainer {
             () -> -DriverController.getLeftX(),
             // Xbox controller is mapped incorrectly on Mac OS
             () ->
-                SimConstants.SIM_MODE == Mode.REAL
+                SimConstants.CURRENT_MODE == Mode.REAL
                     ? -DriverController.getRightX()
                     : -DriverController.getLeftTriggerAxis(),
             () ->
-                SimConstants.SIM_MODE == Mode.REAL
+                SimConstants.CURRENT_MODE == Mode.REAL
                     ? DriverController.getRightTriggerAxis() > 0.5
                     : DriverController.getRightY() > 0.5));
 
