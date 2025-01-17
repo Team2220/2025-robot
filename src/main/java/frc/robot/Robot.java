@@ -112,6 +112,7 @@ public class Robot extends LoggedRobot {
   private RobotContainer getRobotContainerFromInstance(RobotInstance instance) {
     return switch (instance) {
       case Robot24 -> new frc.robot.Robot24.RobotContainer();
+      case Robot25 -> new frc.robot.Robot25.RobotContainer();
       // case BoxyBot -> new BoxysRobotContainer();
       // case KrackenSwerve -> new frc.robot.KrackenSwerve.RobotContainer();
       case Simulator -> SimConstants.SIM_ROBOT_SUPPLIER.get();

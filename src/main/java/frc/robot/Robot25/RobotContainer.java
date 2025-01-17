@@ -55,7 +55,8 @@ public class RobotContainer extends frc.lib.RobotContainer {
       new SwerveDriveSimulation(Drive.MAPLE_SIM_CONFIG, SimConstants.SIM_INITIAL_FIELD_POSE);
 
   // Controller
-  private final CommandXboxController controller = new CommandXboxController(0);
+  private final CommandXboxController DriverController = new CommandXboxController(0);
+  private final CommandXboxController OperatorController = new CommandXboxController(0);
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -149,45 +150,45 @@ public class RobotContainer extends frc.lib.RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            () -> -controller.getLeftY(),
-            () -> -controller.getLeftX(),
+            () -> -DriverController.getLeftY(),
+            () -> -DriverController.getLeftX(),
             // Xbox controller is mapped incorrectly on Mac OS
             () ->
                 SimConstants.SIM_MODE == Mode.REAL
-                    ? -controller.getRightX()
-                    : -controller.getLeftTriggerAxis(),
+                    ? -DriverController.getRightX()
+                    : -DriverController.getLeftTriggerAxis(),
             () ->
                 SimConstants.SIM_MODE == Mode.REAL
-                    ? controller.getRightTriggerAxis() > 0.5
-                    : controller.getRightY() > 0.5));
+                    ? DriverController.getRightTriggerAxis() > 0.5
+                    : DriverController.getRightY() > 0.5));
 
-    controller
-        .a()
+    DriverController.a()
         .toggleOnTrue(
             DriveCommands.keepRotationForward(
-                drive, () -> -controller.getLeftY(), () -> -controller.getLeftX()));
+                drive, () -> -DriverController.getLeftY(), () -> -DriverController.getLeftX()));
 
-    controller.povUp().onTrue(DriveCommands.snapToRotation(drive, Rotation2d.kZero));
+    DriverController.povUp().onTrue(DriveCommands.snapToRotation(drive, Rotation2d.kZero));
 
-    controller
-        .povUpRight()
+    DriverController.povUpRight()
         .onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(-45)));
 
-    controller.povRight().onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(-90)));
-
-    controller
-        .povDownRight()
+    DriverController.povRight()
+        .onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(-90)));
+    // have.get.money
+    DriverController.povDownRight()
         .onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(-135)));
 
-    controller.povDown().onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(-180)));
+    DriverController.povDown()
+        .onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(-180)));
 
-    controller
-        .povDownLeft()
+    DriverController.povDownLeft()
         .onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(135)));
 
-    controller.povLeft().onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(90)));
+    DriverController.povLeft()
+        .onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(90)));
 
-    controller.povUpLeft().onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(45)));
+    DriverController.povUpLeft()
+        .onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(45)));
 
     // Lock to 0° when A button is held
     // controller
@@ -200,11 +201,10 @@ public class RobotContainer extends frc.lib.RobotContainer {
     // () -> Rotation2d.kZero));
 
     // Switch to X pattern when X button is pressed
-    controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
+    DriverController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
     // Reset gyro to 0° when B button is pressed
-    controller
-        .start()
+    DriverController.start()
         .onTrue(
             Commands.runOnce(
                     () ->
