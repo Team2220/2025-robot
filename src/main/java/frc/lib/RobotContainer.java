@@ -13,7 +13,10 @@ public abstract class RobotContainer {
 
   protected RobotContainer(SwerveDriveSimulation driveSimulation) {
     this.driveSimulation = driveSimulation;
-    SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
+
+    if (SimConstants.CURRENT_MODE == SimConstants.Mode.SIM) {
+      SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
+    }
   }
 
   public abstract Command getTestCommand();
