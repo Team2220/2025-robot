@@ -7,6 +7,24 @@ plugins {
 
     // For formatting
     id 'com.diffplug.spotless' version '7.0.1'
+
+    // For Kotlin
+    id 'org.jetbrains.kotlin.jvm' version '2.1.0'
+}
+
+// For Kotlin
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+}
+
+// Keep Kotlin files in the same directory as Java
+sourceSets {
+    main {
+        kotlin {
+            srcDirs("src/main/java")
+        }
+    }
 }
 
 java {
@@ -82,6 +100,9 @@ dependencies {
     // Install AdvantageKit into existing project
     def akitJson = new groovy.json.JsonSlurper().parseText(new File(projectDir.getAbsolutePath() + "/vendordeps/AdvantageKit.json").text)
     annotationProcessor "org.littletonrobotics.akit:akit-autolog:$akitJson.version"
+
+    // For Kotlin
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
 }
 
 test {
