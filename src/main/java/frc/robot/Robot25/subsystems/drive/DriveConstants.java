@@ -23,10 +23,10 @@ public class DriveConstants {
     public static final Slot0Configs STEER_GAINS =
         new Slot0Configs()
             .withKP(5)
-            .withKI(0)
-            .withKD(0)
-            .withKS(0)
-            .withKV(0)
+            .withKI(1)
+            .withKD(1)
+            .withKS(1)
+            .withKV(1)
             .withKA(0)
             .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
 
@@ -148,7 +148,7 @@ public class DriveConstants {
   private static final Distance kFrontLeftXPos = Inches.of(10.375);
   private static final Distance kFrontLeftYPos = Inches.of(10.375);
 
-  // Back Left
+  // Front Right
   private static final int kFrontRightDriveMotorId = 14;
   private static final int kFrontRightSteerMotorId = 13;
   private static final int kFrontRightEncoderId = 2;
@@ -158,7 +158,7 @@ public class DriveConstants {
   private static final Distance kFrontRightXPos = Inches.of(10.375);
   private static final Distance kFrontRightYPos = Inches.of(-10.375);
 
-  // Front Right
+  // Back Left
   private static final int kBackLeftDriveMotorId = 12;
   private static final int kBackLeftSteerMotorId = 11;
   private static final int kBackLeftEncoderId = 0;
@@ -168,7 +168,7 @@ public class DriveConstants {
   private static final Distance kBackLeftXPos = Inches.of(-10.375);
   private static final Distance kBackLeftYPos = Inches.of(10.375);
 
-  // Back right
+  // Back Right
   private static final int kBackRightDriveMotorId = 16;
   private static final int kBackRightSteerMotorId = 15;
   private static final int kBackRightEncoderId = 3;

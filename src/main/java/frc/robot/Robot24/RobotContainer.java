@@ -30,7 +30,6 @@ import frc.robot.Robot24.commands.DriveCommands;
 import frc.robot.Robot24.subsystems.drive.Drive;
 import frc.robot.Robot24.subsystems.drive.DriveConstants;
 import frc.robot.Robot24.subsystems.drive.GyroIO;
-import frc.robot.Robot24.subsystems.drive.GyroIONavX;
 import frc.robot.Robot24.subsystems.drive.GyroIOPigeon2;
 import frc.robot.Robot24.subsystems.drive.GyroIOSim;
 import frc.robot.Robot24.subsystems.drive.ModuleIO;

@@ -144,4 +144,12 @@ public class Module {
   public double getFFCharacterizationVelocity() {
     return Units.radiansToRotations(inputs.driveVelocityRadPerSec);
   }
+
+  public void setDriveVoltage(double voltage) {
+    io.setDriveOpenLoop(voltage);
+  }
+
+  public void setTurnVoltage(double voltage) {
+    io.setTurnOpenLoop(voltage);
+  }
 }

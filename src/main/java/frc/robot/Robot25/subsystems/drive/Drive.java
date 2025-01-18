@@ -388,4 +388,18 @@ public class Drive extends SubsystemBase /* implements Vision.VisionConsumer */ 
       new Translation2d(DriveConstants.BackRight.LocationX, DriveConstants.BackRight.LocationY)
     };
   }
+
+  public void driveOpenLoop(double voltage) {
+    modules[0].setDriveVoltage(voltage);
+    modules[1].setDriveVoltage(voltage);
+    modules[2].setDriveVoltage(voltage);
+    modules[3].setDriveVoltage(voltage);
+  }
+
+  public void TurnOpenLoop(double voltage) {
+    modules[0].setTurnVoltage(voltage);
+    modules[1].setTurnVoltage(voltage);
+    modules[2].setTurnVoltage(voltage);
+    modules[3].setTurnVoltage(voltage);
+  }
 }
