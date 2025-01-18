@@ -171,14 +171,17 @@ public class Drive extends SubsystemBase /* implements Vision.VisionConsumer */ 
     odometryLock.unlock();
 
     double velocity = 0;
+    double position = 0;
 
     for (int i = 0; i < 4; i++) {
 
       velocity += modules[i].getVelocityMetersPerSec();
-
+      position += modules[i].getPositionMeters();
     }
     velocity = velocity / 4;
     Logger.recordOutput("Drive/Velocity", velocity);
+    position = position / 4;
+    Logger.recordOutput("Drive/Position", position);
 
     // Stop moving when disabled
     if (DriverStation.isDisabled()) {
