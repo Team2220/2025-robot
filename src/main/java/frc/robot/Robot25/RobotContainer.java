@@ -36,7 +36,6 @@ import frc.robot.Robot25.subsystems.drive.ModuleIO;
 import frc.robot.Robot25.subsystems.drive.ModuleIOSim;
 import frc.robot.Robot25.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.SimConstants;
-import frc.robot.SimConstants.Mode;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -148,22 +147,16 @@ public class RobotContainer extends frc.lib.RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {
-    // Default command, normal field-relative drive
+
+   // Default command, normal field-relative drive
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
             () -> -DriverController.getLeftY(),
             () -> -DriverController.getLeftX(),
             // Xbox controller is mapped incorrectly on Mac OS
-            () ->
-                SimConstants.CURRENT_MODE == Mode.REAL
-                    ? -DriverController.getRightX()
-                    : -DriverController.getLeftTriggerAxis(),
-            () ->
-                SimConstants.CURRENT_MODE == Mode.REAL
-                    ? DriverController.getRightTriggerAxis() > 0.5
-                    : DriverController.getRightY() > 0.5));
+            () -> -DriverController.getRightX(),
+            () -> DriverController.getRightTriggerAxis() > 0.5));
 
     DriverController.a()
         .toggleOnTrue(
