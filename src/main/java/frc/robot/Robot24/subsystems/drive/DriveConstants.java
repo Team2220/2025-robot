@@ -32,31 +32,31 @@ public class DriveConstants {
 
     // When using closed-loop control, the drive motor uses the control
     // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
-    public static final Slot0Configs DRIVE_GRAINS =
+    public static final Slot0Configs DRIVE_GAINS =
         new Slot0Configs().withKP(0.1).withKI(0).withKD(0).withKS(0).withKV(0.124);
   }
 
   /* These constants only affect simulation */
   public static class Sim {
 
-    /* TODO Both sets of gains need to be tuned to your individual robot; practice tuning in the simulation */
+    // TODO Both sets of gains need to be tuned to your individual robot; practice tuning in
+    // simulation
 
-    // The steer motor uses any SwerveModule.SteerRequestType control request with the
-    // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
-    public static final Slot0Configs STEER_GAINS =
-        new Slot0Configs()
-            .withKP(140)
-            .withKI(0)
-            .withKD(5)
-            .withKS(0.1)
-            .withKV(1.91)
-            .withKA(0)
-            .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
+    /* Steer gains */
+    public static final double STEER_KS = 0.1;
+    public static final double STEER_KV = 1.91;
+    public static final double STEER_KA = 0.0;
+    public static final double STEER_KP = 100.0;
+    public static final double STEER_KI = 0.0;
+    public static final double STEER_KD = 0.5;
 
-    // When using closed-loop control, the drive motor uses the control
-    // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
-    public static final Slot0Configs DRIVE_GAINS =
-        new Slot0Configs().withKP(0.5).withKI(0).withKD(0).withKS(0.12085).withKV(0.83153);
+    /* Drive gains */
+    public static final double DRIVE_KS = 0.0;
+    public static final double DRIVE_KV = 0.124;
+    public static final double DRIVE_KA = 0.0;
+    public static final double DRIVE_KP = 0.1;
+    public static final double DRIVE_KI = 0.0;
+    public static final double DRIVE_KD = 0.0;
 
     /* These are both calculated off of MK4i Swerve Module CAD */
     private static final MomentOfInertia kSteerInertia = KilogramSquareMeters.of(0.007442);
@@ -206,6 +206,8 @@ public class DriveConstants {
               .withDriveInertia(Sim.kDriveInertia)
               .withSteerFrictionVoltage(Sim.kSteerFrictionVoltage)
               .withDriveFrictionVoltage(Sim.kDriveFrictionVoltage)
+              .withDriveMotorGains(Real.DRIVE_GAINS)
+              .withSteerMotorGains(Real.STEER_GAINS)
               .withEncoderInitialConfigs(new CANcoderConfiguration());
 
   public static final SwerveModuleConstants<

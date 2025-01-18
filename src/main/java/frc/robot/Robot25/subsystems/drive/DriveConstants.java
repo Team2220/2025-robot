@@ -22,32 +22,9 @@ public class DriveConstants {
     // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
     public static final Slot0Configs STEER_GAINS =
         new Slot0Configs()
-            .withKP(5)
-            .withKI(1)
-            .withKD(1)
-            .withKS(1)
-            .withKV(1)
-            .withKA(0)
-            .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
-
-    // When using closed-loop control, the drive motor uses the control
-    // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
-    public static final Slot0Configs DRIVE_GRAINS =
-        new Slot0Configs().withKP(0.1).withKI(0).withKD(0).withKS(0).withKV(0.124);
-  }
-
-  /* These constants only affect simulation */
-  public static class Sim {
-
-    /* TODO Both sets of gains need to be tuned to your individual robot; practice tuning in the simulation */
-
-    // The steer motor uses any SwerveModule.SteerRequestType control request with the
-    // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
-    public static final Slot0Configs STEER_GAINS =
-        new Slot0Configs()
-            .withKP(140)
+            .withKP(100)
             .withKI(0)
-            .withKD(5)
+            .withKD(0.5)
             .withKS(0.1)
             .withKV(1.91)
             .withKA(0)
@@ -56,11 +33,34 @@ public class DriveConstants {
     // When using closed-loop control, the drive motor uses the control
     // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
     public static final Slot0Configs DRIVE_GAINS =
-        new Slot0Configs().withKP(0.5).withKI(0).withKD(0).withKS(0.12085).withKV(0.83153);
+        new Slot0Configs().withKP(0.1).withKI(0).withKD(0).withKS(0).withKV(0.124);
+  }
+
+  /* These constants only affect simulation */
+  public static class Sim {
+
+    // TODO Both sets of gains need to be tuned to your individual robot; practice tuning in
+    // simulation
+
+    /* Steer gains */
+    public static final double STEER_KS = 0.1;
+    public static final double STEER_KV = 1.91;
+    public static final double STEER_KA = 0.0;
+    public static final double STEER_KP = 100.0;
+    public static final double STEER_KI = 0.0;
+    public static final double STEER_KD = 0.5;
+
+    /* Drive gains */
+    public static final double DRIVE_KS = 0.0;
+    public static final double DRIVE_KV = 0.124;
+    public static final double DRIVE_KA = 0.0;
+    public static final double DRIVE_KP = 0.1;
+    public static final double DRIVE_KI = 0.0;
+    public static final double DRIVE_KD = 0.0;
 
     /* These are both calculated off of MK4i Swerve Module CAD */
-    private static final MomentOfInertia kSteerInertia = KilogramSquareMeters.of(0.02); // 0.007442
-    private static final MomentOfInertia kDriveInertia = KilogramSquareMeters.of(0.019); // 0.007212
+    private static final MomentOfInertia kSteerInertia = KilogramSquareMeters.of(0.007442);
+    private static final MomentOfInertia kDriveInertia = KilogramSquareMeters.of(0.007212);
 
     private static final Voltage kSteerFrictionVoltage = Volts.of(0.4); // suggested range 0.3 - 0.5
     private static final Voltage kDriveFrictionVoltage = Volts.of(0.7); // suggested range 0.6 - 0.8
@@ -142,7 +142,7 @@ public class DriveConstants {
   private static final int kFrontLeftDriveMotorId = 18;
   private static final int kFrontLeftSteerMotorId = 17;
   private static final int kFrontLeftEncoderId = 1;
-  private static final Angle kFrontLeftEncoderOffset = Radians.of(-5.788 + Math.PI);
+  private static final Angle kFrontLeftEncoderOffset = Radians.of(-0.888 + Math.PI);
   private static final boolean kFrontLeftSteerMotorInverted = true;
   private static final boolean kFrontLeftEncoderInverted = false;
   private static final Distance kFrontLeftXPos = Inches.of(10.375);
@@ -152,7 +152,7 @@ public class DriveConstants {
   private static final int kFrontRightDriveMotorId = 14;
   private static final int kFrontRightSteerMotorId = 13;
   private static final int kFrontRightEncoderId = 2;
-  private static final Angle kFrontRightEncoderOffset = Radians.of(-6.113 + Math.PI);
+  private static final Angle kFrontRightEncoderOffset = Radians.of(-3.738 + Math.PI);
   private static final boolean kFrontRightSteerMotorInverted = true;
   private static final boolean kFrontRightEncoderInverted = false;
   private static final Distance kFrontRightXPos = Inches.of(10.375);
@@ -162,7 +162,7 @@ public class DriveConstants {
   private static final int kBackLeftDriveMotorId = 12;
   private static final int kBackLeftSteerMotorId = 11;
   private static final int kBackLeftEncoderId = 0;
-  private static final Angle kBackLeftEncoderOffset = Radians.of(-2.192);
+  private static final Angle kBackLeftEncoderOffset = Radians.of(-3.276 + Math.PI);
   private static final boolean kBackLeftSteerMotorInverted = true;
   private static final boolean kBackLeftEncoderInverted = false;
   private static final Distance kBackLeftXPos = Inches.of(-10.375);
@@ -172,7 +172,7 @@ public class DriveConstants {
   private static final int kBackRightDriveMotorId = 16;
   private static final int kBackRightSteerMotorId = 15;
   private static final int kBackRightEncoderId = 3;
-  private static final Angle kBackRightEncoderOffset = Radians.of(-0.238);
+  private static final Angle kBackRightEncoderOffset = Radians.of(-4.617 + Math.PI);
   private static final boolean kBackRightSteerMotorInverted = true;
   private static final boolean kBackRightEncoderInverted = false;
   private static final Distance kBackRightXPos = Inches.of(-10.375);
@@ -206,6 +206,8 @@ public class DriveConstants {
               .withDriveInertia(Sim.kDriveInertia)
               .withSteerFrictionVoltage(Sim.kSteerFrictionVoltage)
               .withDriveFrictionVoltage(Sim.kDriveFrictionVoltage)
+              .withDriveMotorGains(Real.DRIVE_GAINS)
+              .withSteerMotorGains(Real.STEER_GAINS)
               .withEncoderInitialConfigs(new CANcoderConfiguration());
 
   public static final SwerveModuleConstants<
@@ -272,5 +274,5 @@ public class DriveConstants {
               Math.hypot(DriveConstants.BackRight.LocationX, DriveConstants.BackRight.LocationY)));
 
   public static final double ODOMETRY_FREQUENCY =
-      new CANBus(DrivetrainConstants.CANBusName).isNetworkFD() ? 250.0 : 100.0;
+      new CANBus(DriveConstants.DrivetrainConstants.CANBusName).isNetworkFD() ? 250.0 : 100.0;
 }

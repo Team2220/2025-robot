@@ -33,8 +33,8 @@ import frc.robot.Robot24.subsystems.drive.GyroIO;
 import frc.robot.Robot24.subsystems.drive.GyroIOPigeon2;
 import frc.robot.Robot24.subsystems.drive.GyroIOSim;
 import frc.robot.Robot24.subsystems.drive.ModuleIO;
-import frc.robot.Robot24.subsystems.drive.ModuleIOTalonFXReal;
-import frc.robot.Robot24.subsystems.drive.ModuleIOTalonFXSim;
+import frc.robot.Robot24.subsystems.drive.ModuleIOSim;
+import frc.robot.Robot24.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.SimConstants;
 import frc.robot.SimConstants.Mode;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
@@ -86,10 +86,10 @@ public class RobotContainer extends frc.lib.RobotContainer {
         drive =
             new Drive(
                 new GyroIOPigeon2(),
-                new ModuleIOTalonFXReal(DriveConstants.FrontLeft),
-                new ModuleIOTalonFXReal(DriveConstants.FrontRight),
-                new ModuleIOTalonFXReal(DriveConstants.BackLeft),
-                new ModuleIOTalonFXReal(DriveConstants.BackRight));
+                new ModuleIOTalonFX(DriveConstants.FrontLeft),
+                new ModuleIOTalonFX(DriveConstants.FrontRight),
+                new ModuleIOTalonFX(DriveConstants.BackLeft),
+                new ModuleIOTalonFX(DriveConstants.BackRight));
         break;
 
       case SIM:
@@ -97,10 +97,10 @@ public class RobotContainer extends frc.lib.RobotContainer {
         drive =
             new Drive(
                 new GyroIOSim(driveSimulation.getGyroSimulation()),
-                new ModuleIOTalonFXSim(DriveConstants.FrontLeft, driveSimulation.getModules()[0]),
-                new ModuleIOTalonFXSim(DriveConstants.FrontRight, driveSimulation.getModules()[1]),
-                new ModuleIOTalonFXSim(DriveConstants.BackLeft, driveSimulation.getModules()[2]),
-                new ModuleIOTalonFXSim(DriveConstants.BackRight, driveSimulation.getModules()[3]));
+                new ModuleIOSim(driveSimulation.getModules()[0]),
+                new ModuleIOSim(driveSimulation.getModules()[1]),
+                new ModuleIOSim(driveSimulation.getModules()[2]),
+                new ModuleIOSim(driveSimulation.getModules()[3]));
         break;
 
       default:
