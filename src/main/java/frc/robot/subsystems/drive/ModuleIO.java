@@ -52,4 +52,8 @@ public interface ModuleIO {
 
   /** Run the turn motor to the specified rotation. */
   public default void setTurnPosition(Rotation2d rotation) {}
+
+  public default void Coast() {}
+
+  public default void Break() {}
 }

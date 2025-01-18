@@ -28,9 +28,11 @@
     {
       "name": "WPIlibUnitTests",
       "workingDirectory": "${workspaceFolder}/build/jni/release",
-      "vmargs": [ "-Djava.library.path=${workspaceFolder}/build/jni/release" ],
+      "vmargs": [
+        "-Djava.library.path=${workspaceFolder}/build/jni/release"
+      ],
       "env": {
-        "LD_LIBRARY_PATH": "${workspaceFolder}/build/jni/release" ,
+        "LD_LIBRARY_PATH": "${workspaceFolder}/build/jni/release",
         "DYLD_LIBRARY_PATH": "${workspaceFolder}/build/jni/release"
       }
     },
@@ -78,13 +80,11 @@
   "files.autoSave": "afterDelay",
   "files.autoSaveDelay": 1000,
   "[java]": {
-    "spotlessGradle.format.enable": true,
-    "spotlessGradle.diagnostics.enable": true,
-    "editor.defaultFormatter": "richardwillis.vscode-spotless-gradle",
+    "spotlessGradle.format.enable": false,
+    "spotlessGradle.diagnostics.enable": false,
+    "editor.defaultFormatter": "redhat.java",
     "files.trimTrailingWhitespace": false,
-    "editor.codeActionsOnSave": {
-      "source.fixAll.spotlessGradle": "always",
-    }
+    "editor.codeActionsOnSave": {}
   },
   "[gradle]": {
     "files.trimTrailingWhitespace": false,
@@ -103,5 +103,6 @@
     "editor.codeActionsOnSave": {
       "source.fixAll.spotlessGradle": "always",
     }
-  }
+  },
+  "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx2G -Xms100m -Xlog:disable"
 }

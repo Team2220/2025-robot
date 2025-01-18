@@ -293,4 +293,13 @@ public class DriveCommands {
     Rotation2d lastAngle = new Rotation2d();
     double gyroDelta = 0.0;
   }
+
+  public static Command ToggleCoast(Drive drive) {
+    return Commands.runOnce(
+        () -> {
+          System.out.println("testing AHHHHHHHHHHHHHHHHHHHHH");
+          drive.ToggleCoast();
+        });
+  }
+  ;
 }

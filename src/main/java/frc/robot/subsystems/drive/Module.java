@@ -144,4 +144,12 @@ public class Module {
   public double getFFCharacterizationVelocity() {
     return Units.radiansToRotations(inputs.driveVelocityRadPerSec);
   }
+
+  public void Coast() {
+    io.Coast();
+  }
+
+  public void Break() {
+    io.Break();
+  }
 }

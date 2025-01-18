@@ -104,7 +104,8 @@ public class ModuleIOTalonFX implements ModuleIO {
     this.constants = constants;
     driveTalon = new TalonFX(constants.DriveMotorId, TunerConstants.DrivetrainConstants.CANBusName);
     turnTalon = new TalonFX(constants.SteerMotorId, TunerConstants.DrivetrainConstants.CANBusName);
-    // cancoder = new CANcoder(constants.EncoderId, TunerConstants.DrivetrainConstants.CANBusName);
+    // cancoder = new CANcoder(constants.EncoderId,
+    // TunerConstants.DrivetrainConstants.CANBusName);
     customEncoder = new PWMEncoder(constants.EncoderId, Rotations.of(constants.EncoderOffset));
 
     // Configure drive motor
@@ -147,9 +148,9 @@ public class ModuleIOTalonFX implements ModuleIO {
     // CANcoderConfiguration cancoderConfig = constants.EncoderInitialConfigs;
     // cancoderConfig.MagnetSensor.MagnetOffset = constants.EncoderOffset;
     // cancoderConfig.MagnetSensor.SensorDirection =
-    //     constants.EncoderInverted
-    //         ? SensorDirectionValue.Clockwise_Positive
-    //         : SensorDirectionValue.CounterClockwise_Positive;
+    // constants.EncoderInverted
+    // ? SensorDirectionValue.Clockwise_Positive
+    // : SensorDirectionValue.CounterClockwise_Positive;
     // cancoder.getConfigurator().apply(cancoderConfig);
 
     // Create timestamp queue
@@ -266,5 +267,18 @@ public class ModuleIOTalonFX implements ModuleIO {
           case TorqueCurrentFOC ->
               positionTorqueCurrentRequest.withPosition(rotation.getRotations());
         });
+  }
+
+  @Override
+  public void Coast() {
+    driveTalon.setNeutralMode(NeutralModeValue.Coast);
+    turnTalon.setNeutralMode(NeutralModeValue.Coast);
+    Logger.recordOutput("Coastmode", true);
+  }
+
+  public void Break() {
+    driveTalon.setNeutralMode(NeutralModeValue.Brake);
+    turnTalon.setNeutralMode(NeutralModeValue.Brake);
+    Logger.recordOutput("Coastmode", false);
   }
 }
