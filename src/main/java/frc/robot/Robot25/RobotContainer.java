@@ -36,6 +36,8 @@ import frc.robot.Robot25.subsystems.drive.ModuleIO;
 import frc.robot.Robot25.subsystems.drive.ModuleIOSim;
 import frc.robot.Robot25.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.SimConstants;
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -149,58 +151,53 @@ public class RobotContainer extends frc.lib.RobotContainer {
    */
   private void configureButtonBindings() {
 
+    // Xbox controller is mapped incorrectly on Mac OS
+    DoubleSupplier xSupplier =
+        () ->
+            !SimConstants.IS_MAC
+                ? -DriverController.getRightX()
+                : -DriverController.getRightTriggerAxis();
+    DoubleSupplier ySupplier =
+        () ->
+            !SimConstants.IS_MAC
+                ? -DriverController.getRightY()
+                : -DriverController.getLeftTriggerAxis();
+    DoubleSupplier omegaSupplier = () -> -DriverController.getLeftX();
+    BooleanSupplier slowModeSupplier =
+        () ->
+            !SimConstants.IS_MAC
+                ? DriverController.getRightTriggerAxis() > 0.5
+                : DriverController.getRightX() > 0.0;
+
     // Default command, normal field-relative drive
     drive.setDefaultCommand(
-        DriveCommands.joystickDrive(
-            drive,
-            () -> -DriverController.getLeftY(),
-            () -> -DriverController.getLeftX(),
-            // Xbox controller is mapped incorrectly on Mac OS
-            () -> -DriverController.getRightX(),
-            () -> DriverController.getRightTriggerAxis() > 0.5));
+        DriveCommands.joystickDrive(drive, xSupplier, ySupplier, omegaSupplier, slowModeSupplier));
 
     DriverController.a()
-        .toggleOnTrue(
-            DriveCommands.keepRotationForward(
-                drive, () -> -DriverController.getLeftY(), () -> -DriverController.getLeftX()));
+        .toggleOnTrue(DriveCommands.keepRotationForward(drive, xSupplier, ySupplier));
 
+    // POV snap to angles
     DriverController.povUp().onTrue(DriveCommands.snapToRotation(drive, Rotation2d.kZero));
-
     DriverController.povUpRight()
         .onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(-45)));
-
     DriverController.povRight()
         .onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(-90)));
-    // have.get.money
     DriverController.povDownRight()
         .onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(-135)));
-
     DriverController.povDown()
         .onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(-180)));
-
     DriverController.povDownLeft()
         .onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(135)));
-
     DriverController.povLeft()
         .onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(90)));
-
     DriverController.povUpLeft()
         .onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(45)));
 
-    // Lock to 0° when A button is held
-    // controller
-    // .a()
-    // .whileTrue(
-    // DriveCommands.joystickDriveAtAngle(
-    // drive,
-    // () -> -controller.getLeftY(),
-    // () -> -controller.getLeftX(),
-    // () -> Rotation2d.kZero));
-
+    // TODO should this be true in TeleOp?
     // Switch to X pattern when X button is pressed
     DriverController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
-    // Reset gyro to 0° when B button is pressed
+    // Reset gyro to 0° when START button is pressed
     DriverController.start()
         .onTrue(
             Commands.runOnce(

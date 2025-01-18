@@ -30,6 +30,8 @@ public final class SimConstants {
   public static final Pose2d SIM_INITIAL_FIELD_POSE = new Pose2d(3, 3, new Rotation2d());
   public static final Supplier<RobotContainer> SIM_ROBOT_SUPPLIER =
       () -> new frc.robot.Robot25.RobotContainer();
+  public static final boolean IS_MAC =
+      System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0;
 
   /* DO NOT CHANGE */
   public static final Mode CURRENT_MODE = RobotBase.isReal() ? Mode.REAL : SIM_MODE;

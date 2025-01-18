@@ -80,6 +80,9 @@
   "editor.formatOnSave": true,
   "files.autoSave": "afterDelay",
   "files.autoSaveDelay": 1000,
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
   "[java]": {
     "spotlessGradle.format.enable": false,
     "spotlessGradle.diagnostics.enable": false,
@@ -105,5 +108,4 @@
       "source.fixAll.spotlessGradle": "always",
     }
   },
-  "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx2G -Xms100m -Xlog:disable"
 }
