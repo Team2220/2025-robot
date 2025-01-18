@@ -46,7 +46,7 @@ public class DriveConstants {
     public static final double STEER_KS = 0.1;
     public static final double STEER_KV = 1.91;
     public static final double STEER_KA = 0.0;
-    public static final double STEER_KP = 100.0;
+    public static final double STEER_KP = 10.0;
     public static final double STEER_KI = 0.0;
     public static final double STEER_KD = 0.5;
 

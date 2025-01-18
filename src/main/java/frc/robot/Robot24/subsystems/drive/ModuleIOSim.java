@@ -127,6 +127,7 @@ public class ModuleIOSim implements ModuleIO {
 
   @Override
   public void setTurnPosition(Rotation2d rotation) {
+    turnClosedLoop = true;
     turnController.setSetpoint(rotation.getRadians());
   }
 }

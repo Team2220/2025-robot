@@ -79,7 +79,7 @@ public class Drive extends SubsystemBase /* implements Vision.VisionConsumer */ 
           .withSwerveModule(
               new SwerveModuleSimulationConfig(
                   DCMotor.getKrakenX60(1),
-                  DCMotor.getKrakenX60(1),
+                  DCMotor.getFalcon500(1),
                   DriveConstants.FrontLeft.DriveMotorGearRatio,
                   DriveConstants.FrontLeft.SteerMotorGearRatio,
                   Volts.of(DriveConstants.FrontLeft.DriveFrictionVoltage),
