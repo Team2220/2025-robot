@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 
-package frc.robot.subsystems.drive;
+package frc.robot.Robot24.subsystems.drive;
 
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
@@ -21,7 +21,8 @@ import java.util.Queue;
 
 /** IO implementation for NavX. */
 public class GyroIONavX implements GyroIO {
-  private final AHRS navX = new AHRS(NavXComType.kMXP_SPI, (byte) Drive.ODOMETRY_FREQUENCY);
+  private final AHRS navX =
+      new AHRS(NavXComType.kMXP_SPI, (byte) DriveConstants.ODOMETRY_FREQUENCY);
   private final Queue<Double> yawPositionQueue;
   private final Queue<Double> yawTimestampQueue;
 

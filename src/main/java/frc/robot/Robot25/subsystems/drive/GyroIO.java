@@ -11,17 +11,20 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 
-package frc.robot.util;
+package frc.robot.Robot25.subsystems.drive;
 
-import com.ctre.phoenix6.StatusCode;
-import java.util.function.Supplier;
+import edu.wpi.first.math.geometry.Rotation2d;
+import org.littletonrobotics.junction.AutoLog;
 
-public class PhoenixUtil {
-  /** Attempts to run the command until no error is produced. */
-  public static void tryUntilOk(int maxAttempts, Supplier<StatusCode> command) {
-    for (int i = 0; i < maxAttempts; i++) {
-      var error = command.get();
-      if (error.isOK()) break;
-    }
+public interface GyroIO {
+  @AutoLog
+  public static class GyroIOInputs {
+    public boolean connected = false;
+    public Rotation2d yawPosition = new Rotation2d();
+    public double yawVelocityRadPerSec = 0.0;
+    public double[] odometryYawTimestamps = new double[] {};
+    public Rotation2d[] odometryYawPositions = new Rotation2d[] {};
   }
+
+  public default void updateInputs(GyroIOInputs inputs) {}
 }

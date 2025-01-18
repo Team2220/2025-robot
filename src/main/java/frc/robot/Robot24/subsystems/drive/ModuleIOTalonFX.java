@@ -11,10 +11,10 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 
-package frc.robot.subsystems.drive;
+package frc.robot.Robot24.subsystems.drive;
 
 import static edu.wpi.first.units.Units.Rotations;
-import static frc.robot.util.PhoenixUtil.*;
+import static frc.robot.Robot24.util.PhoenixUtil.*;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
@@ -40,7 +40,6 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
 import frc.lib.devices.PWMEncoder;
-import frc.robot.generated.TunerConstants;
 import java.util.Queue;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
@@ -49,7 +48,7 @@ import org.littletonrobotics.junction.Logger;
  * Module IO implementation for Talon FX drive motor controller, Talon FX turn motor controller, and
  * CANcoder. Configured using a set of module constants from Phoenix.
  *
- * <p>Device configuration and other behaviors not exposed by TunerConstants can be customized here.
+ * <p>Device configuration and other behaviors not exposed by DriveConstants can be customized here.
  */
 public class ModuleIOTalonFX implements ModuleIO {
   private final SwerveModuleConstants<
@@ -102,10 +101,8 @@ public class ModuleIOTalonFX implements ModuleIO {
       SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
           constants) {
     this.constants = constants;
-    driveTalon = new TalonFX(constants.DriveMotorId, TunerConstants.DrivetrainConstants.CANBusName);
-    turnTalon = new TalonFX(constants.SteerMotorId, TunerConstants.DrivetrainConstants.CANBusName);
-    // cancoder = new CANcoder(constants.EncoderId,
-    // TunerConstants.DrivetrainConstants.CANBusName);
+    driveTalon = new TalonFX(constants.DriveMotorId, DriveConstants.DrivetrainConstants.CANBusName);
+    turnTalon = new TalonFX(constants.SteerMotorId, DriveConstants.DrivetrainConstants.CANBusName);
     customEncoder = new PWMEncoder(constants.EncoderId, Rotations.of(constants.EncoderOffset));
 
     // Configure drive motor
@@ -148,9 +145,9 @@ public class ModuleIOTalonFX implements ModuleIO {
     // CANcoderConfiguration cancoderConfig = constants.EncoderInitialConfigs;
     // cancoderConfig.MagnetSensor.MagnetOffset = constants.EncoderOffset;
     // cancoderConfig.MagnetSensor.SensorDirection =
-    // constants.EncoderInverted
-    // ? SensorDirectionValue.Clockwise_Positive
-    // : SensorDirectionValue.CounterClockwise_Positive;
+    //     constants.EncoderInverted
+    //         ? SensorDirectionValue.Clockwise_Positive
+    //         : SensorDirectionValue.CounterClockwise_Positive;
     // cancoder.getConfigurator().apply(cancoderConfig);
 
     // Create timestamp queue
@@ -174,7 +171,7 @@ public class ModuleIOTalonFX implements ModuleIO {
 
     // Configure periodic frames
     BaseStatusSignal.setUpdateFrequencyForAll(
-        Drive.ODOMETRY_FREQUENCY, drivePosition, turnPosition);
+        DriveConstants.ODOMETRY_FREQUENCY, drivePosition, turnPosition);
     BaseStatusSignal.setUpdateFrequencyForAll(
         50.0,
         driveVelocity,
@@ -267,18 +264,5 @@ public class ModuleIOTalonFX implements ModuleIO {
           case TorqueCurrentFOC ->
               positionTorqueCurrentRequest.withPosition(rotation.getRotations());
         });
-  }
-
-  @Override
-  public void Coast() {
-    driveTalon.setNeutralMode(NeutralModeValue.Coast);
-    turnTalon.setNeutralMode(NeutralModeValue.Coast);
-    Logger.recordOutput("Coastmode", true);
-  }
-
-  public void Break() {
-    driveTalon.setNeutralMode(NeutralModeValue.Brake);
-    turnTalon.setNeutralMode(NeutralModeValue.Brake);
-    Logger.recordOutput("Coastmode", false);
   }
 }

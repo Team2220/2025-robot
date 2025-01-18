@@ -1,4 +1,4 @@
-// Copyright 2021-2025 FRC 6328
+// Copyright 2021-2024 FRC 6328
 // http://github.com/Mechanical-Advantage
 //
 // This program is free software; you can redistribute it and/or
@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 
-package frc.robot.subsystems.drive;
+package frc.robot.Robot25.subsystems.drive;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -81,7 +81,7 @@ public class Module {
   public void runSetpoint(SwerveModuleState state) {
     // Optimize velocity setpoint
     state.optimize(getAngle());
-    state.cosineScale(inputs.turnPosition);
+    state.cosineScale(inputs.turnAbsolutePosition);
 
     // Apply setpoints
     io.setDriveVelocity(state.speedMetersPerSecond / constants.WheelRadius);
@@ -102,7 +102,7 @@ public class Module {
 
   /** Returns the current turn angle of the module. */
   public Rotation2d getAngle() {
-    return inputs.turnPosition;
+    return inputs.turnAbsolutePosition;
   }
 
   /** Returns the current drive position of the module in meters. */
@@ -145,11 +145,11 @@ public class Module {
     return Units.radiansToRotations(inputs.driveVelocityRadPerSec);
   }
 
-  public void Coast() {
-    io.Coast();
+  public void setDriveVoltage(double voltage) {
+    io.setDriveOpenLoop(voltage);
   }
 
-  public void Break() {
-    io.Break();
+  public void setTurnVoltage(double voltage) {
+    io.setTurnOpenLoop(voltage);
   }
 }
