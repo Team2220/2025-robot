@@ -17,18 +17,24 @@
     "**/.factorypath": true,
     "**/*~": true,
     "**/BuildConstants.java": true,
+    "**/.kotlin": true,
     "*.log": true,
     ".wpilib": true,
     "gradle": true,
     "ctre_sim": true,
     "build": true,
-    "WPILib-License.md": true
+    "WPILib-License.md": true,
+    "**/simgui*.json": true,
+    "**/networktables.json": true,
+    "vendordeps": true,
   },
   "java.test.config": [
     {
       "name": "WPIlibUnitTests",
       "workingDirectory": "${workspaceFolder}/build/jni/release",
-      "vmargs": ["-Djava.library.path=${workspaceFolder}/build/jni/release"],
+      "vmargs": [
+        "-Djava.library.path=${workspaceFolder}/build/jni/release"
+      ],
       "env": {
         "LD_LIBRARY_PATH": "${workspaceFolder}/build/jni/release",
         "DYLD_LIBRARY_PATH": "${workspaceFolder}/build/jni/release"

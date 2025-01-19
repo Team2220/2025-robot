@@ -35,7 +35,9 @@
         "settings": {
           "java": {
             "project": {
-              "sourcePaths": ["src/main/java"],
+              "sourcePaths": [
+                "src/main/java"
+              ],
               "referencedLibraries": [
                 "~/wpilib/2025/maven/edu/wpi/first/**/*.jar"
               ]
@@ -48,5 +50,41 @@
         }
       }
     }
-  }
+  },
+  "tab_size": 2,
+  "hard_tabs": false,
+  "formatter": "language_server",
+  "use_on_type_format": true,
+  "format_on_save": "language_server",
+  "tabs": {
+    "git_status": true,
+    "file_icons": true
+  },
+  "file_scan_exclusions": [
+    "**/.git",
+    "**/.svn",
+    "**/.hg",
+    "**/CVS",
+    "**/.DS_Store",
+    "**/.gradle/",
+    "**/gradlew",
+    "**/gradlew.bat",
+    "bin/",
+    "**/.classpath",
+    "**/.project",
+    "**/.settings",
+    "**/.factorypath",
+    "**/*~",
+    "**/BuildConstants.java",
+    "*.log",
+    ".wpilib",
+    "gradle",
+    "ctre_sim",
+    "build",
+    "WPILib-License.md",
+    ".kotlin",
+    "**/simgui*.json",
+    "**/networktables.json",
+    "vendordeps"
+  ]
 }
