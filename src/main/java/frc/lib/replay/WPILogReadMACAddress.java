@@ -12,11 +12,13 @@ public final class WPILogReadMACAddress {
   public static final String ENTRY_METADATA = "{\"source\":\"AdvantageKit\"}";
 
   /**
-   * Intended only to be used a single time to retrieve the MAC address of the robot used during
+   * Intended only to be used a single time to retrieve the MAC address of the
+   * robot used during
    * this log. This is for robot code selection during replay
    *
-   * @param filename The name of the log file, can use log path given by AdvantageKit's find log
-   *     file
+   * @param filename The name of the log file, can use log path given by
+   *                 AdvantageKit's find log
+   *                 file
    * @return The MAC address, null if could not find or load.
    */
   public static String get(String filename) {
@@ -50,7 +52,8 @@ public final class WPILogReadMACAddress {
       }
 
       // For some reason control records happen after start records?
-      // Only enter "/RealMetadata" entries since that's where we'll keep RobotMACAddress
+      // Only enter "/RealMetadata" entries since that's where we'll keep
+      // RobotMACAddress
       if (record.isControl()
           && record.isStart()
           && record.getStartData().metadata.equals(ENTRY_METADATA)
@@ -58,7 +61,8 @@ public final class WPILogReadMACAddress {
         entryNametoIdMap.put(record.getStartData().name, record.getStartData().entry);
         continue;
       } else {
-        // All entries can be gotten as a string, only add valid strings to the map since we're
+        // All entries can be gotten as a string, only add valid strings to the map
+        // since we're
         // searching for a MAC address
         String entryAsString = record.getString();
         if (!entryAsString.trim().isEmpty()) {
@@ -67,7 +71,7 @@ public final class WPILogReadMACAddress {
       }
     }
 
-    var id = entryNametoIdMap.get("/RealMetadata/RobotMacAddress");
+    var id = entryNametoIdMap.get("/RealMetadata/RobotMACAddress");
     if (id != null) {
       macAddress = entryIdToValueMap.get(id);
     }

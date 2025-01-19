@@ -107,7 +107,8 @@ public class Robot extends LoggedRobot {
            * IF REPLAYING A LOG MISSING MAC ADDRESS, MANUALLY SELECT CORRECT ROBOT CODE
            * HERE
            */
-          robotContainer = new frc.robot.Robot24.RobotContainer();
+          // robotContainer = new frc.robot.Robot24.RobotContainer();
+          throw new RuntimeException("No MAC address in replay log");
         } else {
           robotContainer = getRobotContainerFromInstance(RobotInstance.fromString(macAddress));
         }
@@ -122,8 +123,6 @@ public class Robot extends LoggedRobot {
     return switch (instance) {
       case Robot24 -> new frc.robot.Robot24.RobotContainer();
       case Robot25 -> new frc.robot.Robot25.RobotContainer();
-      // case BoxyBot -> new BoxysRobotContainer();
-      // case KrackenSwerve -> new frc.robot.KrackenSwerve.RobotContainer();
       case Simulator -> SimConstants.SIM_ROBOT_SUPPLIER.get();
       default -> throw new RuntimeException("Unsupported robot instance: " + instance.toString());
     };
