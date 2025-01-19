@@ -17,6 +17,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.RobotBase;
 import frc.lib.RobotContainer;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -25,25 +26,33 @@ import java.util.function.Supplier;
  * (log replay from a file).
  */
 public final class SimConstants {
+
   /* Simulation mode, initial position, and robot container */
-  public static final Mode SIM_MODE = Mode.SIM;
+
+  /* This gets the value of environment variable AKIT_SIM_MODE otherwise sets SIM_MODE to Mode.SIM */
+  public static final Mode SIM_MODE =
+      Optional.ofNullable(System.getenv("AKIT_SIM_MODE")).map(Mode::valueOf).orElse(Mode.SIM);
+
   public static final Pose2d SIM_INITIAL_FIELD_POSE = new Pose2d(3, 3, new Rotation2d());
   public static final Supplier<RobotContainer> SIM_ROBOT_SUPPLIER =
       () -> new frc.robot.Robot25.RobotContainer();
+
   public static final boolean IS_MAC =
       System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0;
 
   /* DO NOT CHANGE */
   public static final Mode CURRENT_MODE = RobotBase.isReal() ? Mode.REAL : SIM_MODE;
 
-  public static enum Mode {
+  public enum Mode {
     /** Running on a real robot. */
-    REAL,
+    REAL(null),
 
     /** Running a physics simulator. */
-    SIM,
+    SIM("SIM"),
 
     /** Replaying from a log file. */
-    REPLAY
+    REPLAY("REPLAY");
+
+    Mode(String env) {}
   }
 }

@@ -4,9 +4,6 @@ plugins {
 
     // Add gversion plugin for AdvantageKit
     id "com.peterabeles.gversion" version "1.10"
-
-    // For formatting
-    id 'com.diffplug.spotless' version '7.0.1'
 }
 
 java {
@@ -90,7 +87,7 @@ test {
 }
 
 // Simulation configuration (e.g. environment variables).
-wpi.sim.addGui().defaultEnabled = true
+wpi.sim.addGui().defaultEnabled = providers.environmentVariable('AKIT_SIM_MODE').map(env -> env.equals("SIM")).orElse(true)
 wpi.sim.addDriverstation()
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
@@ -126,7 +123,7 @@ gversion {
   classPackage = "frc.robot"
   className    = "BuildConstants"
   dateFormat   = "yyyy-MM-dd HH:mm:ss z"
-  timeZone     = "America/New_York" // Use preferred time zone
+  timeZone     = "America/Central" // Use preferred time zone
   indent       = "  "
 }
 
@@ -162,17 +159,3 @@ task(eventDeploy) {
     }
 }
 createVersionFile.dependsOn(eventDeploy)
-
-spotless {
-    java {
-        targetExclude '**/BuildConstants.java'
-        googleJavaFormat()
-        removeUnusedImports()
-        trimTrailingWhitespace()
-        endWithNewline()
-    }
-}
-
-tasks.named("build") {
-    dependsOn "spotlessApply"
-}

@@ -22,15 +22,13 @@
     "gradle": true,
     "ctre_sim": true,
     "build": true,
-    "WPILib-License.md": true,
+    "WPILib-License.md": true
   },
   "java.test.config": [
     {
       "name": "WPIlibUnitTests",
       "workingDirectory": "${workspaceFolder}/build/jni/release",
-      "vmargs": [
-        "-Djava.library.path=${workspaceFolder}/build/jni/release"
-      ],
+      "vmargs": ["-Djava.library.path=${workspaceFolder}/build/jni/release"],
       "env": {
         "LD_LIBRARY_PATH": "${workspaceFolder}/build/jni/release",
         "DYLD_LIBRARY_PATH": "${workspaceFolder}/build/jni/release"
@@ -55,9 +53,9 @@
   "java.completion.guessMethodArguments": "off",
   "java.completion.importOrder": [
     "#",
-    "frc.robot",
-    "frc.lib",
-    "edu.wpi.first",
+    "frc.robot.*",
+    "frc.lib.*",
+    "edu.wpi.first.*"
   ],
   "java.completion.filteredTypes": [
     "java.awt.*",
@@ -84,28 +82,11 @@
   "editor.insertSpaces": true,
   "editor.detectIndentation": false,
   "[java]": {
-    "spotlessGradle.format.enable": false,
-    "spotlessGradle.diagnostics.enable": false,
     "editor.defaultFormatter": "redhat.java",
     "files.trimTrailingWhitespace": false,
     "editor.codeActionsOnSave": {}
   },
-  "[gradle]": {
-    "files.trimTrailingWhitespace": false,
-    "spotlessGradle.diagnostics.enable": true,
-    "spotlessGradle.format.enable": true,
-    "editor.defaultFormatter": "richardwillis.vscode-spotless-gradle",
-    "editor.codeActionsOnSave": {
-      "source.fixAll.spotlessGradle": "always",
-    }
-  },
-  "[kotlin]": {
-    "files.trimTrailingWhitespace": false,
-    "spotlessGradle.diagnostics.enable": true,
-    "spotlessGradle.format.enable": true,
-    "editor.defaultFormatter": "richardwillis.vscode-spotless-gradle",
-    "editor.codeActionsOnSave": {
-      "source.fixAll.spotlessGradle": "always",
-    }
-  },
+  "java.format.settings.url": "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml",
+  "java.format.settings.profile": "GoogleStyle",
+  "java.debug.settings.onBuildFailureProceed": true
 }
