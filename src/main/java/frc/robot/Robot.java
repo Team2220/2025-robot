@@ -28,9 +28,12 @@ import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 /**
- * The VM is configured to automatically run this class, and to call the functions corresponding to
- * each mode, as described in the TimedRobot documentation. If you change the name of this class or
- * the package after creating this project, you must also update the build.gradle file in the
+ * The VM is configured to automatically run this class, and to call the
+ * functions corresponding to
+ * each mode, as described in the TimedRobot documentation. If you change the
+ * name of this class or
+ * the package after creating this project, you must also update the
+ * build.gradle file in the
  * project.
  */
 public class Robot extends LoggedRobot {
@@ -84,9 +87,6 @@ public class Robot extends LoggedRobot {
         break;
     }
 
-    // Start AdvantageKit logger
-    Logger.start();
-
     switch (SimConstants.CURRENT_MODE) {
       case REAL:
       case SIM:
@@ -98,15 +98,24 @@ public class Robot extends LoggedRobot {
         break;
 
       case REPLAY:
-        /* Autodetects which robot instance to construct for REPLAY mode based on metadata */
+        /*
+         * Autodetects which robot instance to construct for REPLAY mode based on
+         * metadata
+         */
         if (macAddress == null) {
-          /* IF REPLAYING A LOG MISSING MAC ADDRESS, MANUALLY SELECT CORRECT ROBOT CODE HERE */
+          /*
+           * IF REPLAYING A LOG MISSING MAC ADDRESS, MANUALLY SELECT CORRECT ROBOT CODE
+           * HERE
+           */
           robotContainer = new frc.robot.Robot24.RobotContainer();
         } else {
           robotContainer = getRobotContainerFromInstance(RobotInstance.fromString(macAddress));
         }
         break;
     }
+
+    // Start AdvantageKit logger
+    Logger.start();
   }
 
   private RobotContainer getRobotContainerFromInstance(RobotInstance instance) {
@@ -121,7 +130,8 @@ public class Robot extends LoggedRobot {
   }
 
   /**
-   * This function is called once when the robot is first started up. All robot-wide initialization
+   * This function is called once when the robot is first started up. All
+   * robot-wide initialization
    * goes here.
    */
   @Override
@@ -160,7 +170,10 @@ public class Robot extends LoggedRobot {
     robotContainer.disabledPeriodic();
   }
 
-  /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
+  /**
+   * This autonomous runs the autonomous command selected by your
+   * {@link RobotContainer} class.
+   */
   @Override
   public void autonomousInit() {
     autonomousCommand = robotContainer.getAutonomousCommand();
