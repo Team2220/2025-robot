@@ -30,7 +30,11 @@ import frc.robot.Robot24.commands.DriveCommands;
 import frc.robot.Robot24.subsystems.drive.Drive;
 import frc.robot.Robot24.subsystems.drive.DriveConstants;
 import frc.robot.Robot24.subsystems.drive.GyroIO;
+<<<<<<< Updated upstream
 import frc.robot.Robot24.subsystems.drive.GyroIOPigeon2;
+=======
+import frc.robot.Robot24.subsystems.drive.GyroIONavX;
+>>>>>>> Stashed changes
 import frc.robot.Robot24.subsystems.drive.GyroIOSim;
 import frc.robot.Robot24.subsystems.drive.ModuleIO;
 import frc.robot.Robot24.subsystems.drive.ModuleIOSim;
@@ -85,11 +89,19 @@ public class RobotContainer extends frc.lib.RobotContainer {
         // Real robot, instantiate hardware IO implementations
         drive =
             new Drive(
+<<<<<<< Updated upstream
                 new GyroIOPigeon2(),
                 new ModuleIOTalonFX(DriveConstants.FrontLeft),
                 new ModuleIOTalonFX(DriveConstants.FrontRight),
                 new ModuleIOTalonFX(DriveConstants.BackLeft),
                 new ModuleIOTalonFX(DriveConstants.BackRight));
+=======
+                new GyroIONavX(),
+                new ModuleIOTalonFXReal(DriveConstants.FrontLeft),
+                new ModuleIOTalonFXReal(DriveConstants.FrontRight),
+                new ModuleIOTalonFXReal(DriveConstants.BackLeft),
+                new ModuleIOTalonFXReal(DriveConstants.BackRight));
+>>>>>>> Stashed changes
         break;
 
       case SIM:
@@ -155,12 +167,13 @@ public class RobotContainer extends frc.lib.RobotContainer {
             () ->
                 SimConstants.SIM_MODE == Mode.REAL
                     ? -controller.getRightX()
-                    : -controller.getLeftTriggerAxis(),
+                    : -controller.getRightX(),
             () ->
                 SimConstants.SIM_MODE == Mode.REAL
-                    ? controller.getRightTriggerAxis() > 0.5
+                    ? controller.getRightY() > 0.5
                     : controller.getRightY() > 0.5));
 
+                    
     controller
         .a()
         .toggleOnTrue(
