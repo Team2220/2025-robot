@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+<<<<<<< Updated upstream:src/main/java/frc/robot/Robot24/RobotContainer.java
 import frc.robot.Robot;
 import frc.robot.Robot24.commands.DriveCommands;
 import frc.robot.Robot24.subsystems.drive.Drive;
@@ -38,6 +39,17 @@ import frc.robot.Robot24.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.SimConstants;
 import frc.robot.SimConstants.Mode;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
+=======
+import frc.robot.commands.DriveCommands;
+import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.GyroIO;
+import frc.robot.subsystems.drive.GyroIONavX;
+import frc.robot.subsystems.drive.GyroIOPigeon2;
+import frc.robot.subsystems.drive.ModuleIO;
+import frc.robot.subsystems.drive.ModuleIOSim;
+import frc.robot.subsystems.drive.ModuleIOTalonFX;
+>>>>>>> Stashed changes:src/main/java/frc/robot/RobotContainer.java
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -86,10 +98,17 @@ public class RobotContainer extends frc.lib.RobotContainer {
         drive =
             new Drive(
                 new GyroIOPigeon2(),
+<<<<<<< Updated upstream:src/main/java/frc/robot/Robot24/RobotContainer.java
                 new ModuleIOTalonFX(DriveConstants.FrontLeft),
                 new ModuleIOTalonFX(DriveConstants.FrontRight),
                 new ModuleIOTalonFX(DriveConstants.BackLeft),
                 new ModuleIOTalonFX(DriveConstants.BackRight));
+=======
+                new ModuleIOTalonFX(TunerConstants.FrontLeft),
+                new ModuleIOTalonFX(TunerConstants.FrontRight),
+                new ModuleIOTalonFX(TunerConstants.BackLeft),
+                new ModuleIOTalonFX(TunerConstants.BackRight));
+>>>>>>> Stashed changes:src/main/java/frc/robot/RobotContainer.java
         break;
 
       case SIM:
