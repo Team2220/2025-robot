@@ -4,6 +4,7 @@
     {
       "anchor": {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         "x": 4.0,
         "y": 7.0
       },
@@ -13,6 +14,14 @@
         "y": 6.557269718478757
 =======
         "x": 0.5,
+=======
+        "x": 0.5,
+        "y": 1.75
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.4999999999999991,
+>>>>>>> Stashed changes
         "y": 1.75
       },
       "prevControl": null,
@@ -27,12 +36,21 @@
     {
       "anchor": {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         "x": 4.0,
         "y": 6.0
       },
       "prevControl": {
         "x": 4.0,
         "y": 6.278811218169331
+=======
+        "x": 1.5,
+        "y": 1.75
+      },
+      "prevControl": {
+        "x": 0.9138056823374113,
+        "y": 1.75
+>>>>>>> Stashed changes
 =======
         "x": 1.5,
         "y": 1.75

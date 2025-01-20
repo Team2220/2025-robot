@@ -31,7 +31,11 @@ import frc.robot.Robot24.subsystems.drive.Drive;
 import frc.robot.Robot24.subsystems.drive.DriveConstants;
 import frc.robot.Robot24.subsystems.drive.GyroIO;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import frc.robot.Robot24.subsystems.drive.GyroIOPigeon2;
+=======
+import frc.robot.Robot24.subsystems.drive.GyroIONavX;
+>>>>>>> Stashed changes
 =======
 import frc.robot.Robot24.subsystems.drive.GyroIONavX;
 >>>>>>> Stashed changes
@@ -90,12 +94,15 @@ public class RobotContainer extends frc.lib.RobotContainer {
         drive =
             new Drive(
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                 new GyroIOPigeon2(),
                 new ModuleIOTalonFX(DriveConstants.FrontLeft),
                 new ModuleIOTalonFX(DriveConstants.FrontRight),
                 new ModuleIOTalonFX(DriveConstants.BackLeft),
                 new ModuleIOTalonFX(DriveConstants.BackRight));
 =======
+=======
+>>>>>>> Stashed changes
                 new GyroIONavX(),
                 new ModuleIOTalonFXReal(DriveConstants.FrontLeft),
                 new ModuleIOTalonFXReal(DriveConstants.FrontRight),
