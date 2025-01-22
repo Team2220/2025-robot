@@ -16,6 +16,7 @@ package frc.robot.Robot25;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.DriveMotorArrangement;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerMotorArrangement;
+import com.google.flatbuffers.Constants;
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -25,12 +26,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.lib.devices.DigitalInputWrapper;
 import frc.robot.Robot;
 import frc.robot.Robot25.commands.DriveCommands;
 import frc.robot.Robot25.subsystems.drive.Drive;
 import frc.robot.Robot25.subsystems.drive.DriveConstants;
 import frc.robot.Robot25.subsystems.drive.GyroIO;
 import frc.robot.Robot25.subsystems.drive.GyroIONavX;
+import frc.robot.Robot25.subsystems.drive.GyroIOPigeon2;
 import frc.robot.Robot25.subsystems.drive.GyroIOSim;
 import frc.robot.Robot25.subsystems.drive.ModuleIO;
 import frc.robot.Robot25.subsystems.drive.ModuleIOSim;
@@ -62,18 +65,17 @@ public class RobotContainer extends frc.lib.RobotContainer {
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
 
+
+  // coast buttion
+  private static DigitalInputWrapper coastButton = new DigitalInputWrapper(0, "coastButton", false);
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     super(driveSimulation);
 
     // Check for valid swerve config
-    var modules =
-        new SwerveModuleConstants[] {
-          DriveConstants.FrontLeft,
-          DriveConstants.FrontRight,
-          DriveConstants.BackLeft,
-          DriveConstants.BackRight
-        };
+    var modules = new SwerveModuleConstants[] {DriveConstants.FrontLeft, DriveConstants.FrontRight,
+        DriveConstants.BackLeft, DriveConstants.BackRight};
     for (var constants : modules) {
       if (constants.DriveMotorType != DriveMotorArrangement.TalonFX_Integrated
           || constants.SteerMotorType != SteerMotorArrangement.TalonFX_Integrated) {
@@ -85,37 +87,29 @@ public class RobotContainer extends frc.lib.RobotContainer {
     switch (SimConstants.CURRENT_MODE) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
-        drive =
-            new Drive(
-                new GyroIONavX(),
-                new ModuleIOTalonFX(DriveConstants.FrontLeft),
-                new ModuleIOTalonFX(DriveConstants.FrontRight),
-                new ModuleIOTalonFX(DriveConstants.BackLeft),
-                new ModuleIOTalonFX(DriveConstants.BackRight));
+        drive = new Drive(new GyroIOPigeon2(), new ModuleIOTalonFX(DriveConstants.FrontLeft),
+            new ModuleIOTalonFX(DriveConstants.FrontRight),
+            new ModuleIOTalonFX(DriveConstants.BackLeft),
+            new ModuleIOTalonFX(DriveConstants.BackRight));
         break;
 
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
-        drive =
-            new Drive(
-                new GyroIOSim(driveSimulation.getGyroSimulation()),
-                new ModuleIOSim(driveSimulation.getModules()[0]),
-                new ModuleIOSim(driveSimulation.getModules()[1]),
-                new ModuleIOSim(driveSimulation.getModules()[2]),
-                new ModuleIOSim(driveSimulation.getModules()[3]));
+        drive = new Drive(new GyroIOSim(driveSimulation.getGyroSimulation()),
+            new ModuleIOSim(driveSimulation.getModules()[0]),
+            new ModuleIOSim(driveSimulation.getModules()[1]),
+            new ModuleIOSim(driveSimulation.getModules()[2]),
+            new ModuleIOSim(driveSimulation.getModules()[3]));
         break;
 
       default:
         // Replayed robot, disable IO implementations
-        drive =
-            new Drive(
-                new GyroIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {});
+        drive = new Drive(new GyroIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {},
+            new ModuleIO() {});
         break;
     }
+
+
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -124,20 +118,18 @@ public class RobotContainer extends frc.lib.RobotContainer {
     autoChooser.addOption("Static Turn Voltage", Commands.run(() -> drive.TurnOpenLoop(10)));
 
     // Set up SysId routines
-    autoChooser.addOption(
-        "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
-    autoChooser.addOption(
-        "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
-    autoChooser.addOption(
-        "Drive SysId (Quasistatic Forward)",
+    autoChooser.addOption("Drive Wheel Radius Characterization",
+        DriveCommands.wheelRadiusCharacterization(drive));
+    autoChooser.addOption("Drive Simple FF Characterization",
+        DriveCommands.feedforwardCharacterization(drive));
+    autoChooser.addOption("Drive SysId (Quasistatic Forward)",
         drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    autoChooser.addOption(
-        "Drive SysId (Quasistatic Reverse)",
+    autoChooser.addOption("Drive SysId (Quasistatic Reverse)",
         drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    autoChooser.addOption(
-        "Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    autoChooser.addOption(
-        "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    autoChooser.addOption("Drive SysId (Dynamic Forward)",
+        drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    autoChooser.addOption("Drive SysId (Dynamic Reverse)",
+        drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -145,29 +137,29 @@ public class RobotContainer extends frc.lib.RobotContainer {
 
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   * instantiating a {@link GenericHID} or one of its subclasses
+   * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a
+   * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
 
+
+    // toggle coast on true
+    coastButton.asTrigger().onChange(Commands.runOnce(() -> {
+      // TODO Add coast for more subsystems once we have them
+      drive.toggleCoast();
+      System.out.println("COAST TOGGLED");
+    }));
+
     // Xbox controller is mapped incorrectly on Mac OS
-    DoubleSupplier xSupplier =
-        () ->
-            !SimConstants.IS_MAC
-                ? DriverController.getRightX()
-                : DriverController.getRightTriggerAxis();
-    DoubleSupplier ySupplier =
-        () ->
-            !SimConstants.IS_MAC
-                ? -DriverController.getRightY()
-                : -DriverController.getLeftTriggerAxis();
+    DoubleSupplier xSupplier = () -> !SimConstants.IS_MAC ? DriverController.getRightX()
+        : DriverController.getRightTriggerAxis();
+    DoubleSupplier ySupplier = () -> !SimConstants.IS_MAC ? -DriverController.getRightY()
+        : -DriverController.getLeftTriggerAxis();
     DoubleSupplier omegaSupplier = () -> -DriverController.getLeftX();
     BooleanSupplier slowModeSupplier =
-        () ->
-            !SimConstants.IS_MAC
-                ? DriverController.getRightTriggerAxis() > 0.5
-                : DriverController.getRightX() > 0.0;
+        () -> !SimConstants.IS_MAC ? DriverController.getRightTriggerAxis() > 0.5
+            : DriverController.getRightX() > 0.0;
 
     // Default command, normal field-relative drive
     drive.setDefaultCommand(
@@ -199,13 +191,9 @@ public class RobotContainer extends frc.lib.RobotContainer {
 
     // Reset gyro to 0° when START button is pressed
     DriverController.start()
-        .onTrue(
-            Commands.runOnce(
-                    () ->
-                        drive.setPose(
-                            new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
-                    drive)
-                .ignoringDisable(true));
+        .onTrue(Commands.runOnce(
+            () -> drive.setPose(new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
+            drive).ignoringDisable(true));
   }
 
   @Override
@@ -220,6 +208,6 @@ public class RobotContainer extends frc.lib.RobotContainer {
 
   @Override
   public void disabledInit() {
-    drive.stopWithX();
+    // drive.stopWithX();
   }
 }
