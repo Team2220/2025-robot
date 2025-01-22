@@ -105,12 +105,9 @@ public class RobotContainer extends frc.lib.RobotContainer {
 
 
 
-    NamedCommands.registerCommand("armSpeakerPos", drive.NullCommand(1));
-    NamedCommands.registerCommand("firstArmSpeakerPos", drive.NullCommand(1));
-    NamedCommands.registerCommand("armRestFull", drive.NullCommand(1));
-    NamedCommands.registerCommand("armRest", drive.NullCommand(1));
-    NamedCommands.registerCommand("3.1", drive.NullCommand(1));
-    NamedCommands.registerCommand("3.2", drive.NullCommand(1));
+    NamedCommands.registerCommand("Test", drive.NullCommand(1));
+    NamedCommands.registerCommand("ToggleCoast", drive.toggleCoastCommand());
+    NamedCommands.registerCommand("Null", drive.NullCommand(2));
 
 
 

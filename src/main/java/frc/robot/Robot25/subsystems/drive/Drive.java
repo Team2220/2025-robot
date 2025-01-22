@@ -267,6 +267,13 @@ public class Drive extends SubsystemBase /* implements Vision.VisionConsumer */ 
     // .until(() -> atPosition(degrees, 2));
   }
 
+  public Command toggleCoastCommand() {
+    return this.run(() -> {
+      toggleCoast();
+    });
+    // .until(() -> atPosition(degrees, 2));
+  }
+
   /** Returns a command to run a dynamic test in the specified direction. */
   public Command sysIdDynamic(SysIdRoutine.Direction direction) {
     return run(() -> runCharacterization(0.0)).withTimeout(1.0).andThen(sysId.dynamic(direction));
