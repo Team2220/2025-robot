@@ -16,6 +16,7 @@ package frc.robot.Robot25;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.DriveMotorArrangement;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerMotorArrangement;
+import com.google.flatbuffers.Constants;
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -25,12 +26,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.lib.devices.DigitalInputWrapper;
 import frc.robot.Robot;
 import frc.robot.Robot25.commands.DriveCommands;
 import frc.robot.Robot25.subsystems.drive.Drive;
 import frc.robot.Robot25.subsystems.drive.DriveConstants;
 import frc.robot.Robot25.subsystems.drive.GyroIO;
 import frc.robot.Robot25.subsystems.drive.GyroIONavX;
+import frc.robot.Robot25.subsystems.drive.GyroIOPigeon2;
 import frc.robot.Robot25.subsystems.drive.GyroIOSim;
 import frc.robot.Robot25.subsystems.drive.ModuleIO;
 import frc.robot.Robot25.subsystems.drive.ModuleIOSim;
@@ -62,6 +65,10 @@ public class RobotContainer extends frc.lib.RobotContainer {
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
 
+
+  // coast buttion
+  private static DigitalInputWrapper coastButton = new DigitalInputWrapper(0, "coastButton", false);
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     super(driveSimulation);
@@ -80,7 +87,8 @@ public class RobotContainer extends frc.lib.RobotContainer {
     switch (SimConstants.CURRENT_MODE) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
-        drive = new Drive(new GyroIONavX(), new ModuleIOTalonFX(DriveConstants.FrontLeft),
+
+        drive = new Drive(new GyroIOPigeon2(), new ModuleIOTalonFX(DriveConstants.FrontLeft),
             new ModuleIOTalonFX(DriveConstants.FrontRight),
             new ModuleIOTalonFX(DriveConstants.BackLeft),
             new ModuleIOTalonFX(DriveConstants.BackRight));
@@ -101,6 +109,8 @@ public class RobotContainer extends frc.lib.RobotContainer {
             new ModuleIO() {});
         break;
     }
+
+
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -136,6 +146,14 @@ public class RobotContainer extends frc.lib.RobotContainer {
    */
   private void configureButtonBindings() {
 
+
+    // toggle coast on true
+    coastButton.asTrigger().onChange(Commands.runOnce(() -> {
+      // TODO Add coast for more subsystems once we have them
+      drive.toggleCoast();
+      System.out.println("COAST TOGGLED");
+    }));
+
     // Xbox controller is mapped incorrectly on Mac OS
     DoubleSupplier xSupplier = () -> !SimConstants.IS_MAC ? DriverController.getLeftX() * -1
         : DriverController.getLeftX() * -1;
@@ -144,6 +162,7 @@ public class RobotContainer extends frc.lib.RobotContainer {
     DoubleSupplier omegaSupplier = () -> -DriverController.getRightX();
     BooleanSupplier slowModeSupplier =
         () -> !SimConstants.IS_MAC ? DriverController.getRightX() > 0.5
+
             : DriverController.getRightX() > 0.0;
 
     // Default command, normal field-relative drive
@@ -193,6 +212,6 @@ public class RobotContainer extends frc.lib.RobotContainer {
 
   @Override
   public void disabledInit() {
-    drive.stopWithX();
+    // drive.stopWithX();
   }
 }
