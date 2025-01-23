@@ -264,14 +264,12 @@ public class Drive extends SubsystemBase /* implements Vision.VisionConsumer */ 
     return this.run(() -> {
       System.out.println("Null Command Executed " + Number);
     });
-    // .until(() -> atPosition(degrees, 2));
   }
 
   public Command toggleCoastCommand() {
     return this.run(() -> {
       toggleCoast();
     });
-    // .until(() -> atPosition(degrees, 2));
   }
 
   /** Returns a command to run a dynamic test in the specified direction. */
