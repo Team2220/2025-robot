@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.lib.devices.DigitalInputWrapper;
+import frc.lib.tunables.TunableDouble;
 import frc.robot.Robot;
 import frc.robot.Robot25.commands.DriveCommands;
 import frc.robot.Robot25.subsystems.drive.Drive;
@@ -114,6 +115,7 @@ public class RobotContainer extends frc.lib.RobotContainer {
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
+
     autoChooser.addOption("Static Drive Voltage", Commands.run(() -> drive.driveOpenLoop(10)));
     autoChooser.addOption("Static Turn Voltage", Commands.run(() -> drive.TurnOpenLoop(10)));
 
@@ -152,18 +154,18 @@ public class RobotContainer extends frc.lib.RobotContainer {
     }));
 
     // Xbox controller is mapped incorrectly on Mac OS
-    DoubleSupplier xSupplier = () -> !SimConstants.IS_MAC ? DriverController.getRightX()
+    DoubleSupplier xSupplier = () -> !SimConstants.IS_MAC ? DriverController.getLeftX() * -1
         : DriverController.getRightTriggerAxis();
-    DoubleSupplier ySupplier = () -> !SimConstants.IS_MAC ? -DriverController.getRightY()
+    DoubleSupplier ySupplier = () -> !SimConstants.IS_MAC ? -DriverController.getLeftY()
         : -DriverController.getLeftTriggerAxis();
-    DoubleSupplier omegaSupplier = () -> -DriverController.getLeftX();
+    DoubleSupplier omegaSupplier = () -> -DriverController.getRightX();
     BooleanSupplier slowModeSupplier =
         () -> !SimConstants.IS_MAC ? DriverController.getRightTriggerAxis() > 0.5
             : DriverController.getRightX() > 0.0;
 
     // Default command, normal field-relative drive
     drive.setDefaultCommand(
-        DriveCommands.joystickDrive(drive, xSupplier, ySupplier, omegaSupplier, slowModeSupplier));
+        DriveCommands.joystickDrive(drive, ySupplier, xSupplier, omegaSupplier, slowModeSupplier));
 
     DriverController.a()
         .toggleOnTrue(DriveCommands.keepRotationForward(drive, xSupplier, ySupplier));
