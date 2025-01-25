@@ -43,6 +43,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Robot25.subsystems.gyro.GyroIO;
+import frc.robot.Robot25.subsystems.gyro.GyroIOInputsAutoLogged;
 import frc.robot.Robot25.util.LocalADStarAK;
 import frc.robot.SimConstants;
 import frc.robot.SimConstants.Mode;

@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 
-package frc.robot.Robot25.subsystems.drive;
+package frc.robot.Robot25.subsystems.gyro;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
@@ -22,6 +22,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
+import frc.robot.Robot25.subsystems.drive.DriveConstants;
+import frc.robot.Robot25.subsystems.drive.PhoenixOdometryThread;
 import java.util.Queue;
 
 /** IO implementation for Pigeon 2. */
