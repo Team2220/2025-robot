@@ -1,8 +1,8 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) 2024 Griffin. All Rights Reserved.                             */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* Copyright (c) 2024 Griffin. All Rights Reserved. */
+/* Open Source Software - may be modified and shared by FRC teams. The code */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
+/* the project. */
 /*----------------------------------------------------------------------------*/
 
 // where is the money whisknousky
@@ -11,6 +11,7 @@ package frc.robot.Robot25.subsystems.led.Arduino;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.util.function.Function;
 
 public class Arduino extends SubsystemBase {
 
@@ -40,17 +41,49 @@ public class Arduino extends SubsystemBase {
   }
 
   public Command runCommand(ArduinoCommand command) {
-    return this.runOnce(
-        () -> {
-          // System.out.println(Sent to Arduino);
-          if (arduino != null) {
-            arduino.write(new byte[] {command.getvalue()}, 1);
-            if (arduino.getBytesReceived() > 0) {
-              System.out.print(arduino.readString());
-            }
-          } else {
-            System.out.println("No Ardunio Detected");
-          }
-        });
+    return this.runOnce(() -> {
+      // System.out.println(Sent to Arduino);
+      if (arduino != null) {
+        arduino.write(new byte[] {command.getvalue()}, 1);
+        if (arduino.getBytesReceived() > 0) {
+          System.out.print(arduino.readString());
+        }
+      } else {
+        System.out.println("No Ardunio Detected");
+      }
+    });
+  }
+
+
+
+  public byte byteWizard(int value) {
+    if (value > 255) {
+      value = 255;
+    }
+    if (value < 0) {
+      value = 0;
+    }
+    return (byte) value;
+  }
+
+
+  // CONFIG
+  public byte[] colors;
+  public int byteCount = 4;
+
+
+  // FUNCTION
+  public void customColor(int R, int G, int B) {
+    colors = new byte[] {0x30, byteWizard(R), byteWizard(G), byteWizard(B)};
+    if (arduino != null) {
+      arduino.write(colors, byteCount);
+      if (arduino.getBytesReceived() > 0) {
+        System.out.print(arduino.readString());
+      }
+    } else {
+      System.out.println("No Ardunio Detected");
+    }
   }
 }
+
+
