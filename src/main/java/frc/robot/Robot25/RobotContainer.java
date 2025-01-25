@@ -35,6 +35,10 @@ import frc.robot.Robot25.subsystems.drive.GyroIOSim;
 import frc.robot.Robot25.subsystems.drive.ModuleIO;
 import frc.robot.Robot25.subsystems.drive.ModuleIOSim;
 import frc.robot.Robot25.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.Robot25.subsystems.elevator.Elevator;
+import frc.robot.Robot25.subsystems.elevator.ElevatorIO;
+import frc.robot.Robot25.subsystems.elevator.ElevatorIOSim;
+import frc.robot.Robot25.subsystems.elevator.ElevatorIOTalonFX;
 import frc.robot.SimConstants;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -50,6 +54,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer extends frc.lib.RobotContainer {
   // Subsystems
   private final Drive drive;
+  private final Elevator elevator;
 
   // Drive simulation
   private static final SwerveDriveSimulation driveSimulation =
@@ -57,7 +62,9 @@ public class RobotContainer extends frc.lib.RobotContainer {
 
   // Controller
   private final CommandXboxController DriverController = new CommandXboxController(0);
-  private final CommandXboxController OperatorController = new CommandXboxController(1);
+  private final CommandXboxController OperatorController = new CommandXboxController(1); // using
+                                                                                         // this
+                                                                                         // controller
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -67,13 +74,8 @@ public class RobotContainer extends frc.lib.RobotContainer {
     super(driveSimulation);
 
     // Check for valid swerve config
-    var modules =
-        new SwerveModuleConstants[] {
-          DriveConstants.FrontLeft,
-          DriveConstants.FrontRight,
-          DriveConstants.BackLeft,
-          DriveConstants.BackRight
-        };
+    var modules = new SwerveModuleConstants[] {DriveConstants.FrontLeft, DriveConstants.FrontRight,
+        DriveConstants.BackLeft, DriveConstants.BackRight};
     for (var constants : modules) {
       if (constants.DriveMotorType != DriveMotorArrangement.TalonFX_Integrated
           || constants.SteerMotorType != SteerMotorArrangement.TalonFX_Integrated) {
@@ -82,38 +84,35 @@ public class RobotContainer extends frc.lib.RobotContainer {
       }
     }
 
+    // Where subsystems get created
     switch (SimConstants.CURRENT_MODE) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
-        drive =
-            new Drive(
-                new GyroIONavX(),
-                new ModuleIOTalonFX(DriveConstants.FrontLeft),
-                new ModuleIOTalonFX(DriveConstants.FrontRight),
-                new ModuleIOTalonFX(DriveConstants.BackLeft),
-                new ModuleIOTalonFX(DriveConstants.BackRight));
+        drive = new Drive(new GyroIONavX(), new ModuleIOTalonFX(DriveConstants.FrontLeft),
+            new ModuleIOTalonFX(DriveConstants.FrontRight),
+            new ModuleIOTalonFX(DriveConstants.BackLeft),
+            new ModuleIOTalonFX(DriveConstants.BackRight));
+
+        elevator = new Elevator(new ElevatorIOTalonFX());
         break;
 
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
-        drive =
-            new Drive(
-                new GyroIOSim(driveSimulation.getGyroSimulation()),
-                new ModuleIOSim(driveSimulation.getModules()[0]),
-                new ModuleIOSim(driveSimulation.getModules()[1]),
-                new ModuleIOSim(driveSimulation.getModules()[2]),
-                new ModuleIOSim(driveSimulation.getModules()[3]));
+        drive = new Drive(new GyroIOSim(driveSimulation.getGyroSimulation()),
+            new ModuleIOSim(driveSimulation.getModules()[0]),
+            new ModuleIOSim(driveSimulation.getModules()[1]),
+            new ModuleIOSim(driveSimulation.getModules()[2]),
+            new ModuleIOSim(driveSimulation.getModules()[3]));
+
+        elevator = new Elevator(new ElevatorIOSim());
         break;
 
       default:
         // Replayed robot, disable IO implementations
-        drive =
-            new Drive(
-                new GyroIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {});
+        drive = new Drive(new GyroIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {},
+            new ModuleIO() {});
+
+        elevator = new Elevator(new ElevatorIO() {});
         break;
     }
 
@@ -124,50 +123,40 @@ public class RobotContainer extends frc.lib.RobotContainer {
     autoChooser.addOption("Static Turn Voltage", Commands.run(() -> drive.TurnOpenLoop(10)));
 
     // Set up SysId routines
-    autoChooser.addOption(
-        "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
-    autoChooser.addOption(
-        "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
-    autoChooser.addOption(
-        "Drive SysId (Quasistatic Forward)",
+    autoChooser.addOption("Drive Wheel Radius Characterization",
+        DriveCommands.wheelRadiusCharacterization(drive));
+    autoChooser.addOption("Drive Simple FF Characterization",
+        DriveCommands.feedforwardCharacterization(drive));
+    autoChooser.addOption("Drive SysId (Quasistatic Forward)",
         drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    autoChooser.addOption(
-        "Drive SysId (Quasistatic Reverse)",
+    autoChooser.addOption("Drive SysId (Quasistatic Reverse)",
         drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    autoChooser.addOption(
-        "Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    autoChooser.addOption(
-        "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    autoChooser.addOption("Drive SysId (Dynamic Forward)",
+        drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    autoChooser.addOption("Drive SysId (Dynamic Reverse)",
+        drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
     // Configure the button bindings
-    configureButtonBindings();
+    configureButtonBindings(); // we will add keybinds to control the elevator in SIM
   }
 
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   * instantiating a {@link GenericHID} or one of its subclasses
+   * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a
+   * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
 
     // Xbox controller is mapped incorrectly on Mac OS
-    DoubleSupplier xSupplier =
-        () ->
-            !SimConstants.IS_MAC
-                ? DriverController.getRightX()
-                : DriverController.getRightTriggerAxis();
-    DoubleSupplier ySupplier =
-        () ->
-            !SimConstants.IS_MAC
-                ? -DriverController.getRightY()
-                : -DriverController.getLeftTriggerAxis();
+    DoubleSupplier xSupplier = () -> !SimConstants.IS_MAC ? DriverController.getRightX()
+        : DriverController.getRightTriggerAxis();
+    DoubleSupplier ySupplier = () -> !SimConstants.IS_MAC ? -DriverController.getRightY()
+        : -DriverController.getLeftTriggerAxis();
     DoubleSupplier omegaSupplier = () -> -DriverController.getLeftX();
     BooleanSupplier slowModeSupplier =
-        () ->
-            !SimConstants.IS_MAC
-                ? DriverController.getRightTriggerAxis() > 0.5
-                : DriverController.getRightX() > 0.0;
+        () -> !SimConstants.IS_MAC ? DriverController.getRightTriggerAxis() > 0.5
+            : DriverController.getRightX() > 0.0;
 
     // Default command, normal field-relative drive
     drive.setDefaultCommand(
@@ -199,13 +188,28 @@ public class RobotContainer extends frc.lib.RobotContainer {
 
     // Reset gyro to 0° when START button is pressed
     DriverController.start()
-        .onTrue(
-            Commands.runOnce(
-                    () ->
-                        drive.setPose(
-                            new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
-                    drive)
-                .ignoringDisable(true));
+        .onTrue(Commands.runOnce(
+            () -> drive.setPose(new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
+            drive).ignoringDisable(true));
+
+    // elevator controls
+    OperatorController.a().onTrue(Commands.runOnce(() -> elevator.moveToMaximum())); // A button
+                                                                                     // press =>
+                                                                                     // move to max
+                                                                                     // height
+    OperatorController.b().onTrue(Commands.runOnce(() -> elevator.moveToMinimum())); // B button
+                                                                                     // press =>
+                                                                                     // move to min
+                                                                                     // height
+    OperatorController.povDown().onTrue(Commands.runOnce(() -> elevator.moveToL1())); // POV down =>
+                                                                                      // move to L1
+    OperatorController.povLeft().onTrue(Commands.runOnce(() -> elevator.moveToL2())); // POV left =>
+                                                                                      // move to L2
+    OperatorController.povRight().onTrue(Commands.runOnce(() -> elevator.moveToL3())); // POV right
+                                                                                       // => move to
+                                                                                       // L3
+    OperatorController.povUp().onTrue(Commands.runOnce(() -> elevator.moveToL4())); // POV up =>
+                                                                                    // move to L4
   }
 
   @Override
