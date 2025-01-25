@@ -11,12 +11,14 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 
-package frc.robot.Robot25.subsystems.drive;
+package frc.robot.Robot25.subsystems.gyro;
 
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import frc.robot.Robot25.subsystems.drive.DriveConstants;
+import frc.robot.Robot25.subsystems.drive.PhoenixOdometryThread;
 import java.util.Queue;
 
 /** IO implementation for NavX. */

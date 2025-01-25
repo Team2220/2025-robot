@@ -27,17 +27,18 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.lib.devices.DigitalInputWrapper;
+import frc.lib.tunables.TunableDouble;
 import frc.robot.Robot;
 import frc.robot.Robot25.commands.DriveCommands;
 import frc.robot.Robot25.subsystems.drive.Drive;
 import frc.robot.Robot25.subsystems.drive.DriveConstants;
-import frc.robot.Robot25.subsystems.drive.GyroIO;
-import frc.robot.Robot25.subsystems.drive.GyroIONavX;
-import frc.robot.Robot25.subsystems.drive.GyroIOPigeon2;
-import frc.robot.Robot25.subsystems.drive.GyroIOSim;
 import frc.robot.Robot25.subsystems.drive.ModuleIO;
 import frc.robot.Robot25.subsystems.drive.ModuleIOSim;
 import frc.robot.Robot25.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.Robot25.subsystems.gyro.GyroIO;
+import frc.robot.Robot25.subsystems.gyro.GyroIONavX;
+import frc.robot.Robot25.subsystems.gyro.GyroIOPigeon2;
+import frc.robot.Robot25.subsystems.gyro.GyroIOSim;
 import frc.robot.SimConstants;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -114,6 +115,7 @@ public class RobotContainer extends frc.lib.RobotContainer {
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+
 
     autoChooser.addOption("Static Drive Voltage", Commands.run(() -> drive.driveOpenLoop(10)));
     autoChooser.addOption("Static Turn Voltage", Commands.run(() -> drive.TurnOpenLoop(10)));

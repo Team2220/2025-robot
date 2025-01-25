@@ -30,8 +30,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.lib.ShuffleBoardTabWrapper;
 import frc.lib.tunables.TunableDouble;
-import frc.lib.tunables.TunableTab;
 import frc.robot.Robot25.subsystems.drive.Drive;
 import frc.robot.Robot25.subsystems.drive.DriveConstants;
 import java.text.DecimalFormat;
@@ -46,8 +46,9 @@ import org.littletonrobotics.junction.Logger;
 public class DriveCommands {
   private static final double SLOW_MODE_MULTIPLIER = 0.5;
   private static final double DEADBAND = 0.1;
-  private static final double ANGLE_KP = 7.0;
-  private static final double ANGLE_KD = 0.4;
+  // private static final double ANGLE_KP = 7.0;
+  // private static final double ANGLE_KI = 0.0;
+  // private static final double ANGLE_KD = 0.4;
   private static final double ANGLE_MAX_VELOCITY = 8.0;
   private static final double ANGLE_MAX_ACCELERATION = 20.0;
   private static final double ANGLE_TOLERANCE = Degrees.of(0.05).in(Radians);
@@ -56,9 +57,12 @@ public class DriveCommands {
   private static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
   private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
 
-  TunableDouble kS = new TunableDouble("DkS", 0.0, "driver").setSpot(1, 1);
+  public static final TunableDouble ANGLE_KP = new TunableDouble("ANGLE_KP", 7.0, "driver").setSpot(0, 0);
+  public static final TunableDouble ANGLE_KI = new TunableDouble("ANGLE_KI", 0.0, "driver").setSpot(1, 0);
+  public static final TunableDouble ANGLE_KD = new TunableDouble("ANGLE_KD", 0.4, "driver").setSpot(2, 0);
 
-  private DriveCommands() {}
+  private DriveCommands() {
+  }
 
   private static Translation2d getLinearVelocityFromJoysticks(double x, double y) {
     // Apply deadband
@@ -74,21 +78,22 @@ public class DriveCommands {
   }
 
   /**
-   * Field relative drive command using two joysticks (controlling linear and angular velocities).
+   * Field relative drive command using two joysticks (controlling linear and
+   * angular velocities).
    */
   public static Command joystickDrive(Drive drive, DoubleSupplier xSupplier,
       DoubleSupplier ySupplier, DoubleSupplier omegaSupplier, BooleanSupplier slowModeSupplier) {
 
     // Create PID controller
-    ProfiledPIDController angleController = new ProfiledPIDController(ANGLE_KP, 0.0, ANGLE_KD,
+    ProfiledPIDController angleController = new ProfiledPIDController(ANGLE_KP.getValue(), ANGLE_KI.getValue(),
+        ANGLE_KD.getValue(),
         new TrapezoidProfile.Constraints(ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
     angleController.enableContinuousInput(-Math.PI, Math.PI);
     angleController.setTolerance(ANGLE_TOLERANCE);
 
     return Commands.run(() -> {
       // Get linear velocity
-      Translation2d linearVelocity =
-          getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
+      Translation2d linearVelocity = getLinearVelocityFromJoysticks(-xSupplier.getAsDouble(), -ySupplier.getAsDouble());
 
       // Apply rotation deadband
       double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND);
@@ -96,8 +101,7 @@ public class DriveCommands {
       // Square rotation value for more precise control
       omega = Math.copySign(omega * omega, omega);
 
-      final double slowModeMultiplier =
-          (slowModeSupplier.getAsBoolean() ? SLOW_MODE_MULTIPLIER : 1.0);
+      final double slowModeMultiplier = (slowModeSupplier.getAsBoolean() ? SLOW_MODE_MULTIPLIER : 1.0);
 
       // No rotation
       if (Math.abs(omega) > 1E-6) {
@@ -129,32 +133,33 @@ public class DriveCommands {
   }
 
   /**
-   * Field relative drive command using joystick for linear control and PID for angular control.
-   * Possible use cases include snapping to an angle, aiming at a vision target, or controlling
+   * Field relative drive command using joystick for linear control and PID for
+   * angular control.
+   * Possible use cases include snapping to an angle, aiming at a vision target,
+   * or controlling
    * absolute rotation with a joystick.
    */
   public static Command joystickDriveAtAngle(Drive drive, DoubleSupplier xSupplier,
       DoubleSupplier ySupplier, Supplier<Rotation2d> rotationSupplier) {
 
     // Create PID controller
-    ProfiledPIDController angleController = new ProfiledPIDController(ANGLE_KP, 0.0, ANGLE_KD,
+    ProfiledPIDController angleController = new ProfiledPIDController(ANGLE_KP.getValue(), ANGLE_KI.getValue(),
+        ANGLE_KD.getValue(),
         new TrapezoidProfile.Constraints(ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
     angleController.enableContinuousInput(-Math.PI, Math.PI);
 
     // Construct command
     return Commands.run(() -> {
       // Get linear velocity
-      Translation2d linearVelocity =
-          getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
+      Translation2d linearVelocity = getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
 
       // Calculate angular speed
       double omega = angleController.calculate(drive.getRotation().getRadians(),
           rotationSupplier.get().getRadians());
 
       // Convert to field relative speeds & send command
-      ChassisSpeeds speeds =
-          new ChassisSpeeds(linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
-              linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(), omega);
+      ChassisSpeeds speeds = new ChassisSpeeds(linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
+          linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(), omega);
       drive.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(speeds, drive.getRotation()));
     }, drive)
 
@@ -286,8 +291,7 @@ public class DriveCommands {
                   for (int i = 0; i < 4; i++) {
                     wheelDelta += Math.abs(positions[i] - state.positions[i]) / 4.0;
                   }
-                  double wheelRadius =
-                      (state.gyroDelta * DriveConstants.DRIVE_BASE_RADIUS) / wheelDelta;
+                  double wheelRadius = (state.gyroDelta * DriveConstants.DRIVE_BASE_RADIUS) / wheelDelta;
 
                   NumberFormat formatter = new DecimalFormat("#0.000");
                   System.out.println("********** Wheel Radius Characterization Results **********");

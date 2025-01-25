@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 
-package frc.robot.Robot25.subsystems.drive;
+package frc.robot.Robot25.subsystems.gyro;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
@@ -22,14 +22,14 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
+import frc.robot.Robot25.subsystems.drive.DriveConstants;
+import frc.robot.Robot25.subsystems.drive.PhoenixOdometryThread;
 import java.util.Queue;
 
 /** IO implementation for Pigeon 2. */
 public class GyroIOPigeon2 implements GyroIO {
-  private final Pigeon2 pigeon =
-      new Pigeon2(
-          DriveConstants.DrivetrainConstants.Pigeon2Id,
-          DriveConstants.DrivetrainConstants.CANBusName);
+  private final Pigeon2 pigeon = new Pigeon2(DriveConstants.DrivetrainConstants.Pigeon2Id,
+      DriveConstants.DrivetrainConstants.CANBusName);
   private final StatusSignal<Angle> yaw = pigeon.getYaw();
   private final Queue<Double> yawPositionQueue;
   private final Queue<Double> yawTimestampQueue;
@@ -53,10 +53,8 @@ public class GyroIOPigeon2 implements GyroIO {
 
     inputs.odometryYawTimestamps =
         yawTimestampQueue.stream().mapToDouble((Double value) -> value).toArray();
-    inputs.odometryYawPositions =
-        yawPositionQueue.stream()
-            .map((Double value) -> Rotation2d.fromDegrees(value))
-            .toArray(Rotation2d[]::new);
+    inputs.odometryYawPositions = yawPositionQueue.stream()
+        .map((Double value) -> Rotation2d.fromDegrees(value)).toArray(Rotation2d[]::new);
     yawTimestampQueue.clear();
     yawPositionQueue.clear();
   }
