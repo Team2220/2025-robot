@@ -112,6 +112,9 @@ public class DriveConstants {
 
   // Configs for the Pigeon 2; leave this null to skip applying Pigeon 2 configs
   private static final Pigeon2Configuration pigeonConfigs = new Pigeon2Configuration();
+
+
+
   private static final int kPigeonId = 1;
 
   // CAN bus that the devices are located on;
@@ -141,7 +144,7 @@ public class DriveConstants {
   private static final int kFrontLeftDriveMotorId = 18;
   private static final int kFrontLeftSteerMotorId = 17;
   private static final int kFrontLeftEncoderId = 1;
-  private static final Angle kFrontLeftEncoderOffset = Radians.of(-0.888 + Math.PI);
+  private static final Angle kFrontLeftEncoderOffset = Radians.of(-0.888);
   private static final boolean kFrontLeftSteerMotorInverted = true;
   private static final boolean kFrontLeftEncoderInverted = false;
   private static final Distance kFrontLeftXPos = Inches.of(10.375);
@@ -151,7 +154,7 @@ public class DriveConstants {
   private static final int kFrontRightDriveMotorId = 14;
   private static final int kFrontRightSteerMotorId = 13;
   private static final int kFrontRightEncoderId = 2;
-  private static final Angle kFrontRightEncoderOffset = Radians.of(-3.738 + Math.PI);
+  private static final Angle kFrontRightEncoderOffset = Radians.of(-3.738);
   private static final boolean kFrontRightSteerMotorInverted = true;
   private static final boolean kFrontRightEncoderInverted = false;
   private static final Distance kFrontRightXPos = Inches.of(10.375);
@@ -161,7 +164,7 @@ public class DriveConstants {
   private static final int kBackLeftDriveMotorId = 12;
   private static final int kBackLeftSteerMotorId = 11;
   private static final int kBackLeftEncoderId = 0;
-  private static final Angle kBackLeftEncoderOffset = Radians.of(-3.276 + Math.PI);
+  private static final Angle kBackLeftEncoderOffset = Radians.of(-3.276);
   private static final boolean kBackLeftSteerMotorInverted = true;
   private static final boolean kBackLeftEncoderInverted = false;
   private static final Distance kBackLeftXPos = Inches.of(-10.375);
@@ -171,7 +174,7 @@ public class DriveConstants {
   private static final int kBackRightDriveMotorId = 16;
   private static final int kBackRightSteerMotorId = 15;
   private static final int kBackRightEncoderId = 3;
-  private static final Angle kBackRightEncoderOffset = Radians.of(-4.617 + Math.PI);
+  private static final Angle kBackRightEncoderOffset = Radians.of(-4.617);
   private static final boolean kBackRightSteerMotorInverted = true;
   private static final boolean kBackRightEncoderInverted = false;
   private static final Distance kBackRightXPos = Inches.of(-10.375);
