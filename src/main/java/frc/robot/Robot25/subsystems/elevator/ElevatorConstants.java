@@ -44,6 +44,10 @@ public class ElevatorConstants {
     public static final double kV = 0;
     public static final double kA = 0;
 
+    // guessing numbers. we don't know at this point, so we make constants for them to track here.
+    public static final int LEAD_WINCH_MOTOR_ID = 0;
+    public static final int FOLLOWER_WINCH_MOTOR_ID = 1;
+
     public static final double ODOMETRY_FREQUENCY = new CANBus().isNetworkFD() ? 250.0 : 100.0;
   }
 
