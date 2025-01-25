@@ -35,10 +35,6 @@ import frc.robot.Robot25.subsystems.drive.GyroIOSim;
 import frc.robot.Robot25.subsystems.drive.ModuleIO;
 import frc.robot.Robot25.subsystems.drive.ModuleIOSim;
 import frc.robot.Robot25.subsystems.drive.ModuleIOTalonFX;
-import frc.robot.Robot25.subsystems.elevator.Elevator;
-import frc.robot.Robot25.subsystems.elevator.ElevatorIO;
-import frc.robot.Robot25.subsystems.elevator.ElevatorIOSim;
-import frc.robot.Robot25.subsystems.elevator.ElevatorIOTalonFX;
 import frc.robot.SimConstants;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -54,7 +50,6 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer extends frc.lib.RobotContainer {
   // Subsystems
   private final Drive drive;
-  private final Elevator elevator;
 
   // Drive simulation
   private static final SwerveDriveSimulation driveSimulation =
@@ -93,7 +88,6 @@ public class RobotContainer extends frc.lib.RobotContainer {
             new ModuleIOTalonFX(DriveConstants.BackLeft),
             new ModuleIOTalonFX(DriveConstants.BackRight));
 
-        elevator = new Elevator(new ElevatorIOTalonFX());
         break;
 
       case SIM:
@@ -104,7 +98,6 @@ public class RobotContainer extends frc.lib.RobotContainer {
             new ModuleIOSim(driveSimulation.getModules()[2]),
             new ModuleIOSim(driveSimulation.getModules()[3]));
 
-        elevator = new Elevator(new ElevatorIOSim());
         break;
 
       default:
@@ -112,7 +105,6 @@ public class RobotContainer extends frc.lib.RobotContainer {
         drive = new Drive(new GyroIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {},
             new ModuleIO() {});
 
-        elevator = new Elevator(new ElevatorIO() {});
         break;
     }
 
@@ -191,25 +183,6 @@ public class RobotContainer extends frc.lib.RobotContainer {
         .onTrue(Commands.runOnce(
             () -> drive.setPose(new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
             drive).ignoringDisable(true));
-
-    // elevator controls
-    OperatorController.a().onTrue(Commands.runOnce(() -> elevator.moveToMaximum())); // A button
-                                                                                     // press =>
-                                                                                     // move to max
-                                                                                     // height
-    OperatorController.b().onTrue(Commands.runOnce(() -> elevator.moveToMinimum())); // B button
-                                                                                     // press =>
-                                                                                     // move to min
-                                                                                     // height
-    OperatorController.povDown().onTrue(Commands.runOnce(() -> elevator.moveToL1())); // POV down =>
-                                                                                      // move to L1
-    OperatorController.povLeft().onTrue(Commands.runOnce(() -> elevator.moveToL2())); // POV left =>
-                                                                                      // move to L2
-    OperatorController.povRight().onTrue(Commands.runOnce(() -> elevator.moveToL3())); // POV right
-                                                                                       // => move to
-                                                                                       // L3
-    OperatorController.povUp().onTrue(Commands.runOnce(() -> elevator.moveToL4())); // POV up =>
-                                                                                    // move to L4
   }
 
   @Override
