@@ -154,10 +154,8 @@ public class RobotContainer extends frc.lib.RobotContainer {
     }));
 
     // Xbox controller is mapped incorrectly on Mac OS
-    DoubleSupplier xSupplier = () -> !SimConstants.IS_MAC ? DriverController.getLeftX() * -1
-        : DriverController.getRightTriggerAxis();
-    DoubleSupplier ySupplier = () -> !SimConstants.IS_MAC ? -DriverController.getLeftY()
-        : -DriverController.getLeftTriggerAxis();
+    DoubleSupplier xSupplier = () -> DriverController.getLeftX();
+    DoubleSupplier ySupplier = () -> DriverController.getLeftY();
     DoubleSupplier omegaSupplier = () -> -DriverController.getRightX();
     BooleanSupplier slowModeSupplier =
         () -> !SimConstants.IS_MAC ? DriverController.getRightTriggerAxis() > 0.5
