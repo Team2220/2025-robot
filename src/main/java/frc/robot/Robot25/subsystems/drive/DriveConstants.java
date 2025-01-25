@@ -19,7 +19,7 @@ public class DriveConstants {
     // The steer motor uses any SwerveModule.SteerRequestType control request with
     // the output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
     public static final Slot0Configs STEER_GAINS =
-        new Slot0Configs().withKP(100).withKI(0).withKD(0.5).withKS(0.1).withKV(1.91).withKA(0)
+        new Slot0Configs().withKP(80).withKI(10).withKD(0.5).withKS(0.1).withKV(1.91).withKA(0)
             .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
     private static final double METERS_TO_ROTATIONS = 0.3912;
     // When using closed-loop control, the drive motor uses the control
@@ -31,6 +31,7 @@ public class DriveConstants {
 
     // Curint limits
     public static final double MaxDriveAmps = 45;
+
   }
 
   /* These constants only affect simulation */
