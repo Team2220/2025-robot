@@ -39,7 +39,6 @@ import frc.robot.Robot24.subsystems.drive.GyroIOSim;
 import frc.robot.Robot24.subsystems.drive.ModuleIO;
 import frc.robot.Robot24.subsystems.drive.ModuleIOTalonFXReal;
 import frc.robot.Robot24.subsystems.drive.ModuleIOTalonFXSim;
-import frc.robot.Robot24.subsystems.elevator.Elevator;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
@@ -53,7 +52,6 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer extends frc.lib.RobotContainer {
   // Subsystems
   private final Drive drive;
-  private final Elevator elevator;
 
   // Drive simulation
   private static final SwerveDriveSimulation driveSimulation =
@@ -87,7 +85,6 @@ public class RobotContainer extends frc.lib.RobotContainer {
     }
 
     // TODO hardware abstraction
-    elevator = new Elevator();
     switch (CURRENT_MODE) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
@@ -228,34 +225,5 @@ public class RobotContainer extends frc.lib.RobotContainer {
   @Override
   public Command getTestCommand() {
     return autoChooser.get();
-  }
-
-  @Override
-  public void robotPeriodic() {
-    elevator.updateTelemetry();
-  }
-
-  @Override
-  public void disabledInit() {
-    drive.stopWithX();
-    elevator.stop();
-  }
-
-  @Override
-  public void teleopPeriodic() {
-    if (elevatorController.getLeftTriggerAxis() > 0.5) {
-      // Here, we set the constant setpoint of 0.75 meters.
-      elevator.reachGoal(kSetpointMeters);
-      Logger.recordOutput("Elevator/Setpoint", kSetpointMeters);
-    } else {
-      // Otherwise, we update the setpoint to 0.
-      elevator.reachGoal(0.0);
-      Logger.recordOutput("Elevator/Setpoint", 0.0);
-    }
-  }
-
-  @Override
-  public void simulationPeriodic() {
-    elevator.simulationPeriodic();
   }
 }

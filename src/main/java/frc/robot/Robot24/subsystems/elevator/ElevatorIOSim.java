@@ -1,0 +1,99 @@
+package frc.robot.Robot24.subsystems.elevator;
+
+import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Kilograms;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecondPerSecond;
+import static edu.wpi.first.units.Units.Volts;
+import static frc.robot.Robot24.subsystems.elevator.ElevatorConstants.*;
+
+import org.ironmaple.simulation.motorsims.MapleMotorSim;
+import org.ironmaple.simulation.motorsims.SimMotorConfigs;
+import org.ironmaple.simulation.motorsims.SimulatedMotorController;
+
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import edu.wpi.first.wpilibj.simulation.ElevatorSim;
+import frc.robot.Robot24.subsystems.elevator.ElevatorConstants.Sim;
+
+public class ElevatorIOSim implements ElevatorIO {
+
+    private final SimulatedMotorController.GenericMotorController winchMotorController;
+    private final MapleMotorSim elevatorMotor;
+
+    private static final DCMotor elevatorGearbox = DCMotor.getKrakenX60(2);
+
+    private boolean winchClosedLoop = false;
+    private Voltage winchAppliedVoltage = Volts.of(0);
+    private Voltage winchFFVoltage = Volts.of(0);
+
+    private final ProfiledPIDController pidController = new ProfiledPIDController(
+        Sim.kP,
+        Sim.kI,
+        Sim.kD,
+        new TrapezoidProfile.Constraints(MAX_VELOCITY.in(MetersPerSecond) / DRUM_RADIUS.in(Meters), MAX_ACCELERATION.in(RadiansPerSecondPerSecond)));
+
+    private final ElevatorFeedforward feedForwardController = new ElevatorFeedforward(
+        Sim.kS,
+        Sim.kG,
+        Sim.kV,
+        Sim.kA);
+
+    private final ElevatorSim elevatorSim = new ElevatorSim(
+        elevatorGearbox,
+        GEARING,
+        CARRIAGE_MASS.in(Kilograms),
+        DRUM_RADIUS.in(Meters),
+        0,
+        MAX_EXTENSION.in(Meters),
+        true,
+        0,
+        0.000015,
+        0);
+
+    public ElevatorIOSim() {
+        elevatorMotor = new MapleMotorSim(new SimMotorConfigs(elevatorGearbox, 0, null, null))
+        winchMotorController = elevatorMotor.useSimpleDCMotorController().withCurrentLimit(null);
+    }
+
+    @Override
+    public void updateInputs(ElevatorIOInputs inputs) {
+        var winchPositionRads = elevatorSim.getPositionMeters() / DRUM_RADIUS.in(Meters);
+
+        if (isClosedLoop) {
+
+        } else {
+
+        }
+        
+        // Update motor inputs
+        inputs.winchConnected = true;
+        inputs.winchPosition = motor.getAngularPosition();
+        inputs.winchVelocity = motor.getAngularVelocity();
+        inputs.winchAppliedVolts = driveAppliedVoltage;
+        inputs.winchCurrent = Amps.of(motor.getCurrentDrawAmps());
+
+        // Update odometry inputs (50Hz because high-frequency odometry in sim doesn't
+        // matter)
+    }
+
+    @Override
+    public void setWinchOpenLoop(Voltage output) {
+    }
+
+    @Override
+    public void setWinchPosition(Angle angle) {
+    }
+}
