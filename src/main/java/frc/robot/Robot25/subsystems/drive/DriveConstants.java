@@ -28,14 +28,17 @@ public class DriveConstants {
         new Slot0Configs().withKP(2.8444 * METERS_TO_ROTATIONS).withKI(0 * METERS_TO_ROTATIONS)
             .withKD(0 * METERS_TO_ROTATIONS).withKS(0.065599).withKV(2.2267 * METERS_TO_ROTATIONS)
             .withKA(0.058183 * METERS_TO_ROTATIONS);
+
+    // Curint limits
+    public static final double MaxDriveAmps = 45;
   }
 
   /* These constants only affect simulation */
   public static class Sim {
 
     // TODO Both sets of gains need to be tuned to your individual robot; practice
-    // tuning in
-    // simulation
+    // tuning in simulation
+
 
     /* Steer gains */
     public static final double STEER_KS = 0.1;
