@@ -50,7 +50,7 @@ void loop()
   break;
   case 0x13:
   {
-    
+
     fill_solid(leds, NUM_LEDS, CRGB(255, 0, 0));
     FastLED.show();
   }
@@ -107,6 +107,15 @@ void loop()
         Red();
       }
     }
+  }
+  break;
+  case 0x30:
+  {
+byte R = Serial.read();
+byte G = Serial.read();
+byte B = Serial.read();
+fill_solid(leds, NUM_LEDS, CRGB(R, G, B));
+FastLED.show();
   }
   }
 }
