@@ -226,9 +226,34 @@ public class RobotContainer extends frc.lib.RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
+    elevatorController.povDown().onTrue(Commands.runOnce(
+        () -> {
+            elevator.minHeight();
+        }
+    ));
+    elevatorController.povUp().onTrue(Commands.runOnce(
+        () -> {
+            elevator.maxHeight();
+        }
+    ));
     elevatorController.a().onTrue(Commands.runOnce(
         () -> {
-            
+            elevator.L1();
+        }
+    ));
+    elevatorController.x().onTrue(Commands.runOnce(
+        () -> {
+            elevator.L2();
+        }
+    ));
+    elevatorController.b().onTrue(Commands.runOnce(
+        () -> {
+            elevator.L3();
+        }
+    ));
+    elevatorController.y().onTrue(Commands.runOnce(
+        () -> {
+            elevator.L4();
         }
     ));
   }

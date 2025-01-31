@@ -29,10 +29,11 @@ public class Elevator extends SubsystemBase{
     public final LoggedMechanism2d mechanism2d = new LoggedMechanism2d(3, 3, new Color8Bit(Color.kBlack));
 
     private final LoggedMechanismRoot2d mechRoot2d = mechanism2d.getRoot("Elevator Root", 1.5, 0);
-    private final LoggedMechanismLigament2d elevatorMech2d = mechRoot2d.append(new LoggedMechanismLigament2d("Elevator", INITIAL_HEIGHT.in(Meters), 90.0, 0.2, new Color8Bit(Color.kBlue)));
+    private final LoggedMechanismLigament2d elevatorMech2d = mechRoot2d.append(new LoggedMechanismLigament2d("Elevator", INITIAL_HEIGHT.in(Meters), 90.0, 50, new Color8Bit(Color.kBlue)));
     
     public Elevator(ElevatorIO io) {
         this.io = io;
+        this.minHeight();
     }
 
     @Override
@@ -40,6 +41,8 @@ public class Elevator extends SubsystemBase{
         io.updateInputs(inputs);
         Logger.processInputs("Elevator", inputs);
         elevatorMech2d.setLength(radiansToInches(inputs.winchPosition).in(Meters));
+
+        Logger.recordOutput("Elevator/EstimatedHeight", radiansToInches(inputs.winchPosition).in(Meters));
     }
 
     private Angle inchesToRadians(Distance d) {
@@ -52,37 +55,37 @@ public class Elevator extends SubsystemBase{
         return Meters.of(d).plus(MIN_HEIGHT);
     }
 
-    private void minHeight() {
+    public void minHeight() {
         Distance height = MIN_HEIGHT;
         Angle r = inchesToRadians(height);
         io.setWinchPosition(r);
     }
 
-    private void L1() {
+    public void L1() {
         Distance height = Inches.of(18 + 3);
         Angle r = inchesToRadians(height);
         io.setWinchPosition(r);
     }
 
-    private void L2() {
+    public void L2() {
         Distance height = Inches.of(31.9 + 3);
         Angle r = inchesToRadians(height);
         io.setWinchPosition(r);
     }
 
-    private void L3() {
+    public void L3() {
         Distance height = Inches.of(47.6 + 3);
         Angle r = inchesToRadians(height);
         io.setWinchPosition(r);
     }
 
-    private void L4() {
+    public void L4() {
         Distance height = Inches.of(72 + 3);
         Angle r = inchesToRadians(height);
         io.setWinchPosition(r);
     }
 
-    private void maxHeight() {
+    public void maxHeight() {
         Distance height = MAX_EXTENSION.plus(MIN_HEIGHT);
         Angle r = inchesToRadians(height);
         io.setWinchPosition(r);

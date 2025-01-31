@@ -7,8 +7,11 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecondPerSecond;
+import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 import static frc.robot.Robot24.subsystems.elevator.ElevatorConstants.*;
+
+import java.util.logging.Logger;
 
 import org.ironmaple.simulation.motorsims.MapleMotorSim;
 import org.ironmaple.simulation.motorsims.SimMotorConfigs;
@@ -20,6 +23,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import frc.robot.Robot24.subsystems.elevator.ElevatorConstants.Sim;
 
@@ -59,8 +63,8 @@ public class ElevatorIOSim implements ElevatorIO {
         0);
 
     public ElevatorIOSim() {
-        elevatorMotor = new MapleMotorSim(new SimMotorConfigs(elevatorGearbox, 0, null, null));
-        winchMotorController = elevatorMotor.useSimpleDCMotorController().withCurrentLimit(null);
+        elevatorMotor = new MapleMotorSim(new SimMotorConfigs(elevatorGearbox, GEARING, Sim.MOTOR_LOAD_MOI, Sim.FRICTION_VOLTAGE));
+        winchMotorController = elevatorMotor.useSimpleDCMotorController().withCurrentLimit(CURRENT_LIMIT);
     }
 
     @Override
@@ -75,6 +79,12 @@ public class ElevatorIOSim implements ElevatorIO {
         } else {
             pidController.reset(winchPositionRads);
         }
+
+        winchMotorController.requestVoltage(winchAppliedVoltage);
+        elevatorSim.setInputVoltage(elevatorMotor.getAppliedVoltage().in(Volts));
+
+        elevatorMotor.update(Seconds.of(TimedRobot.kDefaultPeriod));
+        elevatorSim.update(TimedRobot.kDefaultPeriod);
         
         // Update motor inputs
         inputs.winchConnected = true;
