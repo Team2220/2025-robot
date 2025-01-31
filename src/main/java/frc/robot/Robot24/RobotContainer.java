@@ -14,7 +14,6 @@
 package frc.robot.Robot24;
 
 import static frc.robot.Constants.*;
-import static frc.robot.Robot24.subsystems.elevator.Constants.*;
 
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.DriveMotorArrangement;
@@ -39,6 +38,11 @@ import frc.robot.Robot24.subsystems.drive.GyroIOSim;
 import frc.robot.Robot24.subsystems.drive.ModuleIO;
 import frc.robot.Robot24.subsystems.drive.ModuleIOTalonFXReal;
 import frc.robot.Robot24.subsystems.drive.ModuleIOTalonFXSim;
+import frc.robot.Robot24.subsystems.elevator.Elevator;
+import frc.robot.Robot24.subsystems.elevator.ElevatorIO;
+import frc.robot.Robot24.subsystems.elevator.ElevatorIOSim;
+import frc.robot.Robot24.subsystems.elevator.ElevatorIOTalonFX;
+
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
@@ -52,6 +56,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer extends frc.lib.RobotContainer {
   // Subsystems
   private final Drive drive;
+  private final Elevator elevator;
 
   // Drive simulation
   private static final SwerveDriveSimulation driveSimulation =
@@ -59,7 +64,7 @@ public class RobotContainer extends frc.lib.RobotContainer {
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
-  private final XboxController elevatorController = new XboxController(1);
+  private final CommandXboxController elevatorController = new CommandXboxController(1);
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -95,6 +100,7 @@ public class RobotContainer extends frc.lib.RobotContainer {
                 new ModuleIOTalonFXReal(TunerConstants.FrontRight),
                 new ModuleIOTalonFXReal(TunerConstants.BackLeft),
                 new ModuleIOTalonFXReal(TunerConstants.BackRight));
+        elevator = new Elevator(new ElevatorIOTalonFX());
         break;
 
       case SIM:
@@ -106,6 +112,8 @@ public class RobotContainer extends frc.lib.RobotContainer {
                 new ModuleIOTalonFXSim(TunerConstants.FrontRight, driveSimulation.getModules()[1]),
                 new ModuleIOTalonFXSim(TunerConstants.BackLeft, driveSimulation.getModules()[2]),
                 new ModuleIOTalonFXSim(TunerConstants.BackRight, driveSimulation.getModules()[3]));
+        
+        elevator = new Elevator(new ElevatorIOSim());
         break;
 
       default:
@@ -117,6 +125,8 @@ public class RobotContainer extends frc.lib.RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
+        
+        elevator = new Elevator(new ElevatorIO() {});
         break;
     }
 
@@ -215,6 +225,12 @@ public class RobotContainer extends frc.lib.RobotContainer {
                             new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
                     drive)
                 .ignoringDisable(true));
+
+    elevatorController.a().onTrue(Commands.runOnce(
+        () -> {
+            
+        }
+    ));
   }
 
   @Override
