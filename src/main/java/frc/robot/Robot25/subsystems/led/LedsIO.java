@@ -15,9 +15,9 @@ public interface LedsIO {
   public default void setColor(Color color) {}
 
   public static class Color {
-    int red;
-    int blue;
-    int green;
-    int white;
+    public int red;
+    public int blue;
+    public int green;
+    //public int white;
   }
 }
