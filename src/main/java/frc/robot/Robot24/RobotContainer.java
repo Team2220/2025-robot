@@ -38,6 +38,7 @@ import frc.robot.Robot24.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.SimConstants;
 import frc.robot.SimConstants.Mode;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
+import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -56,6 +57,7 @@ public class RobotContainer extends frc.lib.RobotContainer {
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
+  private final CommandXboxController elevatorController = new CommandXboxController(1);
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -187,10 +189,5 @@ public class RobotContainer extends frc.lib.RobotContainer {
   @Override
   public Command getTestCommand() {
     return autoChooser.get();
-  }
-
-  @Override
-  public void disabledInit() {
-    drive.stopWithX();
   }
 }
