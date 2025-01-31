@@ -35,6 +35,10 @@ import frc.robot.Robot25.subsystems.drive.DriveConstants;
 import frc.robot.Robot25.subsystems.drive.ModuleIO;
 import frc.robot.Robot25.subsystems.drive.ModuleIOSim;
 import frc.robot.Robot25.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.Robot25.subsystems.elevator.Elevator;
+import frc.robot.Robot25.subsystems.elevator.ElevatorIO;
+import frc.robot.Robot25.subsystems.elevator.ElevatorIOSim;
+import frc.robot.Robot25.subsystems.elevator.ElevatorIOTalonFX;
 import frc.robot.Robot25.subsystems.gyro.GyroIO;
 import frc.robot.Robot25.subsystems.gyro.GyroIONavX;
 import frc.robot.Robot25.subsystems.gyro.GyroIOPigeon2;
@@ -54,6 +58,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer extends frc.lib.RobotContainer {
   // Subsystems
   private final Drive drive;
+  private final Elevator elevator;
 
   // Drive simulation
   private static final SwerveDriveSimulation driveSimulation =
@@ -92,6 +97,8 @@ public class RobotContainer extends frc.lib.RobotContainer {
             new ModuleIOTalonFX(DriveConstants.FrontRight),
             new ModuleIOTalonFX(DriveConstants.BackLeft),
             new ModuleIOTalonFX(DriveConstants.BackRight));
+
+        elevator = new Elevator(new ElevatorIO() {});
         break;
 
       case SIM:
@@ -101,12 +108,16 @@ public class RobotContainer extends frc.lib.RobotContainer {
             new ModuleIOSim(driveSimulation.getModules()[1]),
             new ModuleIOSim(driveSimulation.getModules()[2]),
             new ModuleIOSim(driveSimulation.getModules()[3]));
+
+        elevator = new Elevator(new ElevatorIOSim());
         break;
 
       default:
         // Replayed robot, disable IO implementations
         drive = new Drive(new GyroIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {},
             new ModuleIO() {});
+
+        elevator = new Elevator(new ElevatorIO() {});
         break;
     }
 
@@ -194,6 +205,24 @@ public class RobotContainer extends frc.lib.RobotContainer {
         .onTrue(Commands.runOnce(
             () -> drive.setPose(new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
             drive).ignoringDisable(true));
+    OperatorController.povDown().onTrue(Commands.runOnce(() -> {
+      elevator.minHeight();
+    }));
+    OperatorController.povUp().onTrue(Commands.runOnce(() -> {
+      elevator.maxHeight();
+    }));
+    OperatorController.a().onTrue(Commands.runOnce(() -> {
+      elevator.L1();
+    }));
+    OperatorController.x().onTrue(Commands.runOnce(() -> {
+      elevator.L2();
+    }));
+    OperatorController.b().onTrue(Commands.runOnce(() -> {
+      elevator.L3();
+    }));
+    OperatorController.y().onTrue(Commands.runOnce(() -> {
+      elevator.L4();
+    }));
   }
 
   @Override
