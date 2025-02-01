@@ -18,6 +18,7 @@ import frc.robot.Robot25.subsystems.outtake.OuttakeConstants.Sim;
 import org.ironmaple.simulation.motorsims.MapleMotorSim;
 import org.ironmaple.simulation.motorsims.SimMotorConfigs;
 import org.ironmaple.simulation.motorsims.SimulatedMotorController;
+import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean;
 
 public class OuttakeIOSim implements OuttakeIO {
   private static final DCMotor outtakeGearbox = DCMotor.getKrakenX60(1);
@@ -38,11 +39,15 @@ public class OuttakeIOSim implements OuttakeIO {
       outtakeGearbox,
       0.000015);
 
+  LoggedNetworkBoolean inputSensor = new LoggedNetworkBoolean("/Tuning/inputSensorSim", false);
+  LoggedNetworkBoolean outputSensor = new LoggedNetworkBoolean("/Tuning/outputSensorSim", false);
+
   public OuttakeIOSim() {
     outtakeMotor = new MapleMotorSim(
         new SimMotorConfigs(outtakeGearbox, GEARING, Sim.MOTOR_LOAD_MOI, Sim.FRICTION_VOLTAGE));
     outtakeMotorController = outtakeMotor.useSimpleDCMotorController().withCurrentLimit(CURRENT_LIMIT);
   }
+
 
   @Override
   public void setOpenLoop(Voltage output) {
@@ -68,5 +73,7 @@ public class OuttakeIOSim implements OuttakeIO {
     inputs.outtakeAppliedVolts = outtakeAppliedVoltage;
     inputs.outtakeCurrent = Amps.of(outtakeSim.getCurrentDrawAmps());
     inputs.outtakeVelocity = AngularVelocity.ofBaseUnits(angularVelocity, RadiansPerSecond);
+    inputs.seesCoralAtInput = inputSensor.get();
+    inputs.seesCoralAtOutput = outputSensor.get();
   }
 }
