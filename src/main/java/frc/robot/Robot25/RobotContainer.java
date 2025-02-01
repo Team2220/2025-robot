@@ -13,6 +13,8 @@
 
 package frc.robot.Robot25;
 
+import static edu.wpi.first.units.Units.Volt;
+
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.DriveMotorArrangement;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerMotorArrangement;
@@ -245,6 +247,8 @@ public class RobotContainer extends frc.lib.RobotContainer {
     OperatorController.y().onTrue(Commands.runOnce(() -> {
       elevator.L4();
     }));
+    OperatorController.leftBumper().whileTrue(outtake.setOpenLoop(Volt.of(5)));
+    OperatorController.rightBumper().whileTrue(outtake.setOpenLoop(Volt.of(-5)));
   }
 
   @Override
