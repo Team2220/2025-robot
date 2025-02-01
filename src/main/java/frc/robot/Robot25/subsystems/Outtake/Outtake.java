@@ -28,4 +28,16 @@ public class Outtake extends SubsystemBase {
       io.setOpenLoop(Volts.of(0));
     });
   }
+
+  public Command autoQueueCoral() {
+    return this.run(() -> {
+      if (inputs.seesCoralAtOutput) {
+        io.setOpenLoop(Volts.of(0));
+      } else if (inputs.seesCoralAtInput) {
+        io.setOpenLoop(Volts.of(6));
+      } else {
+        io.setOpenLoop(Volts.of(12));
+      }
+    });
+  }
 }
