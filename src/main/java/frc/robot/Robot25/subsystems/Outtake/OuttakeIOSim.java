@@ -1,4 +1,4 @@
-package frc.robot.Robot25.subsystems.Outtake;
+package frc.robot.Robot25.subsystems.outtake;
 
 public class OuttakeIOSim {
   
