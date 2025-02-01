@@ -50,7 +50,7 @@ public class Arduino extends SubsystemBase {
     return this.runOnce(() -> {
       // System.out.println(Sent to Arduino);
       if (arduino != null) {
-        arduino.write(new byte[] {command.getvalue()}, 1);
+        arduino.write(new byte[] { command.getvalue() }, 1);
         if (arduino.getBytesReceived() > 0) {
           System.out.print(arduino.readString());
         }
@@ -68,8 +68,6 @@ public class Arduino extends SubsystemBase {
     }
   }
 
-
-
   public byte byteWizard(int value) {
     if (value > 255) {
       value = 255;
@@ -80,15 +78,13 @@ public class Arduino extends SubsystemBase {
     return (byte) value;
   }
 
-
   // CONFIG
   public byte[] colors;
   public int byteCount = 4;
 
-
   // FUNCTION
   public void customColor(int R, int G, int B) {
-    colors = new byte[] {0x30, byteWizard(R), byteWizard(G), byteWizard(B)};
+    colors = new byte[] { 0x30, byteWizard(R), byteWizard(G), byteWizard(B) };
     if (arduino != null) {
       arduino.write(colors, byteCount);
       if (arduino.getBytesReceived() > 0) {
