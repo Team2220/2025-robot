@@ -16,33 +16,14 @@ import frc.robot.Robot25.subsystems.outtake.OuttakeIO.OuttakeIOInputs;
 
 public class OuttakeIOTalonFX implements OuttakeIO {
   TalonFXWrapper outtakeTalonFX;
-  double gearRatio;
-  double P;
-  double I;
-  double D;
-  final int rightMotorID = 1;
-  final int leftMotorID = 2;
-
+  final int motorID = 25;
+  
   public OuttakeIOTalonFX() {
         outtakeTalonFX = new TalonFXWrapper(
-                rightMotorID,
+                motorID,
                 "Outtake",
                 true,
-                NeutralModeValue.Brake,
-                gearRatio,
-                P,
-                I,
-                D,
-                RotationsPerSecondPerSecond.of(0),
-                RotationsPerSecond.of(0),
-                false,
-                false,
-                Rotations.of(120.0 / 360.0),
-                Rotations.of(0),
-                new FollowerConfig(leftMotorID, true),
-                Units.Seconds.of(3),
-                Units.Amps.of(75),
-                Units.RotationsPerSecond.of(1));
+                NeutralModeValue.Brake);
     }
 
   @Override
