@@ -51,9 +51,12 @@ import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in
+ * the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of
+ * the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer extends frc.lib.RobotContainer {
@@ -62,8 +65,8 @@ public class RobotContainer extends frc.lib.RobotContainer {
   private final Elevator elevator;
 
   // Drive simulation
-  private static final SwerveDriveSimulation driveSimulation =
-      new SwerveDriveSimulation(Drive.MAPLE_SIM_CONFIG, SimConstants.SIM_INITIAL_FIELD_POSE);
+  private static final SwerveDriveSimulation driveSimulation = new SwerveDriveSimulation(Drive.MAPLE_SIM_CONFIG,
+      SimConstants.SIM_INITIAL_FIELD_POSE);
 
   // Controller
   private final CommandXboxController DriverController = new CommandXboxController(0);
@@ -72,17 +75,18 @@ public class RobotContainer extends frc.lib.RobotContainer {
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
 
-
   // coast buttion
   private static DigitalInputWrapper coastButton = new DigitalInputWrapper(0, "coastButton", false);
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
   public RobotContainer() {
     super(driveSimulation);
 
     // Check for valid swerve config
-    var modules = new SwerveModuleConstants[] {DriveConstants.FrontLeft, DriveConstants.FrontRight,
-        DriveConstants.BackLeft, DriveConstants.BackRight};
+    var modules = new SwerveModuleConstants[] { DriveConstants.FrontLeft, DriveConstants.FrontRight,
+        DriveConstants.BackLeft, DriveConstants.BackRight };
     for (var constants : modules) {
       if (constants.DriveMotorType != DriveMotorArrangement.TalonFX_Integrated
           || constants.SteerMotorType != SteerMotorArrangement.TalonFX_Integrated) {
@@ -99,7 +103,8 @@ public class RobotContainer extends frc.lib.RobotContainer {
             new ModuleIOTalonFX(DriveConstants.BackLeft),
             new ModuleIOTalonFX(DriveConstants.BackRight));
 
-        elevator = new Elevator(new ElevatorIO() {});
+        elevator = new Elevator(new ElevatorIO() {
+        });
         break;
 
       case SIM:
@@ -115,21 +120,25 @@ public class RobotContainer extends frc.lib.RobotContainer {
 
       default:
         // Replayed robot, disable IO implementations
-        drive = new Drive(new GyroIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {},
-            new ModuleIO() {});
+        drive = new Drive(new GyroIO() {
+        }, new ModuleIO() {
+        }, new ModuleIO() {
+        }, new ModuleIO() {
+        },
+            new ModuleIO() {
+            });
 
-        elevator = new Elevator(new ElevatorIO() {});
+        elevator = new Elevator(new ElevatorIO() {
+        });
         break;
     }
 
-    NamedCommands.registerCommand("Test", drive.NullCommand(1));
-    NamedCommands.registerCommand("ToggleCoast", drive.toggleCoastCommand());
-    NamedCommands.registerCommand("Null", drive.NullCommand(2));
-
+    // NamedCommands.registerCommand("Test", drive.NullCommand(1));
+    // NamedCommands.registerCommand("ToggleCoast", drive.toggleCoastCommand());
+    // NamedCommands.registerCommand("Null", drive.NullCommand(2));
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
-
 
     autoChooser.addOption("Static Drive Voltage", Commands.run(() -> drive.driveOpenLoop(10)));
     autoChooser.addOption("Static Turn Voltage", Commands.run(() -> drive.TurnOpenLoop(10)));
@@ -153,13 +162,14 @@ public class RobotContainer extends frc.lib.RobotContainer {
   }
 
   /**
-   * Use this method to define your button->command mappings. Buttons can be created by
+   * Use this method to define your button->command mappings. Buttons can be
+   * created by
    * instantiating a {@link GenericHID} or one of its subclasses
-   * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a
+   * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
+   * passing it to a
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-
 
     // toggle coast on true
     coastButton.asTrigger().onChange(Commands.runOnce(() -> {
@@ -172,9 +182,8 @@ public class RobotContainer extends frc.lib.RobotContainer {
     DoubleSupplier xSupplier = () -> DriverController.getLeftX();
     DoubleSupplier ySupplier = () -> DriverController.getLeftY();
     DoubleSupplier omegaSupplier = () -> -DriverController.getRightX();
-    BooleanSupplier slowModeSupplier =
-        () -> !SimConstants.IS_MAC ? DriverController.getRightTriggerAxis() > 0.5
-            : DriverController.getRightX() > 0.0;
+    BooleanSupplier slowModeSupplier = () -> !SimConstants.IS_MAC ? DriverController.getRightTriggerAxis() > 0.5
+        : DriverController.getRightX() > 0.0;
 
     // Default command, normal field-relative drive
     drive.setDefaultCommand(
