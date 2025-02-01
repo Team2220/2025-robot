@@ -17,14 +17,14 @@ import frc.robot.Robot25.subsystems.outtake.OuttakeIO.OuttakeIOInputs;
 public class OuttakeIOTalonFX implements OuttakeIO {
   TalonFXWrapper outtakeTalonFX;
   final int motorID = 25;
-  
+
   public OuttakeIOTalonFX() {
-        outtakeTalonFX = new TalonFXWrapper(
-                motorID,
-                "Outtake",
-                true,
-                NeutralModeValue.Brake);
-    }
+    outtakeTalonFX = new TalonFXWrapper(
+        motorID,
+        "Outtake",
+        true,
+        NeutralModeValue.Brake);
+  }
 
   @Override
   public void setOpenLoop(Voltage output) {
@@ -33,10 +33,9 @@ public class OuttakeIOTalonFX implements OuttakeIO {
 
   @Override
   public void updateInputs(OuttakeIOInputs inputs) {
-    inputs.winchConnected = false;
-    inputs.winchVelocity = outtakeTalonFX.getVelocity();
-    inputs.winchPosition = outtakeTalonFX.getPosition();
-    inputs.winchCurrent = outtakeTalonFX.getTorqueCurrent();
-    inputs.winchAppliedVolts = Volts.of(0);
+    inputs.outtakeConnected = false;
+    inputs.outtakeVelocity = outtakeTalonFX.getVelocity();
+    inputs.outtakeCurrent = outtakeTalonFX.getTorqueCurrent();
+    inputs.outtakeAppliedVolts = Volts.of(0);
   }
 }
