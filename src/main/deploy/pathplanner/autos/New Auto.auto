@@ -3,32 +3,7 @@
   "command": {
     "type": "sequential",
     "data": {
-      "commands": [
-        {
-          "type": "path",
-          "data": {
-            "pathName": "New Path"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "New New Path"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "New New New Path"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "New New New New Path"
-          }
-        }
-      ]
+      "commands": []
     }
   },
   "resetOdom": true,
