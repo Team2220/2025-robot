@@ -262,6 +262,12 @@ public class Drive extends SubsystemBase /* implements Vision.VisionConsumer */ 
         .andThen(sysId.quasistatic(direction));
   }
 
+  public Command NullCommand(int something) {
+    return run(() -> System.out.println("Skibidi ohio sigma owen is the coolio "));
+  }
+ 
+  
+
   /** Returns a command to run a dynamic test in the specified direction. */
   public Command sysIdDynamic(SysIdRoutine.Direction direction) {
     return run(() -> runCharacterization(0.0)).withTimeout(1.0).andThen(sysId.dynamic(direction));
@@ -369,6 +375,10 @@ public class Drive extends SubsystemBase /* implements Vision.VisionConsumer */ 
       modules[3].setBrake();
       coastModeOn = false;
     }
+  }
+  
+  public Command toggleCoastCommand() {
+    return runOnce(() -> toggleCoast());
   }
 
   private void logDriveCharacterization() {

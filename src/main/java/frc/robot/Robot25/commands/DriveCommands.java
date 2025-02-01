@@ -64,9 +64,26 @@ public class DriveCommands {
   public static final TunableDouble ANGLE_KD =
       new TunableDouble("ANGLE_KD", 0.4, "driver").setSpot(2, 0);
 
+  
 
 
-  private DriveCommands() {}
+  private DriveCommands() {
+    //System.out.println("skibidi ohio yayayayayayyayay");
+  }
+
+ /*      ,,,,,,,,
+        (-+-_-+- )
+        |\ @  @ /|
+        | \    / |
+           ()()
+           |  |
+           |  |
+
+
+  */
+
+
+
 
   private static Translation2d getLinearVelocityFromJoysticks(double x, double y) {
     // Apply deadband
