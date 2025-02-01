@@ -46,6 +46,10 @@ import frc.robot.Robot25.subsystems.gyro.GyroIO;
 import frc.robot.Robot25.subsystems.gyro.GyroIONavX;
 import frc.robot.Robot25.subsystems.gyro.GyroIOPigeon2;
 import frc.robot.Robot25.subsystems.gyro.GyroIOSim;
+import frc.robot.Robot25.subsystems.outtake.Outtake;
+import frc.robot.Robot25.subsystems.outtake.OuttakeIO;
+import frc.robot.Robot25.subsystems.outtake.OuttakeIOSim;
+import frc.robot.Robot25.subsystems.outtake.OuttakeIOTalonFX;
 // import frc.robot.Robot25.subsystems.outtake.Outtake;
 // import frc.robot.Robot25.subsystems.outtake.OuttakeIO;
 // import frc.robot.Robot25.subsystems.outtake.OuttakeIOSim;
@@ -66,7 +70,7 @@ public class RobotContainer extends frc.lib.RobotContainer {
   // Subsystems
   private final Drive drive;
   private final Elevator elevator;
-  // private final Outtake outtake;
+  private final Outtake outtake;
 
   // Drive simulation
   private static final SwerveDriveSimulation driveSimulation =
@@ -109,7 +113,7 @@ public class RobotContainer extends frc.lib.RobotContainer {
 
         elevator = new Elevator(new ElevatorIO() {
         });
-        // outtake = new Outtake(new OuttakeIOTalonFX());
+        outtake = new Outtake(new OuttakeIOTalonFX());
         break;
 
       case SIM:
@@ -121,7 +125,7 @@ public class RobotContainer extends frc.lib.RobotContainer {
             new ModuleIOSim(driveSimulation.getModules()[3]));
 
         elevator = new Elevator(new ElevatorIOSim());
-        // outtake = new Outtake(new OuttakeIOSim());
+        outtake = new Outtake(new OuttakeIOSim());
         break;
 
       default:
@@ -131,7 +135,7 @@ public class RobotContainer extends frc.lib.RobotContainer {
 
         elevator = new Elevator(new ElevatorIO() {});
 
-        // outtake = new Outtake(new OuttakeIO() {});
+        outtake = new Outtake(new OuttakeIO() {});
         break;
     }
 
