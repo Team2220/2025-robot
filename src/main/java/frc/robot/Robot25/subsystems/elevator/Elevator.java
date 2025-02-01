@@ -8,6 +8,7 @@ import static frc.robot.Robot25.subsystems.elevator.ElevatorConstants.DRUM_RADIU
 import static frc.robot.Robot25.subsystems.elevator.ElevatorConstants.INITIAL_HEIGHT;
 import static frc.robot.Robot25.subsystems.elevator.ElevatorConstants.MAX_EXTENSION;
 import static frc.robot.Robot25.subsystems.elevator.ElevatorConstants.MIN_HEIGHT;
+import com.ctre.phoenix6.wpiutils.ReplayAutoEnable;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
@@ -18,6 +19,7 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Elevator extends SubsystemBase {
@@ -58,39 +60,56 @@ public class Elevator extends SubsystemBase {
     return Meters.of(d).plus(MIN_HEIGHT);
   }
 
-  public void minHeight() {
-    Distance height = MIN_HEIGHT;
-    Angle r = inchesToRadians(height);
-    io.setWinchPosition(r);
+  public Command minHeight() {
+    return this.runOnce(() -> {
+      Distance height = MIN_HEIGHT;
+      Angle r = inchesToRadians(height);
+      io.setWinchPosition(r);
+    });
   }
 
-  public void L1() {
-    Distance height = Inches.of(18 + 3);
-    Angle r = inchesToRadians(height);
-    io.setWinchPosition(r);
+  public Command L1() {
+    return this.runOnce(() -> {
+      Distance height = Inches.of(18 + 3);
+      Angle r = inchesToRadians(height);
+      io.setWinchPosition(r);
+    });
   }
 
-  public void L2() {
-    Distance height = Inches.of(31.9 + 3);
-    Angle r = inchesToRadians(height);
-    io.setWinchPosition(r);
+  public Command L2() {
+    return this.runOnce(() -> {
+      Distance height = Inches.of(31.9 + 3);
+      Angle r = inchesToRadians(height);
+      io.setWinchPosition(r);
+    });
   }
 
-  public void L3() {
-    Distance height = Inches.of(47.6 + 3);
-    Angle r = inchesToRadians(height);
-    io.setWinchPosition(r);
+  public Command L3() {
+    return this.runOnce(() -> {
+      Distance height = Inches.of(47.6 + 3);
+      Angle r = inchesToRadians(height);
+      io.setWinchPosition(r);
+    });
   }
 
-  public void L4() {
-    Distance height = Inches.of(72 + 3);
-    Angle r = inchesToRadians(height);
-    io.setWinchPosition(r);
+
+
+  public Command L4() {
+
+    return this.runOnce(() -> {
+      Distance height = Inches.of(72 + 3);
+      Angle r = inchesToRadians(height);
+      io.setWinchPosition(r);
+    });
+
   }
 
-  public void maxHeight() {
-    Distance height = MAX_EXTENSION.plus(MIN_HEIGHT);
-    Angle r = inchesToRadians(height);
-    io.setWinchPosition(r);
+  public Command maxHeight() {
+
+    return this.runOnce(() -> {
+      Distance height = MAX_EXTENSION.plus(MIN_HEIGHT);
+      Angle r = inchesToRadians(height);
+      io.setWinchPosition(r);
+    });
   }
 }

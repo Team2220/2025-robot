@@ -1,5 +1,5 @@
-package frc.robot.Robot25.subsystems.outtake;
+// package frc.robot.Robot25.subsystems.Outtake;
 
-public class OuttakeConstants {
+// public class OuttakeConstants {
   
-}
+// }

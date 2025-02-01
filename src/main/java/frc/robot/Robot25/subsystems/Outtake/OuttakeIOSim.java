@@ -1,14 +1,14 @@
-package frc.robot.Robot25.subsystems.outtake;
+// package frc.robot.Robot25.subsystems.outtake;
 
-import edu.wpi.first.units.measure.Voltage;
+// import edu.wpi.first.units.measure.Voltage;
 
-public class OuttakeIOSim implements OuttakeIO {
+// public class OuttakeIOSim implements OuttakeIO {
 
-   @Override
-  public void setOpenLoop(Voltage output) {
-  }
+//    @Override
+//   public void setOpenLoop(Voltage output) {
+//   }
 
-  @Override
-  public void updateInputs(OuttakeIOInputs inputs) {
-  }
-}
+//   @Override
+//   public void updateInputs(OuttakeIOInputs inputs) {
+//   }
+// }
