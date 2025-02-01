@@ -24,7 +24,7 @@ public class OuttakeIOSim implements OuttakeIO {
   private final SimulatedMotorController.GenericMotorController outtakeMotorController;
   private final MapleMotorSim outtakeMotor;
   private boolean isClosedLoop = false;
-  private Voltage outtakeAppliedVoltage;
+  private Voltage outtakeAppliedVoltage = Volts.of(0);
   private final SimpleMotorFeedforward feedForwardController = new SimpleMotorFeedforward(
       Sim.kS,
       Sim.kV,
@@ -36,8 +36,7 @@ public class OuttakeIOSim implements OuttakeIO {
           0.1, // To Do: Estimate this value
           GEARING),
       outtakeGearbox,
-      0.000015,
-      0);
+      0.000015);
 
   public OuttakeIOSim() {
     outtakeMotor = new MapleMotorSim(
@@ -47,6 +46,8 @@ public class OuttakeIOSim implements OuttakeIO {
 
   @Override
   public void setOpenLoop(Voltage output) {
+    outtakeAppliedVoltage = output;
+    isClosedLoop = false;
   }
 
   @Override
