@@ -18,6 +18,7 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants.DriveMotorArrangement;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerMotorArrangement;
 import com.google.flatbuffers.Constants;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -121,6 +122,9 @@ public class RobotContainer extends frc.lib.RobotContainer {
         break;
     }
 
+    NamedCommands.registerCommand("Test", drive.NullCommand(1));
+    NamedCommands.registerCommand("ToggleCoast", drive.toggleCoastCommand());
+    NamedCommands.registerCommand("Null", drive.NullCommand(2));
 
 
     // Set up auto routines
