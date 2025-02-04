@@ -8,7 +8,10 @@
     "Reset Paths",
     "Square Paths"
   ],
-  "autoFolders": [],
+  "autoFolders": [
+    "Coral Autos",
+    "Square Autos"
+  ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
