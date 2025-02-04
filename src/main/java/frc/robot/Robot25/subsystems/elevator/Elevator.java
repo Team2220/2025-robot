@@ -35,9 +35,60 @@ public class Elevator extends SubsystemBase {
       mechRoot2d.append(new LoggedMechanismLigament2d("Elevator", INITIAL_HEIGHT.in(Meters), 90.0,
           50, new Color8Bit(Color.kBlue)));
 
+  private enum Level {
+
+    minHeight(MIN_HEIGHT), L1(Inches.of(18 + 3)), L2(Inches.of(31.9 + 3)), L3(
+        Inches.of(47.6 + 3)), L4(Inches.of(72 + 3));
+
+    private final Distance height;
+
+    Level(Distance height) {
+      this.height = height;
+    }
+
+    public Distance getHeight() {
+      return height;
+    }
+
+    public Level up() {
+      switch (this) {
+        case minHeight:
+          return L1;
+        case L1:
+          return L2;
+        case L2:
+          return L3;
+        case L3:
+          return L4;
+        default:
+          return L4;
+      }
+    }
+
+    public Level down() {
+      switch (this) {
+        case L4:
+          return L3;
+        case L3:
+          return L2;
+        case L2:
+          return L1;
+        case L1:
+          return minHeight;
+        default:
+          return minHeight;
+      }
+    }
+
+  };
+
+  private Level currentLevel;
+
   public Elevator(ElevatorIO io) {
     this.io = io;
     this.minHeight();
+
+    currentLevel = Level.minHeight;
   }
 
   @Override
@@ -48,6 +99,8 @@ public class Elevator extends SubsystemBase {
 
     Logger.recordOutput("Elevator/EstimatedHeight",
         radiansToInches(inputs.winchPosition).in(Meters));
+
+    Logger.recordOutput("Elevator/CurrentLevel", currentLevel);
   }
 
   private Angle inchesToRadians(Distance d) {
@@ -62,7 +115,7 @@ public class Elevator extends SubsystemBase {
 
   public Command minHeight() {
     return this.runOnce(() -> {
-      Distance height = MIN_HEIGHT;
+      Distance height = Level.minHeight.getHeight();
       Angle r = inchesToRadians(height);
       io.setWinchPosition(r);
     });
@@ -70,7 +123,7 @@ public class Elevator extends SubsystemBase {
 
   public Command L1() {
     return this.runOnce(() -> {
-      Distance height = Inches.of(18 + 3);
+      Distance height = Level.L1.getHeight();
       Angle r = inchesToRadians(height);
       io.setWinchPosition(r);
     });
@@ -78,7 +131,7 @@ public class Elevator extends SubsystemBase {
 
   public Command L2() {
     return this.runOnce(() -> {
-      Distance height = Inches.of(31.9 + 3);
+      Distance height = Level.L2.getHeight();
       Angle r = inchesToRadians(height);
       io.setWinchPosition(r);
     });
@@ -86,7 +139,7 @@ public class Elevator extends SubsystemBase {
 
   public Command L3() {
     return this.runOnce(() -> {
-      Distance height = Inches.of(47.6 + 3);
+      Distance height = Level.L3.getHeight();
       Angle r = inchesToRadians(height);
       io.setWinchPosition(r);
     });
@@ -95,9 +148,8 @@ public class Elevator extends SubsystemBase {
 
 
   public Command L4() {
-
     return this.runOnce(() -> {
-      Distance height = Inches.of(72 + 3);
+      Distance height = Level.L4.getHeight();
       Angle r = inchesToRadians(height);
       io.setWinchPosition(r);
     });
@@ -105,9 +157,26 @@ public class Elevator extends SubsystemBase {
   }
 
   public Command maxHeight() {
-
     return this.runOnce(() -> {
       Distance height = MAX_EXTENSION.plus(MIN_HEIGHT);
+      Angle r = inchesToRadians(height);
+      io.setWinchPosition(r);
+    });
+  }
+
+  public Command upLevel() {
+    return this.runOnce(() -> {
+      currentLevel = currentLevel.up();
+      Distance height = currentLevel.getHeight();
+      Angle r = inchesToRadians(height);
+      io.setWinchPosition(r);
+    });
+  }
+
+  public Command downLevel() {
+    return this.runOnce(() -> {
+      currentLevel = currentLevel.down();
+      Distance height = currentLevel.getHeight();
       Angle r = inchesToRadians(height);
       io.setWinchPosition(r);
     });
