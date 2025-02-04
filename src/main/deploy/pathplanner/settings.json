@@ -3,9 +3,10 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
-    "New Folder",
-    "New New Folder",
-    "New New New Folder"
+    "Coral From Start Paths",
+    "Coral Score From Source",
+    "Reset Paths",
+    "Square Paths"
   ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,

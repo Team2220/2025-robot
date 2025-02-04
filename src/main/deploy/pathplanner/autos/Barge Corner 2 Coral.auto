@@ -7,25 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right 1M"
+            "pathName": "Barge Corner to Score Coral"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Up 1M"
+            "pathName": "Coral to Source"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Left 1M"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Down 1M"
+            "pathName": "Source to Reef"
           }
         }
       ]

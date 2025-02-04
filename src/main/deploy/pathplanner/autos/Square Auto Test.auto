@@ -7,19 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Move to Alage"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L4"
+            "pathName": "Forward 1M"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Move to Coral from Alage, Score Coral"
+            "pathName": "Left 1M"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Backwards 1M"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right 1M"
           }
         }
       ]
