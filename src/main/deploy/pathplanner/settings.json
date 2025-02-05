@@ -3,15 +3,11 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
-    "Coral From Start Paths",
-    "Coral Score From Source",
-    "Reset Paths",
-    "Square Paths"
+    "Score Coral",
+    "Score Coral and get Algae",
+    "Score Coral, Score Alage"
   ],
-  "autoFolders": [
-    "Coral Autos",
-    "Square Autos"
-  ],
+  "autoFolders": [],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
