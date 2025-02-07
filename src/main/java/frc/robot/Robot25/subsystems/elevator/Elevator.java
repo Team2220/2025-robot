@@ -101,11 +101,16 @@ public class Elevator extends SubsystemBase {
         radiansToInches(inputs.winchPosition).in(Meters));
 
     Logger.recordOutput("Elevator/CurrentLevel", currentLevel);
+
+    Logger.recordOutput("Elevator/CurrentLevelHeight", currentLevel.getHeight());
+    Logger.recordOutput("Elevator/Radians", inchesToRadians(currentLevel.getHeight()));
+
+    Logger.recordOutput("Elevator/PTuning",
+        currentLevel.getHeight().minus(radiansToInches(inputs.winchPosition)));
   }
 
   private Angle inchesToRadians(Distance d) {
-    d.minus(MIN_HEIGHT);
-    return Radians.of(d.in(Meters) / DRUM_RADIUS.in(Meters));
+    return Radians.of(d.minus(MIN_HEIGHT).in(Meters) / DRUM_RADIUS.in(Meters));
   }
 
   private Distance radiansToInches(Angle a) {
@@ -118,6 +123,7 @@ public class Elevator extends SubsystemBase {
       Distance height = Level.minHeight.getHeight();
       Angle r = inchesToRadians(height);
       io.setWinchPosition(r);
+      currentLevel = Level.minHeight;
     });
   }
 
@@ -126,6 +132,7 @@ public class Elevator extends SubsystemBase {
       Distance height = Level.L1.getHeight();
       Angle r = inchesToRadians(height);
       io.setWinchPosition(r);
+      currentLevel = Level.L1;
     });
   }
 
@@ -134,6 +141,7 @@ public class Elevator extends SubsystemBase {
       Distance height = Level.L2.getHeight();
       Angle r = inchesToRadians(height);
       io.setWinchPosition(r);
+      currentLevel = Level.L2;
     });
   }
 
@@ -142,6 +150,7 @@ public class Elevator extends SubsystemBase {
       Distance height = Level.L3.getHeight();
       Angle r = inchesToRadians(height);
       io.setWinchPosition(r);
+      currentLevel = Level.L3;
     });
   }
 
@@ -152,6 +161,7 @@ public class Elevator extends SubsystemBase {
       Distance height = Level.L4.getHeight();
       Angle r = inchesToRadians(height);
       io.setWinchPosition(r);
+      currentLevel = Level.L4;
     });
 
   }
@@ -161,6 +171,7 @@ public class Elevator extends SubsystemBase {
       Distance height = MAX_EXTENSION.plus(MIN_HEIGHT);
       Angle r = inchesToRadians(height);
       io.setWinchPosition(r);
+      currentLevel = Level.L4;
     });
   }
 

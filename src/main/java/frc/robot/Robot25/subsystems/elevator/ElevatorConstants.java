@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.InchesPerSecond;
 import static edu.wpi.first.units.Units.KilogramSquareMeters;
+import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Pounds;
 import static edu.wpi.first.units.Units.RadiansPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Volts;
@@ -32,7 +33,8 @@ public class ElevatorConstants {
   public static final Distance MAX_EXTENSION = Inches.of(75.0);
   public static final Mass CARRIAGE_MASS = Pounds.of(15);
   public static final LinearVelocity MAX_VELOCITY = InchesPerSecond.of(180.85);
-  public static final AngularAcceleration MAX_ACCELERATION = RadiansPerSecondPerSecond.of(90 / DRUM_RADIUS.in(Inches));
+  public static final AngularAcceleration MAX_ACCELERATION =
+      RadiansPerSecondPerSecond.of(90 / DRUM_RADIUS.in(Inches));
   public static final Current CURRENT_LIMIT = Amps.of(40);
 
   public static final class Real {
@@ -48,14 +50,15 @@ public class ElevatorConstants {
   }
 
   public static final class Sim {
-    public static final double kP = 4.0; // 5
-    public static final double kI = 0.3;
-    public static final double kD = 0.6;
-    public static final double kS = 0.0;
+    public static final double kP = 0; // 5
+    public static final double kI = 0;
+    public static final double kD = 0;
+    public static final double kS = 0;
     public static final double kG = 0.43; // 0.37
-    public static final double kV = 0.10146; // 2.67
-    public static final double kA = 0.002; // * DRUM_RADIUS.in(Meters); // 0.05
-    public static final MomentOfInertia MOTOR_LOAD_MOI = KilogramSquareMeters.of(0.04); // TODO estimate
+    public static final double kV = 2.51 / DRUM_RADIUS.in(Meters); // 2.67
+    public static final double kA = 0; // * DRUM_RADIUS.in(Meters); // 0.05
+    public static final MomentOfInertia MOTOR_LOAD_MOI = KilogramSquareMeters.of(0.04); // TODO
+                                                                                        // estimate
     public static final Voltage FRICTION_VOLTAGE = Volts.of(0.5);
   }
 }
