@@ -19,7 +19,9 @@ public class LedsIOArduino implements LedsIO {
     arduino = new Arduino();
   }
 
-  public void updateInputs(LedsIOInputs inputs) {}
+  public void updateInputs(LedsIOInputs inputs) {
+    inputs.isConnected = arduino.isConnected();
+  }
 
   public void setColor(Color color) {
     arduino.customColor(color.red, color.green, color.blue);
