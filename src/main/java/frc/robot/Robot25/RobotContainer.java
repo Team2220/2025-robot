@@ -13,6 +13,8 @@
 
 package frc.robot.Robot25;
 
+import static edu.wpi.first.units.Units.Volt;
+
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.DriveMotorArrangement;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerMotorArrangement;
@@ -44,6 +46,14 @@ import frc.robot.Robot25.subsystems.gyro.GyroIO;
 import frc.robot.Robot25.subsystems.gyro.GyroIONavX;
 import frc.robot.Robot25.subsystems.gyro.GyroIOPigeon2;
 import frc.robot.Robot25.subsystems.gyro.GyroIOSim;
+import frc.robot.Robot25.subsystems.outtake.Outtake;
+import frc.robot.Robot25.subsystems.outtake.OuttakeIO;
+import frc.robot.Robot25.subsystems.outtake.OuttakeIOSim;
+import frc.robot.Robot25.subsystems.outtake.OuttakeIOTalonFX;
+// import frc.robot.Robot25.subsystems.outtake.Outtake;
+// import frc.robot.Robot25.subsystems.outtake.OuttakeIO;
+// import frc.robot.Robot25.subsystems.outtake.OuttakeIOSim;
+// import frc.robot.Robot25.subsystems.outtake.OuttakeIOTalonFX;
 import frc.robot.SimConstants;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -51,22 +61,20 @@ import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
- * This class is where the bulk of the robot should be declared. Since
- * Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in
- * the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of
- * the robot (including
+ * This class is where the bulk of the robot should be declared. Since Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer extends frc.lib.RobotContainer {
   // Subsystems
   private final Drive drive;
   private final Elevator elevator;
+  private final Outtake outtake;
 
   // Drive simulation
-  private static final SwerveDriveSimulation driveSimulation = new SwerveDriveSimulation(Drive.MAPLE_SIM_CONFIG,
-      SimConstants.SIM_INITIAL_FIELD_POSE);
+  private static final SwerveDriveSimulation driveSimulation =
+      new SwerveDriveSimulation(Drive.MAPLE_SIM_CONFIG, SimConstants.SIM_INITIAL_FIELD_POSE);
 
   // Controller
   private final CommandXboxController DriverController = new CommandXboxController(0);
@@ -85,8 +93,8 @@ public class RobotContainer extends frc.lib.RobotContainer {
     super(driveSimulation);
 
     // Check for valid swerve config
-    var modules = new SwerveModuleConstants[] { DriveConstants.FrontLeft, DriveConstants.FrontRight,
-        DriveConstants.BackLeft, DriveConstants.BackRight };
+    var modules = new SwerveModuleConstants[] {DriveConstants.FrontLeft, DriveConstants.FrontRight,
+        DriveConstants.BackLeft, DriveConstants.BackRight};
     for (var constants : modules) {
       if (constants.DriveMotorType != DriveMotorArrangement.TalonFX_Integrated
           || constants.SteerMotorType != SteerMotorArrangement.TalonFX_Integrated) {
@@ -103,8 +111,8 @@ public class RobotContainer extends frc.lib.RobotContainer {
             new ModuleIOTalonFX(DriveConstants.BackLeft),
             new ModuleIOTalonFX(DriveConstants.BackRight));
 
-        elevator = new Elevator(new ElevatorIO() {
-        });
+        elevator = new Elevator(new ElevatorIO() {});
+        outtake = new Outtake(new OuttakeIOTalonFX());
         break;
 
       case SIM:
@@ -116,26 +124,29 @@ public class RobotContainer extends frc.lib.RobotContainer {
             new ModuleIOSim(driveSimulation.getModules()[3]));
 
         elevator = new Elevator(new ElevatorIOSim());
+        outtake = new Outtake(new OuttakeIOSim());
         break;
 
       default:
         // Replayed robot, disable IO implementations
-        drive = new Drive(new GyroIO() {
-        }, new ModuleIO() {
-        }, new ModuleIO() {
-        }, new ModuleIO() {
-        },
-            new ModuleIO() {
-            });
+        drive = new Drive(new GyroIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {},
+            new ModuleIO() {});
 
-        elevator = new Elevator(new ElevatorIO() {
-        });
+        elevator = new Elevator(new ElevatorIO() {});
+
+        outtake = new Outtake(new OuttakeIO() {});
         break;
     }
 
     // NamedCommands.registerCommand("Test", drive.NullCommand(1));
     // NamedCommands.registerCommand("ToggleCoast", drive.toggleCoastCommand());
     // NamedCommands.registerCommand("Null", drive.NullCommand(2));
+    NamedCommands.registerCommand("L1", elevator.L1());
+    NamedCommands.registerCommand("L2", elevator.L2());
+    NamedCommands.registerCommand("L3", elevator.L3());
+    NamedCommands.registerCommand("L4", elevator.L4());
+    NamedCommands.registerCommand("Exhaust", outtake.exhaustCoral());
+
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -162,11 +173,9 @@ public class RobotContainer extends frc.lib.RobotContainer {
   }
 
   /**
-   * Use this method to define your button->command mappings. Buttons can be
-   * created by
+   * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses
-   * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
-   * passing it to a
+   * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
@@ -182,12 +191,14 @@ public class RobotContainer extends frc.lib.RobotContainer {
     DoubleSupplier xSupplier = () -> DriverController.getLeftX();
     DoubleSupplier ySupplier = () -> DriverController.getLeftY();
     DoubleSupplier omegaSupplier = () -> -DriverController.getRightX();
-    BooleanSupplier slowModeSupplier = () -> !SimConstants.IS_MAC ? DriverController.getRightTriggerAxis() > 0.5
-        : DriverController.getRightX() > 0.0;
+    BooleanSupplier slowModeSupplier =
+        () -> !SimConstants.IS_MAC ? DriverController.getRightTriggerAxis() > 0.5
+            : DriverController.getRightX() > 0.0;
 
     // Default command, normal field-relative drive
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(drive, ySupplier, xSupplier, omegaSupplier, slowModeSupplier));
+    outtake.setDefaultCommand(outtake.autoQueueCoral());
 
     DriverController.a()
         .toggleOnTrue(DriveCommands.keepRotationForward(drive, xSupplier, ySupplier));
@@ -218,24 +229,13 @@ public class RobotContainer extends frc.lib.RobotContainer {
         .onTrue(Commands.runOnce(
             () -> drive.setPose(new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
             drive).ignoringDisable(true));
-    OperatorController.povDown().onTrue(Commands.runOnce(() -> {
-      elevator.minHeight();
-    }));
-    OperatorController.povUp().onTrue(Commands.runOnce(() -> {
-      elevator.maxHeight();
-    }));
-    OperatorController.a().onTrue(Commands.runOnce(() -> {
-      elevator.L1();
-    }));
-    OperatorController.x().onTrue(Commands.runOnce(() -> {
-      elevator.L2();
-    }));
-    OperatorController.b().onTrue(Commands.runOnce(() -> {
-      elevator.L3();
-    }));
-    OperatorController.y().onTrue(Commands.runOnce(() -> {
-      elevator.L4();
-    }));
+    OperatorController.povDown().onTrue(elevator.downLevel());
+    OperatorController.povUp().onTrue(elevator.upLevel());
+
+    OperatorController.a().onTrue(elevator.L1());
+    OperatorController.x().onTrue(elevator.L2());
+    OperatorController.b().onTrue(elevator.L3());
+    OperatorController.y().onTrue(elevator.L4());
   }
 
   @Override
