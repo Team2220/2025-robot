@@ -201,7 +201,7 @@ public class RobotContainer extends frc.lib.RobotContainer {
     outtake.setDefaultCommand(outtake.autoQueueCoral());
 
     DriverController.a()
-        .toggleOnTrue(DriveCommands.keepRotationForward(drive, xSupplier, ySupplier));
+        .toggleOnTrue(DriveCommands.keepRotationForward(drive, xSupplier, ySupplier));;
 
     // POV snap to angles
     DriverController.povUp().onTrue(DriveCommands.snapToRotation(drive, Rotation2d.kZero));
@@ -220,9 +220,9 @@ public class RobotContainer extends frc.lib.RobotContainer {
     DriverController.povUpLeft()
         .onTrue(DriveCommands.snapToRotation(drive, Rotation2d.fromDegrees(45)));
 
-    // TODO should this be true in TeleOp?
-    // Switch to X pattern when X button is pressed
     DriverController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
+    DriverController.b().onTrue(elevator.minHeight());
+    DriverController.y().onTrue(outtake.exhaustCoral());
 
     // Reset gyro to 0° when START button is pressed
     DriverController.start()
@@ -231,6 +231,7 @@ public class RobotContainer extends frc.lib.RobotContainer {
             drive).ignoringDisable(true));
     OperatorController.povDown().onTrue(elevator.downLevel());
     OperatorController.povUp().onTrue(elevator.upLevel());
+    OperatorController.leftBumper().onTrue(outtake.exhaustCoral());
 
     OperatorController.a().onTrue(elevator.L1());
     OperatorController.x().onTrue(elevator.L2());
