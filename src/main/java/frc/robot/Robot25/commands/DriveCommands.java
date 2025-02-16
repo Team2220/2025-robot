@@ -15,17 +15,20 @@ package frc.robot.Robot25.commands;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Radians;
-
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -135,6 +138,20 @@ public class DriveCommands {
 
         // Reset PID controller when command starts
         .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()));
+  }
+
+  public static Command joystickDriveAtAprilTag(Drive drive, DoubleSupplier xSupplier,
+      DoubleSupplier ySupplier) {
+    return joystickDriveAtAngle(drive, xSupplier, ySupplier, () -> {
+      AprilTagFieldLayout layout = AprilTagFields.k2025Reefscape.loadAprilTagLayoutField();
+      Pose3d RED = layout.getTagPose(2).get();
+      Pose3d BLUE = layout.getTagPose(13).get();
+      var goal = DriverStation.getAlliance().get() == DriverStation.Alliance.Red ? RED : BLUE;
+      var Botpose = drive.getPose().getTranslation().minus((goal).toPose2d().getTranslation());
+
+      double wantedAngle = Math.toDegrees(Math.atan2(Botpose.getY(), Botpose.getX()));
+      return Rotation2d.fromDegrees(wantedAngle);
+    });
   }
 
   /**

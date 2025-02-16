@@ -170,6 +170,9 @@ public class RobotContainer extends frc.lib.RobotContainer {
     DriverController.a()
         .toggleOnTrue(DriveCommands.keepRotationForward(drive, xSupplier, ySupplier));
 
+    DriverController.rightStick()
+        .whileTrue(DriveCommands.joystickDriveAtAprilTag(drive, xSupplier, ySupplier));
+
     // POV snap to angles
     DriverController.povUp().onTrue(DriveCommands.snapToRotation(drive, Rotation2d.kZero));
     DriverController.povUpRight()
